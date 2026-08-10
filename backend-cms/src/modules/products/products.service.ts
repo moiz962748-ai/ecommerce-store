@@ -2,6 +2,7 @@ import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { DRIZZLE } from '../../db/drizzle.provider';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
+import { products } from '../../db/schema';
 
 @Injectable()
 export class ProductsService {
@@ -11,26 +12,26 @@ export class ProductsService {
   ) {}
 
   async createProduct(body: any) {
-    const { name, description, price, basePrice, storeId, categoryId, stock } = body;
+    const { name, description, price, basePrice, storeId, categoryId } = body;
 
     if (!categoryId) {
       throw new BadRequestException('Product create karne ke liye categoryId zaroori hai!');
     }
 
-    const productTable = (schema as any).products || (schema as any).product;
+    if (!storeId) {
+      throw new BadRequestException('Product create karne ke liye storeId zaroori hai!');
+    }
 
     const finalPrice = basePrice || price || '0';
 
     const [newProduct] = await this.db
-      .insert(productTable)
+      .insert(products)
       .values({
         name,
         description: description || '',
-        basePrice: String(finalPrice), // DB schema mapping for base_price
-        price: String(finalPrice),     // Safe fallback agar price column bhi exist karta ho
-        storeId: storeId || null,
+        basePrice: Number(finalPrice),
+        storeId,
         categoryId,
-        stock: stock || 0,
       })
       .returning();
 
@@ -41,7 +42,6 @@ export class ProductsService {
   }
 
   async getAllProducts() {
-    const productTable = (schema as any).products || (schema as any).product;
-    return await this.db.select().from(productTable);
+    return await this.db.select().from(products);
   }
 }

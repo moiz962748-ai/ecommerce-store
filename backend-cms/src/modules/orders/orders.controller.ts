@@ -23,11 +23,10 @@ export class OrdersController {
   }
 
   @Patch(':id/status')
-  @Roles('ADMIN', 'PARTNER')
-  async updateOrderStatus(
-    @Param('id') id: string,
-    @Body('status') status: string,
-  ) {
-    return await this.ordersService.updateOrderStatus(id, status);
-  }
+async updateOrderStatus(
+  @Param('id') id: string,
+  @Body('status') status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED',
+) {
+  return await this.ordersService.updateOrderStatus(id, status);
+}
 }

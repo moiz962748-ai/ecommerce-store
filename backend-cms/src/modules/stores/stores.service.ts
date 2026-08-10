@@ -13,6 +13,28 @@ export class StoresService {
     private storeAccessService: StoreAccessService,
   ) {}
 
+  private async getOrCreateDefaultTemplate() {
+    const existing = await this.db.query.templates.findFirst();
+    if (existing) {
+      return existing;
+    }
+
+    const [created] = await this.db
+      .insert(schema.templates)
+      .values({
+        name: 'Default Store Template',
+        description: 'Standard multi-tenant CMS store template',
+        fieldSchema: {},
+      })
+      .returning();
+
+    if (!created) {
+      throw new Error('Default template create nahi ho saka');
+    }
+
+    return created;
+  }
+
   async createStore(body: any) {
     const { name, slug, subDomain, templateId, logoUrl, templateConfig } = body;
 
@@ -29,19 +51,7 @@ export class StoresService {
     let activeTemplateId = templateId;
 
     if (!activeTemplateId) {
-      let defaultTemplate = await this.db.query.templates.findFirst();
-
-      if (!defaultTemplate) {
-        const [createdTemplate] = await this.db
-          .insert(schema.templates)
-          .values({
-            name: 'Default Store Template',
-            description: 'Standard multi-tenant CMS store template',
-            fieldSchema: {},
-          })
-          .returning();
-        defaultTemplate = createdTemplate;
-      }
+      const defaultTemplate = await this.getOrCreateDefaultTemplate();
       activeTemplateId = defaultTemplate.id;
     }
 
@@ -73,7 +83,7 @@ export class StoresService {
       .insert(schema.storePartner)
       .values({
         storeId,
-        userId: partnerId || userId, // Schema me column name userId hai
+        userId: partnerId || userId,
       })
       .returning();
 

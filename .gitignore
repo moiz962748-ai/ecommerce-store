@@ -1,4 +1,3 @@
-@"
 backend-cms/node_modules/
 backend-cms/dist/
 backend-cms/.env
@@ -9,4 +8,3 @@ frontend-cms/.env
 frontend-cms/.env.local
 
 *.log
-"@ | Set-Content -Path .gitignore -Encoding utf8

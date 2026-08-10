@@ -2,6 +2,7 @@ import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { DRIZZLE } from '../../db/drizzle.provider';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
+import { orders } from '../../db/schema';
 import { eq } from 'drizzle-orm';
 
 @Injectable()
@@ -20,18 +21,24 @@ export class OrdersService {
       throw new BadRequestException('Order create karne ke liye userId zaroori hai!');
     }
 
-    const orderTable = (schema as any).orders || (schema as any).order;
+    if (!storeId) {
+      throw new BadRequestException('Order create karne ke liye storeId zaroori hai!');
+    }
+
+    if (!address) {
+      throw new BadRequestException('Order create karne ke liye address zaroori hai!');
+    }
+
     const finalPrice = price || totalAmount || '0';
 
     const [newOrder] = await this.db
-      .insert(orderTable)
+      .insert(orders)
       .values({
-        storeId: storeId || null,
+        storeId,
         userId: finalUserId,
         price: String(finalPrice),
-        totalAmount: String(finalPrice),
-        address: address || 'Main Street, City', // Fallback address agar body me missing ho
-        status: status || 'PENDING',
+        address,
+        orderStatus: status || 'PENDING',
       })
       .returning();
 
@@ -42,21 +49,22 @@ export class OrdersService {
   }
 
   async getOrdersByStore(storeId: string) {
-    const orderTable = (schema as any).orders || (schema as any).order;
-    return await this.db.select().from(orderTable).where(eq(orderTable.storeId, storeId));
+    return await this.db.select().from(orders).where(eq(orders.storeId, storeId));
   }
-  async updateOrderStatus(orderId: string, status: string) {
-  const orderTable = (schema as any).orders || (schema as any).order;
 
-  const [updatedOrder] = await this.db
-    .update(orderTable)
-    .set({ status })
-    .where(eq(orderTable.id, orderId))
-    .returning();
+  async updateOrderStatus(
+    orderId: string,
+    status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED',
+  ) {
+    const [updatedOrder] = await this.db
+      .update(orders)
+      .set({ orderStatus: status })
+      .where(eq(orders.id, orderId))
+      .returning();
 
-  return {
-    message: 'Order status successfully update ho gaya hai!',
-    order: updatedOrder,
-  };
-}
+    return {
+      message: 'Order status successfully update ho gaya hai!',
+      order: updatedOrder,
+    };
+  }
 }
