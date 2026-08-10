@@ -8,11 +8,13 @@ import { StoresModule } from './modules/stores/stores.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
+    CommonModule,        
     AuthModule,
     StoresModule,
     CategoriesModule,

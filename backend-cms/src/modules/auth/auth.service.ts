@@ -15,7 +15,7 @@ export class AuthService {
   ) {}
 
   async registerUser(body: any) {
-    const { email, password, fullName, role } = body;
+    const { email, password, fullName } = body;
 
     const existingUser = await this.db.query.users.findFirst({
       where: eq(schema.users.email, email),
@@ -33,7 +33,7 @@ export class AuthService {
         email,
         password: hashedPassword,
         fullName,
-        role: role || 'CUSTOMER',
+        role: 'CUSTOMER',
       })
       .returning({
         id: schema.users.id,

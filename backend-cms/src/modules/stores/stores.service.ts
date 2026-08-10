@@ -3,12 +3,14 @@ import { DRIZZLE } from '../../db/drizzle.provider';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
 import { eq } from 'drizzle-orm';
+import { StoreAccessService } from '../../common/store-access.service';
 
 @Injectable()
 export class StoresService {
   constructor(
     @Inject(DRIZZLE)
     private db: PostgresJsDatabase<typeof schema>,
+    private storeAccessService: StoreAccessService,
   ) {}
 
   async createStore(body: any) {
@@ -63,39 +65,43 @@ export class StoresService {
   async getAllStores() {
     return await this.db.query.stores.findMany();
   }
+
   async assignPartnerToStore(body: any) {
-  const { storeId, partnerId, userId } = body;
+    const { storeId, partnerId, userId } = body;
 
-  const [assignment] = await this.db
-    .insert(schema.storePartner)
-    .values({
-      storeId,
-      userId: partnerId || userId, // Schema me column name userId hai
-    })
-    .returning();
+    const [assignment] = await this.db
+      .insert(schema.storePartner)
+      .values({
+        storeId,
+        userId: partnerId || userId, // Schema me column name userId hai
+      })
+      .returning();
 
-  return {
-    message: 'Partner successfully store se assign ho gaya hai!',
-    assignment,
-  };
-}
-    async updateStore(storeId: string, body: any) {
-  const { name, logoUrl, templateConfig } = body;
+    return {
+      message: 'Partner successfully store se assign ho gaya hai!',
+      assignment,
+    };
+  }
 
-  const [updatedStore] = await this.db
-    .update(schema.stores)
-    .set({
-      ...(name && { name }),
-      ...(logoUrl !== undefined && { logoUrl }),
-      ...(templateConfig && { templateConfig }),
-      updatedAt: new Date(),
-    })
-    .where(eq(schema.stores.id, storeId))
-    .returning();
+  async updateStore(storeId: string, body: any, currentUser: { userId: string; role: string }) {
+    await this.storeAccessService.assertStoreAccess(currentUser.userId, currentUser.role, storeId);
 
-  return {
-    message: 'Store settings successfully update ho gayi hain!',
-    store: updatedStore,
-  };
-}
+    const { name, logoUrl, templateConfig } = body;
+
+    const [updatedStore] = await this.db
+      .update(schema.stores)
+      .set({
+        ...(name && { name }),
+        ...(logoUrl !== undefined && { logoUrl }),
+        ...(templateConfig && { templateConfig }),
+        updatedAt: new Date(),
+      })
+      .where(eq(schema.stores.id, storeId))
+      .returning();
+
+    return {
+      message: 'Store settings successfully update ho gayi hain!',
+      store: updatedStore,
+    };
+  }
 }
