@@ -3,19 +3,21 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from './roles.guard';
 import { Roles } from './roles.decorator';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() body: any) {
-    return await this.authService.registerUser(body);
+  async register(@Body() dto: RegisterDto) {
+    return await this.authService.registerUser(dto);
   }
 
   @Post('login')
-  async login(@Body() body: any) {
-    return await this.authService.loginUser(body);
+  async login(@Body() dto: LoginDto) {
+    return await this.authService.loginUser(dto);
   }
 
   // Sirf Admin access kar sakta hai test route

@@ -4,6 +4,8 @@ import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
 import { eq } from 'drizzle-orm';
 import { StoreAccessService } from '../../common/store-access.service';
+import { CreateStoreDto } from './dto/create-store.dto';
+import { UpdateStoreDto } from './dto/update-store.dto';
 
 @Injectable()
 export class StoresService {
@@ -35,10 +37,14 @@ export class StoresService {
     return created;
   }
 
-  async createStore(body: any) {
-    const { name, slug, subDomain, templateId, logoUrl, templateConfig } = body;
+  async createStore(dto: CreateStoreDto) {
+    const { name, slug, subDomain, templateId, logoUrl, templateConfig } = dto;
 
     const finalSubDomain = subDomain || slug;
+
+    if (!finalSubDomain) {
+      throw new ConflictException('subDomain ya slug mein se koi ek dena zaroori hai!');
+    }
 
     const existingStore = await this.db.query.stores.findFirst({
       where: eq(schema.stores.subDomain, finalSubDomain),
@@ -93,10 +99,10 @@ export class StoresService {
     };
   }
 
-  async updateStore(storeId: string, body: any, currentUser: { userId: string; role: string }) {
+  async updateStore(storeId: string, dto: UpdateStoreDto, currentUser: { userId: string; role: string }) {
     await this.storeAccessService.assertStoreAccess(currentUser.userId, currentUser.role, storeId);
 
-    const { name, logoUrl, templateConfig } = body;
+    const { name, logoUrl, templateConfig } = dto;
 
     const [updatedStore] = await this.db
       .update(schema.stores)

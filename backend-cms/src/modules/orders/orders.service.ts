@@ -4,6 +4,7 @@ import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
 import { orders } from '../../db/schema';
 import { eq } from 'drizzle-orm';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -12,8 +13,8 @@ export class OrdersService {
     private db: PostgresJsDatabase<typeof schema>,
   ) {}
 
-  async createOrder(body: any, authenticatedUserId?: string) {
-    const { storeId, totalAmount, price, address, status, userId } = body;
+  async createOrder(dto: CreateOrderDto, authenticatedUserId?: string) {
+    const { storeId, price, address, userId } = dto;
 
     const finalUserId = userId || authenticatedUserId;
 
@@ -21,24 +22,14 @@ export class OrdersService {
       throw new BadRequestException('Order create karne ke liye userId zaroori hai!');
     }
 
-    if (!storeId) {
-      throw new BadRequestException('Order create karne ke liye storeId zaroori hai!');
-    }
-
-    if (!address) {
-      throw new BadRequestException('Order create karne ke liye address zaroori hai!');
-    }
-
-    const finalPrice = price || totalAmount || '0';
-
     const [newOrder] = await this.db
       .insert(orders)
       .values({
         storeId,
         userId: finalUserId,
-        price: String(finalPrice),
+        price: String(price),
         address,
-        orderStatus: status || 'PENDING',
+        orderStatus: 'PENDING',
       })
       .returning();
 

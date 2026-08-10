@@ -5,6 +5,8 @@ import * as schema from '../../db/schema';
 import { eq } from 'drizzle-orm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -14,8 +16,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async registerUser(body: any) {
-    const { email, password, fullName } = body;
+  async registerUser(dto: RegisterDto) {
+    const { email, password, fullName } = dto;
 
     const existingUser = await this.db.query.users.findFirst({
       where: eq(schema.users.email, email),
@@ -49,8 +51,8 @@ export class AuthService {
     };
   }
 
-  async loginUser(body: any) {
-    const { email, password } = body;
+  async loginUser(dto: LoginDto) {
+    const { email, password } = dto;
 
     // 1. Check user exists
     const user = await this.db.query.users.findFirst({

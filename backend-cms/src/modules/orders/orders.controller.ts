@@ -3,6 +3,8 @@ import { OrdersService } from './orders.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderStatusDto } from './dto/update-order-status.dto';
 
 @Controller('orders')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -11,9 +13,9 @@ export class OrdersController {
 
   @Post()
   @Roles('ADMIN', 'PARTNER', 'CUSTOMER')
-  async createOrder(@Body() body: any, @Req() req: any) {
+  async createOrder(@Body() dto: CreateOrderDto, @Req() req: any) {
     const userId = req.user?.userId || req.user?.id || req.user?.sub;
-    return await this.ordersService.createOrder(body, userId);
+    return await this.ordersService.createOrder(dto, userId);
   }
 
   @Get('store/:storeId')
@@ -23,10 +25,8 @@ export class OrdersController {
   }
 
   @Patch(':id/status')
-async updateOrderStatus(
-  @Param('id') id: string,
-  @Body('status') status: 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED',
-) {
-  return await this.ordersService.updateOrderStatus(id, status);
-}
+  @Roles('ADMIN', 'PARTNER')
+  async updateOrderStatus(@Param('id') id: string, @Body() dto: UpdateOrderStatusDto) {
+    return await this.ordersService.updateOrderStatus(id, dto.status);
+  }
 }
