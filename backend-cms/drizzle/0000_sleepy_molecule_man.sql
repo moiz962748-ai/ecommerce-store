@@ -1,0 +1,21 @@
+CREATE INDEX "audit_log_user_id_idx" ON "audit_log" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "audit_log_store_id_idx" ON "audit_log" USING btree ("store_id");--> statement-breakpoint
+CREATE INDEX "cart_user_id_idx" ON "cart" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "cart_product_variant_id_idx" ON "cart" USING btree ("product_variant_id");--> statement-breakpoint
+CREATE INDEX "favourite_wishlist_user_id_idx" ON "favourite_wishlist" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "favourite_wishlist_product_variant_id_idx" ON "favourite_wishlist" USING btree ("product_variant_id");--> statement-breakpoint
+CREATE INDEX "nav_link_store_id_idx" ON "nav_link" USING btree ("store_id");--> statement-breakpoint
+CREATE INDEX "order_item_order_id_idx" ON "order_item" USING btree ("order_id");--> statement-breakpoint
+CREATE INDEX "order_item_product_variant_id_idx" ON "order_item" USING btree ("product_variant_id");--> statement-breakpoint
+CREATE INDEX "orders_user_id_idx" ON "orders" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "orders_store_id_idx" ON "orders" USING btree ("store_id");--> statement-breakpoint
+CREATE INDEX "product_tag_product_id_idx" ON "product_tag" USING btree ("product_id");--> statement-breakpoint
+CREATE INDEX "product_tag_tag_id_idx" ON "product_tag" USING btree ("tag_id");--> statement-breakpoint
+CREATE INDEX "product_variant_product_id_idx" ON "product_variant" USING btree ("product_id");--> statement-breakpoint
+CREATE INDEX "products_store_id_idx" ON "products" USING btree ("store_id");--> statement-breakpoint
+CREATE INDEX "products_category_id_idx" ON "products" USING btree ("category_id");--> statement-breakpoint
+CREATE INDEX "store_partner_store_id_idx" ON "store_partner" USING btree ("store_id");--> statement-breakpoint
+CREATE INDEX "store_partner_user_id_idx" ON "store_partner" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "store_section_store_id_idx" ON "store_section" USING btree ("store_id");--> statement-breakpoint
+CREATE INDEX "store_section_section_type_id_idx" ON "store_section" USING btree ("section_type_id");--> statement-breakpoint
+CREATE INDEX "stores_template_id_idx" ON "stores" USING btree ("template_id");

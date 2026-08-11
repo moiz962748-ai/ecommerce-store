@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text, integer, boolean, timestamp, jsonb, pgEnum, primaryKey, decimal } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, varchar, text, integer, boolean, timestamp, jsonb, pgEnum, primaryKey, decimal, index } from 'drizzle-orm/pg-core';
 
 // --------------------------------------------------------
 // ENUMS
@@ -42,7 +42,9 @@ export const stores = pgTable('stores', {
   isActive: boolean('is_active').default(true).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
+}, (table) => ({
+  templateIdx: index('stores_template_id_idx').on(table.templateId),
+}));
 
 // 4. Store Partner Table
 export const storePartner = pgTable('store_partner', {
@@ -50,7 +52,10 @@ export const storePartner = pgTable('store_partner', {
   storeId: uuid('store_id').references(() => stores.id).notNull(),
   userId: uuid('user_id').references(() => users.id).notNull(),
   assignedAt: timestamp('assigned_at').defaultNow().notNull(),
-});
+}, (table) => ({
+  storeIdx: index('store_partner_store_id_idx').on(table.storeId),
+  userIdx: index('store_partner_user_id_idx').on(table.userId),
+}));
 
 // 5. Section Type Table
 export const sectionType = pgTable('section_type', {
@@ -69,7 +74,10 @@ export const storeSection = pgTable('store_section', {
   config: jsonb('config').notNull(),
   position: integer('position').notNull(),
   isVisible: boolean('is_visible').default(true).notNull(),
-});
+}, (table) => ({
+  storeIdx: index('store_section_store_id_idx').on(table.storeId),
+  sectionTypeIdx: index('store_section_section_type_id_idx').on(table.sectionTypeId),
+}));
 
 // 7. Nav Link Table
 export const navLink = pgTable('nav_link', {
@@ -78,7 +86,9 @@ export const navLink = pgTable('nav_link', {
   name: varchar('name').notNull(),
   link: varchar('link').notNull(),
   position: integer('position').notNull(),
-});
+}, (table) => ({
+  storeIdx: index('nav_link_store_id_idx').on(table.storeId),
+}));
 
 // 8. Category Table
 export const category = pgTable('category', {
@@ -96,7 +106,10 @@ export const products = pgTable('products', {
   basePrice: integer('base_price').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
-});
+}, (table) => ({
+  storeIdx: index('products_store_id_idx').on(table.storeId),
+  categoryIdx: index('products_category_id_idx').on(table.categoryId),
+}));
 
 // 10. Product Variant Table
 export const productVariant = pgTable('product_variant', {
@@ -106,7 +119,9 @@ export const productVariant = pgTable('product_variant', {
   price: integer('price').notNull(),
   sku: varchar('sku').notNull().unique(),
   stock: integer('stock').default(0).notNull(),
-});
+}, (table) => ({
+  productIdx: index('product_variant_product_id_idx').on(table.productId),
+}));
 
 // 11. Tags Table
 export const tags = pgTable('tags', {
@@ -121,6 +136,8 @@ export const productTag = pgTable('product_tag', {
   tagId: uuid('tag_id').references(() => tags.id).notNull(),
 }, (table) => ({
   pk: primaryKey({ columns: [table.productId, table.tagId] }),
+  productIdx: index('product_tag_product_id_idx').on(table.productId),
+  tagIdx: index('product_tag_tag_id_idx').on(table.tagId),
 }));
 
 // 13. Audit Log Table
@@ -131,7 +148,10 @@ export const auditLog = pgTable('audit_log', {
   action: varchar('action').notNull(),
   details: jsonb('details').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-});
+}, (table) => ({
+  userIdx: index('audit_log_user_id_idx').on(table.userId),
+  storeIdx: index('audit_log_store_id_idx').on(table.storeId),
+}));
 
 // 14. Orders Table
 export const orders = pgTable('orders', {
@@ -142,7 +162,10 @@ export const orders = pgTable('orders', {
   orderStatus: orderStatusEnum('order_status').default('PENDING').notNull(),
   address: text('address').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-});
+}, (table) => ({
+  userIdx: index('orders_user_id_idx').on(table.userId),
+  storeIdx: index('orders_store_id_idx').on(table.storeId),
+}));
 
 // 15. Order Item Table
 export const orderItem = pgTable('order_item', {
@@ -151,7 +174,10 @@ export const orderItem = pgTable('order_item', {
   productVariantId: uuid('product_variant_id').references(() => productVariant.id).notNull(),
   quantity: integer('quantity').notNull(),
   priceAtPurchase: integer('price_at_purchase').notNull(),
-});
+}, (table) => ({
+  orderIdx: index('order_item_order_id_idx').on(table.orderId),
+  variantIdx: index('order_item_product_variant_id_idx').on(table.productVariantId),
+}));
 
 // 16. Cart Table
 export const cart = pgTable('cart', {
@@ -159,11 +185,17 @@ export const cart = pgTable('cart', {
   userId: uuid('user_id').references(() => users.id).notNull(),
   productVariantId: uuid('product_variant_id').references(() => productVariant.id).notNull(),
   quantity: integer('quantity').default(1).notNull(),
-});
+}, (table) => ({
+  userIdx: index('cart_user_id_idx').on(table.userId),
+  variantIdx: index('cart_product_variant_id_idx').on(table.productVariantId),
+}));
 
 // 17. Favourite Wishlist Table
 export const favouriteWishlist = pgTable('favourite_wishlist', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id').references(() => users.id).notNull(),
   productVariantId: uuid('product_variant_id').references(() => productVariant.id).notNull(),
-});
+}, (table) => ({
+  userIdx: index('favourite_wishlist_user_id_idx').on(table.userId),
+  variantIdx: index('favourite_wishlist_product_variant_id_idx').on(table.productVariantId),
+}));
