@@ -20,7 +20,7 @@ export async function apiClient(endpoint: string, options: ApiOptions = {}) {
 
   if (!res.ok) {
     const message = Array.isArray(data.message) ? data.message[0] : data.message;
-    throw new Error(message || 'Kuch ghalat ho gaya');
+    throw new Error(message || 'Something went wrong');
   }
 
   return data;

@@ -1,18 +1,18 @@
 import { IsString, IsNotEmpty, IsOptional, IsUUID, IsNumber, Min } from 'class-validator';
 
 export class CreateOrderDto {
-  @IsUUID('4', { message: 'storeId ek valid UUID hona chahiye' })
+  @IsUUID('4', { message: 'storeId must be a valid UUID' })
   storeId!: string;
 
-  @IsNumber({}, { message: 'price ek number hona chahiye' })
-  @Min(0, { message: 'price negative nahi ho sakta' })
+  @IsNumber({}, { message: 'price must be a number' })
+  @Min(0, { message: 'price cannot be negative' })
   price!: number;
 
   @IsString()
-  @IsNotEmpty({ message: 'Delivery address zaroori hai' })
+  @IsNotEmpty({ message: 'Delivery address is required' })
   address!: string;
 
   @IsOptional()
-  @IsUUID('4', { message: 'userId ek valid UUID hona chahiye' })
+  @IsUUID('4', { message: 'userId must be a valid UUID' })
   userId?: string;
 }

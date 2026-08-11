@@ -24,7 +24,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new ConflictException('Is email ke sath user pehle se registered hai!');
+      throw new ConflictException('A user with this email is already registered!');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -46,7 +46,7 @@ export class AuthService {
       });
 
     return {
-      message: 'User successfully register ho gaya hai!',
+      message: 'User registered successfully!',
       user: newUser,
     };
   }
@@ -54,22 +54,19 @@ export class AuthService {
   async loginUser(dto: LoginDto) {
     const { email, password } = dto;
 
-    // 1. Check user exists
     const user = await this.db.query.users.findFirst({
       where: eq(schema.users.email, email),
     });
 
     if (!user) {
-      throw new UnauthorizedException('Email ya Password galat hai!');
+      throw new UnauthorizedException('Invalid email or password!');
     }
 
-    // 2. Compare Password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Email ya Password galat hai!');
+      throw new UnauthorizedException('Invalid email or password!');
     }
 
-    // 3. Generate JWT Payload
     const payload = { sub: user.id, email: user.email, role: user.role };
     const accessToken = await this.jwtService.signAsync(payload);
 

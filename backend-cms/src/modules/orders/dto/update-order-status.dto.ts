@@ -9,6 +9,6 @@ export enum OrderStatusEnum {
 }
 
 export class UpdateOrderStatusDto {
-  @IsEnum(OrderStatusEnum, { message: 'status in values mein se ek hona chahiye: PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED' })
+  @IsEnum(OrderStatusEnum, { message: 'status must be one of: PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED' })
   status!: OrderStatusEnum;
 }

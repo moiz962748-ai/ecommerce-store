@@ -2,7 +2,7 @@ import { IsString, IsNotEmpty, IsOptional, IsUUID, IsObject } from 'class-valida
 
 export class CreateStoreDto {
   @IsString()
-  @IsNotEmpty({ message: 'Store name zaroori hai' })
+  @IsNotEmpty({ message: 'Store name is required' })
   name!: string;
 
   @IsOptional()
@@ -14,7 +14,7 @@ export class CreateStoreDto {
   subDomain?: string;
 
   @IsOptional()
-  @IsUUID('4', { message: 'templateId ek valid UUID hona chahiye' })
+  @IsUUID('4', { message: 'templateId must be a valid UUID' })
   templateId?: string;
 
   @IsOptional()

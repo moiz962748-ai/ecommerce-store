@@ -18,8 +18,8 @@ import {
 } from '@/components/ui/card';
 
 const loginSchema = z.object({
-  email: z.string().email({ message: 'Sahi email format dein' }),
-  password: z.string().min(1, { message: 'Password zaroori hai' }),
+  email: z.string().email({ message: 'Please provide a valid email address' }),
+  password: z.string().min(1, { message: 'Password is required' }),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -46,7 +46,7 @@ export default function LoginPage() {
         body: JSON.stringify(values),
       });
 
-      // Abhi ke liye token localStorage mein — baad mein httpOnly cookie pe upgrade karenge
+      // Stored in localStorage for now — will upgrade to httpOnly cookies later
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('user', JSON.stringify(data.user));
 
@@ -63,7 +63,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Apne CMS account mein sign in karein</CardDescription>
+          <CardDescription>Sign in to your CMS account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

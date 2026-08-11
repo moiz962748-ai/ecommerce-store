@@ -24,7 +24,7 @@ export class StoreAccessService {
     });
 
     if (!assignment) {
-      throw new ForbiddenException('Aap is store ko manage karne ke liye authorized nahi hain!');
+      throw new ForbiddenException('You are not authorized to manage this store!');
     }
   }
 }

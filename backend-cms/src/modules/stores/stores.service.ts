@@ -31,7 +31,7 @@ export class StoresService {
       .returning();
 
     if (!created) {
-      throw new Error('Default template create nahi ho saka');
+      throw new Error('Failed to create default template');
     }
 
     return created;
@@ -43,7 +43,7 @@ export class StoresService {
     const finalSubDomain = subDomain || slug;
 
     if (!finalSubDomain) {
-      throw new ConflictException('subDomain ya slug mein se koi ek dena zaroori hai!');
+      throw new ConflictException('Either subDomain or slug must be provided!');
     }
 
     const existingStore = await this.db.query.stores.findFirst({
@@ -51,7 +51,7 @@ export class StoresService {
     });
 
     if (existingStore) {
-      throw new ConflictException('Is subDomain/slug ke sath store pehle se majood hai!');
+      throw new ConflictException('A store with this subDomain/slug already exists!');
     }
 
     let activeTemplateId = templateId;
@@ -73,7 +73,7 @@ export class StoresService {
       .returning();
 
     return {
-      message: 'Store successfully create ho gaya hai!',
+      message: 'Store created successfully!',
       store: newStore,
     };
   }
@@ -94,7 +94,7 @@ export class StoresService {
       .returning();
 
     return {
-      message: 'Partner successfully store se assign ho gaya hai!',
+      message: 'Partner assigned to store successfully!',
       assignment,
     };
   }
@@ -116,7 +116,7 @@ export class StoresService {
       .returning();
 
     return {
-      message: 'Store settings successfully update ho gayi hain!',
+      message: 'Store settings updated successfully!',
       store: updatedStore,
     };
   }

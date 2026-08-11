@@ -19,7 +19,7 @@ export class OrdersService {
     const finalUserId = userId || authenticatedUserId;
 
     if (!finalUserId) {
-      throw new BadRequestException('Order create karne ke liye userId zaroori hai!');
+      throw new BadRequestException('userId is required to create an order!');
     }
 
     const [newOrder] = await this.db
@@ -34,7 +34,7 @@ export class OrdersService {
       .returning();
 
     return {
-      message: 'Order successfully place ho gaya hai!',
+      message: 'Order placed successfully!',
       order: newOrder,
     };
   }
@@ -54,7 +54,7 @@ export class OrdersService {
       .returning();
 
     return {
-      message: 'Order status successfully update ho gaya hai!',
+      message: 'Order status updated successfully!',
       order: updatedOrder,
     };
   }

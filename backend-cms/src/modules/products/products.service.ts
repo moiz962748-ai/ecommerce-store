@@ -27,7 +27,7 @@ export class ProductsService {
       .returning();
 
     return {
-      message: 'Product successfully create ho gaya hai!',
+      message: 'Product created successfully!',
       product: newProduct,
     };
   }
