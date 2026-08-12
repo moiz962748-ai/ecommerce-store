@@ -3,8 +3,8 @@ import { DRIZZLE } from '../../db/drizzle.provider';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
 import { orders } from '../../db/schema';
-import { eq } from 'drizzle-orm';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { eq, desc } from 'drizzle-orm';
 
 @Injectable()
 export class OrdersService {
@@ -41,6 +41,14 @@ export class OrdersService {
 
   async getOrdersByStore(storeId: string) {
     return await this.db.select().from(orders).where(eq(orders.storeId, storeId));
+  }
+
+  async getOrdersByUser(userId: string) {
+    return await this.db
+      .select()
+      .from(orders)
+      .where(eq(orders.userId, userId))
+      .orderBy(desc(orders.createdAt));
   }
 
   async updateOrderStatus(

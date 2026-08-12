@@ -24,6 +24,13 @@ export class OrdersController {
     return await this.ordersService.getOrdersByStore(storeId);
   }
 
+  @Get('my-orders')
+  @Roles('ADMIN', 'PARTNER', 'CUSTOMER')
+  async getMyOrders(@Req() req: any) {
+    const userId = req.user?.userId || req.user?.id || req.user?.sub;
+    return await this.ordersService.getOrdersByUser(userId);
+  }
+
   @Patch(':id/status')
   @Roles('ADMIN', 'PARTNER')
   async updateOrderStatus(@Param('id') id: string, @Body() dto: UpdateOrderStatusDto) {
