@@ -11,6 +11,7 @@ const navItems = [
   { label: 'Stores', href: '/dashboard/stores' },
   { label: 'Products', href: '/dashboard/products' },
   { label: 'Categories', href: '/dashboard/categories' },
+  { label: 'Orders', href: '/dashboard/orders' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
