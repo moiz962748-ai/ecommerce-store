@@ -17,6 +17,12 @@ export class StoresController {
     return await this.storesService.createStore(dto);
   }
 
+  @Get('my-stores')
+@Roles('ADMIN', 'PARTNER')
+async getMyStores(@Req() req: any) {
+  return await this.storesService.getMyStores(req.user.userId, req.user.role);
+}
+
   @Get()
   @Roles('ADMIN', 'PARTNER', 'CUSTOMER')
   async getAllStores() {

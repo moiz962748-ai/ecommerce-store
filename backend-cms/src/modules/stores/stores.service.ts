@@ -82,6 +82,27 @@ export class StoresService {
     return await this.db.query.stores.findMany();
   }
 
+  async getMyStores(userId: string, role: string) {
+  if (role === 'ADMIN') {
+    return await this.db.query.stores.findMany();
+  }
+
+  const result = await this.db
+    .select({
+      id: schema.stores.id,
+      name: schema.stores.name,
+      subDomain: schema.stores.subDomain,
+      logoUrl: schema.stores.logoUrl,
+      isActive: schema.stores.isActive,
+      createdAt: schema.stores.createdAt,
+    })
+    .from(schema.storePartner)
+    .innerJoin(schema.stores, eq(schema.storePartner.storeId, schema.stores.id))
+    .where(eq(schema.storePartner.userId, userId));
+
+  return result;
+}
+
   async assignPartnerToStore(body: any) {
     const { storeId, partnerId, userId } = body;
 

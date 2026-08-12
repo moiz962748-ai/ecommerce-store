@@ -50,7 +50,11 @@ export default function LoginPage() {
       localStorage.setItem('accessToken', data.accessToken);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      router.push('/dashboard');
+      if (data.user.role === 'PARTNER') {
+  router.push('/partner');
+} else {
+  router.push('/dashboard');
+}
     } catch (err: any) {
       setServerError(err.message);
     } finally {
