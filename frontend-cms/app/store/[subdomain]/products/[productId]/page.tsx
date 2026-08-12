@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiClient } from '@/lib/api-client';
+import { getStoredToken } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 
 interface Store {
@@ -20,6 +21,7 @@ interface Product {
 
 export default function ProductDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const subdomain = params.subdomain as string;
   const productId = params.productId as string;
 
@@ -27,6 +29,8 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
+  const [addedMessage, setAddedMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +56,29 @@ export default function ProductDetailPage() {
     fetchData();
   }, [subdomain, productId]);
 
+  const handleAddToCart = async () => {
+    const token = getStoredToken();
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    setAdding(true);
+    setAddedMessage(null);
+    try {
+      await apiClient('/cart', {
+        method: 'POST',
+        token,
+        body: JSON.stringify({ productId, quantity: 1 }),
+      });
+      setAddedMessage('Added to cart!');
+    } catch (err: any) {
+      setAddedMessage(err.message);
+    } finally {
+      setAdding(false);
+    }
+  };
+
   if (loading) {
     return (
       <main className="p-8">
@@ -74,9 +101,14 @@ export default function ProductDetailPage() {
         <Link href={`/store/${subdomain}`}>
           <h1 className="text-xl font-bold">{store.name}</h1>
         </Link>
-        <Link href={`/store/${subdomain}/products`} className="text-sm underline">
-          Back to Products
-        </Link>
+        <div className="flex gap-4 items-center">
+          <Link href={`/store/${subdomain}/products`} className="text-sm underline">
+            Back to Products
+          </Link>
+          <Link href={`/store/${subdomain}/cart`} className="text-sm underline">
+            Cart
+          </Link>
+        </div>
       </header>
 
       <div className="max-w-2xl mx-auto p-8">
@@ -86,9 +118,13 @@ export default function ProductDetailPage() {
         </p>
         <p className="mb-8">{product.description}</p>
 
-        <Button size="lg" disabled>
-          Add to Cart (coming soon)
+        <Button size="lg" onClick={handleAddToCart} disabled={adding}>
+          {adding ? 'Adding...' : 'Add to Cart'}
         </Button>
+
+        {addedMessage && (
+          <p className="mt-3 text-sm text-green-600">{addedMessage}</p>
+        )}
       </div>
     </main>
   );

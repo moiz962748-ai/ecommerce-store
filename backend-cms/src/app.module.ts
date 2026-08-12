@@ -9,17 +9,19 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { CommonModule } from './common/common.module';
+import { CartModule } from './modules/cart/cart.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
-    CommonModule,        
+    CommonModule,
     AuthModule,
     StoresModule,
     CategoriesModule,
     ProductsModule,
     OrdersModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
