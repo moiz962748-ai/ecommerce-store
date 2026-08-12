@@ -31,6 +31,8 @@ export default function ProductDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
   const [addedMessage, setAddedMessage] = useState<string | null>(null);
+  const [wishlisting, setWishlisting] = useState(false);
+  const [wishlistMessage, setWishlistMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,6 +81,29 @@ export default function ProductDetailPage() {
     }
   };
 
+  const handleAddToWishlist = async () => {
+    const token = getStoredToken();
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    setWishlisting(true);
+    setWishlistMessage(null);
+    try {
+      await apiClient('/wishlist', {
+        method: 'POST',
+        token,
+        body: JSON.stringify({ productId }),
+      });
+      setWishlistMessage('Added to wishlist!');
+    } catch (err: any) {
+      setWishlistMessage(err.message);
+    } finally {
+      setWishlisting(false);
+    }
+  };
+
   if (loading) {
     return (
       <main className="p-8">
@@ -105,6 +130,9 @@ export default function ProductDetailPage() {
           <Link href={`/store/${subdomain}/products`} className="text-sm underline">
             Back to Products
           </Link>
+          <Link href={`/store/${subdomain}/wishlist`} className="text-sm underline">
+            Wishlist
+          </Link>
           <Link href={`/store/${subdomain}/cart`} className="text-sm underline">
             Cart
           </Link>
@@ -118,12 +146,20 @@ export default function ProductDetailPage() {
         </p>
         <p className="mb-8">{product.description}</p>
 
-        <Button size="lg" onClick={handleAddToCart} disabled={adding}>
-          {adding ? 'Adding...' : 'Add to Cart'}
-        </Button>
+        <div className="flex gap-3">
+          <Button size="lg" onClick={handleAddToCart} disabled={adding}>
+            {adding ? 'Adding...' : 'Add to Cart'}
+          </Button>
+          <Button size="lg" variant="outline" onClick={handleAddToWishlist} disabled={wishlisting}>
+            {wishlisting ? 'Adding...' : 'Add to Wishlist'}
+          </Button>
+        </div>
 
         {addedMessage && (
           <p className="mt-3 text-sm text-green-600">{addedMessage}</p>
+        )}
+        {wishlistMessage && (
+          <p className="mt-1 text-sm text-green-600">{wishlistMessage}</p>
         )}
       </div>
     </main>

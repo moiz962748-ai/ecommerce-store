@@ -147,6 +147,7 @@ export default function OrdersPage() {
         <Table>
           <TableHeader>
             <TableRow>
+                
               <TableHead>Address</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Status</TableHead>
