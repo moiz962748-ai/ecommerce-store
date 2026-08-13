@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '@/lib/api-client';
 import { getStoredToken } from '@/lib/auth';
+import { getStoreTag, tagDotClass } from '@/lib/store-tags';
 import {
   Table,
   TableBody,
@@ -22,6 +23,7 @@ import {
 interface Store {
   id: string;
   name: string;
+  subDomain: string;
 }
 
 interface Order {
@@ -36,12 +38,14 @@ interface Order {
 
 const STATUS_OPTIONS = ['PENDING', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED'] as const;
 
-const statusColors: Record<string, string> = {
-  PENDING: 'bg-yellow-100 text-yellow-700',
-  CONFIRMED: 'bg-blue-100 text-blue-700',
-  SHIPPED: 'bg-purple-100 text-purple-700',
-  DELIVERED: 'bg-green-100 text-green-700',
-  CANCELLED: 'bg-red-100 text-red-700',
+// Outline-style badges, consistent with the "Active" badge look used
+// elsewhere in the design system (border + matching text color, no fill).
+const statusStyles: Record<string, string> = {
+  PENDING: 'border-amber-600 text-amber-700',
+  CONFIRMED: 'border-blue-600 text-blue-700',
+  SHIPPED: 'border-violet-600 text-violet-700',
+  DELIVERED: 'border-emerald-600 text-emerald-700',
+  CANCELLED: 'border-red-600 text-red-700',
 };
 
 export default function OrdersPage() {
@@ -110,10 +114,13 @@ export default function OrdersPage() {
     }
   };
 
+  const selectedStore = stores.find((s) => s.id === selectedStoreId);
+  const selectedTag = selectedStore ? getStoreTag(selectedStore.subDomain) : null;
+
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Orders</h1>
+        <h1 className="font-heading text-2xl font-semibold">Orders</h1>
         <p className="text-muted-foreground">View and manage orders for a store</p>
       </div>
 
@@ -124,17 +131,31 @@ export default function OrdersPage() {
           <Select value={selectedStoreId} onValueChange={(value) => setSelectedStoreId(value || '')}>
             <SelectTrigger>
               <SelectValue>
-                {(value: string | null) =>
-                  stores.find((s) => s.id === value)?.name || 'Select a store'
-                }
+                {(value: string | null) => {
+                  const store = stores.find((s) => s.id === value);
+                  if (!store) return 'Select a store';
+                  const tag = getStoreTag(store.subDomain);
+                  return (
+                    <span className="flex items-center gap-2">
+                      <span className={`inline-block w-1.5 h-1.5 rounded-full ${tagDotClass[tag]}`} />
+                      {store.name}
+                    </span>
+                  );
+                }}
               </SelectValue>
             </SelectTrigger>
             <SelectContent>
-              {stores.map((store) => (
-                <SelectItem key={store.id} value={store.id}>
-                  {store.name}
-                </SelectItem>
-              ))}
+              {stores.map((store) => {
+                const tag = getStoreTag(store.subDomain);
+                return (
+                  <SelectItem key={store.id} value={store.id}>
+                    <span className="flex items-center gap-2">
+                      <span className={`inline-block w-1.5 h-1.5 rounded-full ${tagDotClass[tag]}`} />
+                      {store.name}
+                    </span>
+                  </SelectItem>
+                );
+              })}
             </SelectContent>
           </Select>
         )}
@@ -147,7 +168,6 @@ export default function OrdersPage() {
         <Table>
           <TableHeader>
             <TableRow>
-                
               <TableHead>Address</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Status</TableHead>
@@ -166,13 +186,17 @@ export default function OrdersPage() {
             {orders.map((order) => (
               <TableRow key={order.id}>
                 <TableCell className="max-w-xs truncate">{order.address}</TableCell>
-                <TableCell>Rs. {order.price}</TableCell>
+                <TableCell className="font-mono text-xs">Rs. {order.price}</TableCell>
                 <TableCell>
-                  <span className={`text-xs px-2 py-1 rounded-full ${statusColors[order.orderStatus]}`}>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full border ${statusStyles[order.orderStatus]}`}
+                  >
                     {order.orderStatus}
                   </span>
                 </TableCell>
-                <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell className="font-mono text-xs text-muted-foreground">
+                  {new Date(order.createdAt).toLocaleDateString()}
+                </TableCell>
                 <TableCell>
                   <Select
                     value={order.orderStatus}

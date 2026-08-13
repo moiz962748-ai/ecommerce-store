@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '@/lib/api-client';
 import { getStoredToken } from '@/lib/auth';
+import { getStoreTag, tagDotClass, tagBorderClass } from '@/lib/store-tags';
 import {
   Card,
   CardContent,
@@ -41,7 +42,7 @@ export default function PartnerHomePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-1">My Stores</h1>
+      <h1 className="font-heading text-2xl font-semibold mb-1">My Stores</h1>
       <p className="text-muted-foreground mb-6">Stores you are assigned to manage</p>
 
       {loading && <p className="text-muted-foreground">Loading...</p>}
@@ -55,25 +56,31 @@ export default function PartnerHomePage() {
             </p>
           )}
 
-          {stores.map((store) => (
-            <Card key={store.id}>
-              <CardHeader>
-                <CardTitle>{store.name}</CardTitle>
-                <CardDescription>{store.subDomain}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <span
-                  className={`text-xs px-2 py-1 rounded-full ${
-                    store.isActive
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-gray-100 text-gray-600'
-                  }`}
-                >
-                  {store.isActive ? 'Active' : 'Inactive'}
-                </span>
-              </CardContent>
-            </Card>
-          ))}
+          {stores.map((store) => {
+            const tag = getStoreTag(store.subDomain);
+            return (
+              <Card key={store.id} className={`border-l-4 ${tagBorderClass[tag]}`}>
+                <CardHeader>
+                  <CardTitle className="font-heading flex items-center gap-2">
+                    <span className={`inline-block w-1.5 h-1.5 rounded-full ${tagDotClass[tag]}`} />
+                    {store.name}
+                  </CardTitle>
+                  <CardDescription className="font-mono text-xs">{store.subDomain}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full border ${
+                      store.isActive
+                        ? 'border-emerald-600 text-emerald-700'
+                        : 'border-border text-muted-foreground'
+                    }`}
+                  >
+                    {store.isActive ? 'Active' : 'Inactive'}
+                  </span>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
       )}
     </div>

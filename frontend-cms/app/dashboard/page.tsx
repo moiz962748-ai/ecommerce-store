@@ -3,13 +3,7 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '@/lib/api-client';
 import { getStoredToken } from '@/lib/auth';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { getStoreTag, tagBorderClass, tagDotClass } from '@/lib/store-tags';
 
 interface Store {
   id: string;
@@ -41,8 +35,8 @@ export default function DashboardHomePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-1">Dashboard</h1>
-      <p className="text-muted-foreground mb-6">Overview of your stores</p>
+      <h1 className="font-heading text-2xl font-semibold mb-1">Dashboard</h1>
+      <p className="text-muted-foreground mb-8">Overview of your stores</p>
 
       {loading && <p className="text-muted-foreground">Loading stores...</p>}
       {error && <p className="text-red-500">{error}</p>}
@@ -53,25 +47,32 @@ export default function DashboardHomePage() {
             <p className="text-muted-foreground">No stores found yet.</p>
           )}
 
-          {stores.map((store) => (
-            <Card key={store.id}>
-              <CardHeader>
-                <CardTitle>{store.name}</CardTitle>
-                <CardDescription>{store.subDomain}</CardDescription>
-              </CardHeader>
-              <CardContent>
+          {stores.map((store) => {
+            const tag = getStoreTag(store.subDomain);
+            return (
+              <div
+                key={store.id}
+                className={`bg-card rounded-lg border-l-4 border border-border ${tagBorderClass[tag]} p-5`}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <span className={`inline-block w-2 h-2 rounded-full ${tagDotClass[tag]}`} />
+                  <h3 className="font-heading text-lg font-semibold">{store.name}</h3>
+                </div>
+                <p className="font-mono text-xs text-muted-foreground mb-4">
+                  {store.subDomain}
+                </p>
                 <span
-                  className={`text-xs px-2 py-1 rounded-full ${
+                  className={`text-xs px-2 py-0.5 rounded-full border ${
                     store.isActive
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-gray-100 text-gray-600'
+                      ? 'border-tag-sports text-tag-sports'
+                      : 'border-border text-muted-foreground'
                   }`}
                 >
                   {store.isActive ? 'Active' : 'Inactive'}
                 </span>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

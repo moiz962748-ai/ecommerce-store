@@ -49,32 +49,41 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-64 border-r bg-muted/20 flex flex-col">
-        <div className="p-6 border-b">
-          <h2 className="font-bold text-lg">CMS Admin</h2>
+      <aside className="w-64 bg-sidebar text-sidebar-foreground flex flex-col">
+        <div className="px-6 py-7 border-b border-sidebar-border">
+          <h2 className="font-heading text-xl font-semibold tracking-tight">CMS Admin</h2>
           {user && (
-            <p className="text-sm text-muted-foreground mt-1">{user.fullName}</p>
+            <p className="text-xs text-sidebar-foreground/60 mt-1.5 uppercase tracking-wide">
+              {user.role} · {user.fullName}
+            </p>
           )}
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`block px-3 py-2 rounded-md text-sm ${
-                pathname === item.href
-                  ? 'bg-primary text-primary-foreground'
-                  : 'hover:bg-muted'
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+        <nav className="flex-1 px-3 py-5 space-y-0.5">
+          {navItems.map((item) => {
+            const active = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors border-l-2 ${
+                  active
+                    ? 'bg-sidebar-accent text-sidebar-accent-foreground border-l-tag-electronics'
+                    : 'border-l-transparent text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="p-4 border-t">
-          <Button variant="outline" className="w-full" onClick={handleLogout}>
+        <div className="p-4 border-t border-sidebar-border">
+          <Button
+            variant="outline"
+            className="w-full bg-transparent border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            onClick={handleLogout}
+          >
             Logout
           </Button>
         </div>

@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
 import { getStoredToken } from '@/lib/auth';
+import { getStoreTag, tagDotClass } from '@/lib/store-tags';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -99,7 +100,7 @@ export default function StoresPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Stores</h1>
+          <h1 className="font-heading text-2xl font-semibold">Stores</h1>
           <p className="text-muted-foreground">Manage all stores on the platform</p>
         </div>
 
@@ -107,7 +108,7 @@ export default function StoresPage() {
           <DialogTrigger render={<Button>Create Store</Button>} />
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create a new store</DialogTitle>
+              <DialogTitle className="font-heading">Create a new store</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
               <div className="space-y-2">
@@ -159,24 +160,36 @@ export default function StoresPage() {
                 </TableCell>
               </TableRow>
             )}
-            {stores.map((store) => (
-              <TableRow key={store.id}>
-                <TableCell className="font-medium">{store.name}</TableCell>
-                <TableCell>{store.subDomain}</TableCell>
-                <TableCell>
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full ${
-                      store.isActive
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-gray-100 text-gray-600'
-                    }`}
-                  >
-                    {store.isActive ? 'Active' : 'Inactive'}
-                  </span>
-                </TableCell>
-                <TableCell>{new Date(store.createdAt).toLocaleDateString()}</TableCell>
-              </TableRow>
-            ))}
+            {stores.map((store) => {
+              const tag = getStoreTag(store.subDomain);
+              return (
+                <TableRow key={store.id}>
+                  <TableCell className="font-medium">
+                    <span className="flex items-center gap-2">
+                      <span className={`inline-block w-1.5 h-1.5 rounded-full ${tagDotClass[tag]}`} />
+                      {store.name}
+                    </span>
+                  </TableCell>
+                  <TableCell className="font-mono text-xs text-muted-foreground">
+                    {store.subDomain}
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={`text-xs px-2 py-0.5 rounded-full border ${
+                        store.isActive
+                          ? 'border-tag-sports text-tag-sports'
+                          : 'border-border text-muted-foreground'
+                      }`}
+                    >
+                      {store.isActive ? 'Active' : 'Inactive'}
+                    </span>
+                  </TableCell>
+                  <TableCell className="font-mono text-xs text-muted-foreground">
+                    {new Date(store.createdAt).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       )}

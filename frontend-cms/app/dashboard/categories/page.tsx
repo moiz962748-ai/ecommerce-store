@@ -95,7 +95,7 @@ export default function CategoriesPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Categories</h1>
+          <h1 className="font-heading text-2xl font-semibold">Categories</h1>
           <p className="text-muted-foreground">Manage product categories</p>
         </div>
 
@@ -103,7 +103,7 @@ export default function CategoriesPage() {
           <DialogTrigger render={<Button>Create Category</Button>} />
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create a new category</DialogTitle>
+              <DialogTitle className="font-heading">Create a new category</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
               <div className="space-y-2">

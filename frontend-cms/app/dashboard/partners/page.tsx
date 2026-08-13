@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
 import { getStoredToken } from '@/lib/auth';
+import { getStoreTag, tagDotClass } from '@/lib/store-tags';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -27,6 +28,7 @@ import {
 interface Store {
   id: string;
   name: string;
+  subDomain: string;
 }
 
 const assignSchema = z.object({
@@ -90,13 +92,13 @@ export default function PartnersPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Assign Partner</h1>
+        <h1 className="font-heading text-2xl font-semibold">Assign Partner</h1>
         <p className="text-muted-foreground">Grant a user access to manage a store</p>
       </div>
 
       <Card className="max-w-md">
         <CardHeader>
-          <CardTitle>New Assignment</CardTitle>
+          <CardTitle className="font-heading">New Assignment</CardTitle>
           <CardDescription>
             Enter the user&apos;s ID and select the store they should manage.
           </CardDescription>
@@ -115,17 +117,31 @@ export default function PartnersPage() {
                     <Select value={field.value} onValueChange={(v) => field.onChange(v || '')}>
                       <SelectTrigger className="w-full">
                         <SelectValue>
-                          {(value: string | null) =>
-                            stores.find((s) => s.id === value)?.name || 'Select a store'
-                          }
+                          {(value: string | null) => {
+                            const store = stores.find((s) => s.id === value);
+                            if (!store) return 'Select a store';
+                            const tag = getStoreTag(store.subDomain);
+                            return (
+                              <span className="flex items-center gap-2">
+                                <span className={`inline-block w-1.5 h-1.5 rounded-full ${tagDotClass[tag]}`} />
+                                {store.name}
+                              </span>
+                            );
+                          }}
                         </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
-                        {stores.map((store) => (
-                          <SelectItem key={store.id} value={store.id}>
-                            {store.name}
-                          </SelectItem>
-                        ))}
+                        {stores.map((store) => {
+                          const tag = getStoreTag(store.subDomain);
+                          return (
+                            <SelectItem key={store.id} value={store.id}>
+                              <span className="flex items-center gap-2">
+                                <span className={`inline-block w-1.5 h-1.5 rounded-full ${tagDotClass[tag]}`} />
+                                {store.name}
+                              </span>
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>
                     </Select>
                   )}
@@ -141,6 +157,7 @@ export default function PartnersPage() {
               <Input
                 id="userId"
                 placeholder="e.g. 862915c5-2f43-474c-8208-75dfa8a7fd51"
+                className="font-mono text-xs"
                 {...register('userId')}
               />
               <p className="text-xs text-muted-foreground">

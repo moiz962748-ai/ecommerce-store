@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { apiClient } from '@/lib/api-client';
 import { getStoredToken } from '@/lib/auth';
+import { getStoreTag, tagDotClass } from '@/lib/store-tags';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -42,6 +43,7 @@ interface Product {
 interface Store {
   id: string;
   name: string;
+  subDomain: string;
 }
 
 interface Category {
@@ -143,11 +145,16 @@ export default function PartnerProductsPage() {
     return <p className="text-muted-foreground">You are not assigned to any store yet.</p>;
   }
 
+  const tag = getStoreTag(myStore.subDomain);
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Products — {myStore.name}</h1>
+          <h1 className="font-heading text-2xl font-semibold flex items-center gap-2">
+            <span className={`inline-block w-1.5 h-1.5 rounded-full ${tagDotClass[tag]}`} />
+            Products — {myStore.name}
+          </h1>
           <p className="text-muted-foreground">Manage products for your store</p>
         </div>
 
@@ -155,7 +162,7 @@ export default function PartnerProductsPage() {
           <DialogTrigger render={<Button>Create Product</Button>} />
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create a new product</DialogTitle>
+              <DialogTitle className="font-heading">Create a new product</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
               <div className="space-y-2">
@@ -243,8 +250,8 @@ export default function PartnerProductsPage() {
           {products.map((product) => (
             <TableRow key={product.id}>
               <TableCell className="font-medium">{product.name}</TableCell>
-              <TableCell>{getCategoryName(product.categoryId)}</TableCell>
-              <TableCell>Rs. {product.basePrice}</TableCell>
+              <TableCell className="text-muted-foreground">{getCategoryName(product.categoryId)}</TableCell>
+              <TableCell className="font-mono text-xs">Rs. {product.basePrice}</TableCell>
             </TableRow>
           ))}
         </TableBody>
