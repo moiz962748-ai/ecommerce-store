@@ -18,13 +18,14 @@ export class ProductsService {
   async createProduct(dto: CreateProductDto, currentUser: { userId: string; role: string }) {
     await this.storeAccessService.assertStoreAccess(currentUser.userId, currentUser.role, dto.storeId);
 
-    const { name, description, basePrice, storeId, categoryId } = dto;
+    const { name, description, imageUrl, basePrice, storeId, categoryId } = dto;
 
     const [newProduct] = await this.db
       .insert(products)
       .values({
         name,
         description: description || '',
+        imageUrl: imageUrl || null,
         basePrice: Number(basePrice),
         storeId,
         categoryId,

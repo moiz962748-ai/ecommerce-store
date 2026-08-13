@@ -54,6 +54,7 @@ interface Category {
 const createProductSchema = z.object({
   name: z.string().min(1, { message: 'Product name is required' }),
   description: z.string().optional(),
+  imageUrl: z.string().optional(),
   basePrice: z.number().min(0, { message: 'Price cannot be negative' }),
   storeId: z.string().uuid(),
   categoryId: z.string().uuid({ message: 'Please select a category' }),
@@ -186,6 +187,11 @@ export default function PartnerProductsPage() {
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Input id="description" placeholder="Optional description" {...register('description')} />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="imageUrl">Image URL</Label>
+                <Input id="imageUrl" placeholder="https://..." {...register('imageUrl')} />
               </div>
 
               <div className="space-y-2">

@@ -9,6 +9,10 @@ export class CreateProductDto {
   @IsString()
   description?: string;
 
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
+
   @IsNumber({}, { message: 'basePrice must be a number' })
   @Min(0, { message: 'basePrice cannot be negative' })
   basePrice!: number;

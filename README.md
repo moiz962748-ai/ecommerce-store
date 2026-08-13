@@ -1,7 +1,4 @@
-﻿Project Title
-Short one-line description.
-
-Contents
+﻿Contents
 - backend-cms
 - frontend-cms
 

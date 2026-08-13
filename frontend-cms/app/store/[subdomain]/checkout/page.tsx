@@ -8,14 +8,6 @@ import { getStoredToken } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 
 interface CartItem {
   id: string;
@@ -44,7 +36,6 @@ export default function CheckoutPage() {
   const [error, setError] = useState<string | null>(null);
   const [placedOrder, setPlacedOrder] = useState<any | null>(null);
 
-  // Address form fields
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
@@ -57,9 +48,6 @@ export default function CheckoutPage() {
     }
 
     try {
-      // storeId is required by POST /orders (DTO expects a UUID, not the
-      // subdomain string), so resolve it from the public store-by-subdomain
-      // endpoint — same one the products/product-detail pages use.
       const [cartData, storeData] = await Promise.all([
         apiClient('/cart', { token }),
         apiClient(`/public/stores/${subdomain}`),
@@ -82,7 +70,9 @@ export default function CheckoutPage() {
     loadData();
   }, []);
 
-  const total = items.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
+  const subtotal = items.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
+  const shipping = subtotal > 0 ? 250 : 0;
+  const total = subtotal + shipping;
 
   const handlePlaceOrder = async () => {
     setError(null);
@@ -100,8 +90,6 @@ export default function CheckoutPage() {
     setSubmitting(true);
 
     try {
-      // POST /orders expects: { storeId, price, address, userId? }
-      // userId is derived from the JWT on the backend, so we don't send it.
       const result = await apiClient('/orders', {
         method: 'POST',
         token: token || undefined,
@@ -112,17 +100,12 @@ export default function CheckoutPage() {
         }),
       });
 
-      // Backend only creates the Order row (no OrderItems, no cart-clearing),
-      // so we clear the cart ourselves the same way the cart page's Remove
-      // button does, one item at a time.
       await Promise.all(
         items.map((item) =>
           apiClient(`/cart/${item.id}`, { method: 'DELETE', token: token || undefined }),
         ),
       );
 
-      // There's no GET /orders/:id endpoint yet, so show confirmation right
-      // here instead of routing to a page that doesn't exist.
       setPlacedOrder(result.order ?? result);
     } catch (err: any) {
       setError(err.message);
@@ -133,125 +116,171 @@ export default function CheckoutPage() {
 
   if (loading) {
     return (
-      <main className="p-8">
-        <p className="text-muted-foreground">Loading...</p>
+      <main className="flex min-h-screen items-center justify-center bg-store-background text-store-foreground">
+        <div className="rounded-2xl border border-store-border bg-store-card px-6 py-4 text-store-muted">
+          Loading checkout...
+        </div>
       </main>
     );
   }
 
   if (placedOrder) {
     return (
-      <main className="min-h-screen">
-        <header className="border-b p-6">
-          <h1 className="text-xl font-bold">Order Confirmed</h1>
-        </header>
-        <div className="max-w-xl mx-auto p-8 space-y-4">
-          <p className="text-lg">Thank you! Your order has been placed.</p>
-          <div className="border rounded-md p-4 space-y-1 text-sm">
-            <p><span className="font-medium">Order ID:</span> {placedOrder.id}</p>
-            <p><span className="font-medium">Total:</span> Rs. {placedOrder.price}</p>
-            <p><span className="font-medium">Status:</span> {placedOrder.orderStatus}</p>
-            <p><span className="font-medium">Payment:</span> Cash on Delivery</p>
+      <main className="min-h-screen bg-store-background text-store-foreground">
+        <header className="border-b border-store-border bg-store-background/95 backdrop-blur-sm">
+          <div className="mx-auto max-w-7xl px-4 py-5 md:px-8">
+            <h1 className="text-2xl font-bold text-store-foreground store-heading">Order confirmed</h1>
           </div>
-          <Link href={`/store/${subdomain}/products`}>
-            <Button>Continue Shopping</Button>
-          </Link>
+        </header>
+
+        <div className="mx-auto max-w-xl px-4 py-10 md:px-8">
+          <div className="rounded-[28px] border border-store-border bg-store-card p-8">
+            <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-store-background text-3xl text-store-accent">
+              ✓
+            </div>
+            <p className="text-3xl font-bold text-store-foreground store-heading">Thank you!</p>
+            <p className="mt-3 text-store-muted">Your order has been placed successfully.</p>
+
+            <div className="mt-6 space-y-3 rounded-2xl border border-store-border bg-store-background p-4 text-sm text-store-muted">
+              <p><span className="font-semibold text-store-foreground">Order ID:</span> {placedOrder.id}</p>
+              <p><span className="font-semibold text-store-foreground">Total:</span> Rs. {placedOrder.price}</p>
+              <p><span className="font-semibold text-store-foreground">Status:</span> {placedOrder.orderStatus}</p>
+              <p><span className="font-semibold text-store-foreground">Payment:</span> Cash on Delivery</p>
+            </div>
+
+            <Link href={`/store/${subdomain}/products`} className="mt-6 inline-block">
+              <Button className="bg-store-accent text-store-background hover:bg-store-accent/90">
+                Continue shopping
+              </Button>
+            </Link>
+          </div>
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen">
-      <header className="border-b p-6 flex items-center justify-between">
-        <Link href={`/store/${subdomain}`}>
-          <h1 className="text-xl font-bold">Checkout</h1>
-        </Link>
-        <Link href={`/store/${subdomain}/cart`} className="text-sm underline">
-          Back to Cart
-        </Link>
+    <main className="min-h-screen bg-store-background text-store-foreground">
+      <header className="border-b border-store-border bg-store-background/95 backdrop-blur-sm">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
+          <Link href={`/store/${subdomain}`} className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-store-border bg-store-card text-lg text-store-accent">
+              ⚡
+            </div>
+            <div>
+              <p className="text-lg font-bold text-store-foreground store-heading">Checkout</p>
+            </div>
+          </Link>
+
+          <Link href={`/store/${subdomain}/cart`}>
+            <Button variant="outline" className="border-store-border bg-store-card text-store-foreground hover:bg-store-accent hover:text-store-background">
+              Back to cart
+            </Button>
+          </Link>
+        </div>
       </header>
 
-      <div className="max-w-3xl mx-auto p-8 space-y-8">
-        {error && <p className="text-red-500">{error}</p>}
+      <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">
+        <div className="mb-8 rounded-[28px] border border-store-border bg-store-card p-6 md:p-8">
+          <p className="text-sm uppercase tracking-[0.25em] text-store-muted">Secure checkout</p>
+          <h1 className="mt-3 text-4xl font-bold text-store-foreground store-heading">Complete your order</h1>
+        </div>
 
-        {/* Order summary */}
-        <section>
-          <h2 className="text-lg font-semibold mb-3">Order Summary</h2>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Product</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Quantity</TableHead>
-                <TableHead>Subtotal</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+        {error && <p className="mb-5 text-red-500">{error}</p>}
+
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <section className="space-y-6 rounded-[28px] border border-store-border bg-store-card p-6">
+            <div>
+              <h2 className="text-2xl font-bold text-store-foreground store-heading">Delivery details</h2>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="fullName" className="text-store-foreground">Full Name</Label>
+                <Input
+                  id="fullName"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Your full name"
+                  className="border-store-border bg-store-background text-store-foreground placeholder:text-store-muted"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone" className="text-store-foreground">Phone Number</Label>
+                <Input
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="03XXXXXXXXX"
+                  className="border-store-border bg-store-background text-store-foreground placeholder:text-store-muted"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="address" className="text-store-foreground">Delivery Address</Label>
+                <textarea
+                  id="address"
+                  value={address}
+                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAddress(e.target.value)}
+                  placeholder="House #, Street, Area, City"
+                  rows={5}
+                  className="w-full rounded-md border border-store-border bg-store-background px-3 py-2 text-sm text-store-foreground placeholder:text-store-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-store-accent"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-store-border bg-store-background p-4">
+              <p className="text-lg font-semibold text-store-foreground store-heading">Payment method</p>
+              <p className="mt-2 text-store-muted">Cash on Delivery</p>
+            </div>
+          </section>
+
+          <aside className="rounded-[28px] border border-store-border bg-store-card p-6">
+            <h2 className="text-2xl font-bold text-store-foreground store-heading">Order summary</h2>
+
+            <div className="mt-5 space-y-4">
               {items.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.productName}</TableCell>
-                  <TableCell>Rs. {item.price}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>Rs. {Number(item.price) * item.quantity}</TableCell>
-                </TableRow>
+                <div key={item.id} className="flex items-center justify-between gap-3 rounded-2xl border border-store-border bg-store-background p-3">
+                  <div>
+                    <p className="font-medium text-store-foreground">{item.productName}</p>
+                    <p className="text-xs text-store-muted">Qty: {item.quantity}</p>
+                  </div>
+                  <p className="font-semibold text-store-foreground">Rs. {Number(item.price) * item.quantity}</p>
+                </div>
               ))}
-            </TableBody>
-          </Table>
-          <p className="text-xl font-bold mt-4 text-right">Total: Rs. {total}</p>
-        </section>
+            </div>
 
-        {/* Address form */}
-        <section className="space-y-4">
-          <h2 className="text-lg font-semibold">Delivery Details</h2>
+            <div className="mt-6 space-y-3 border-t border-store-border pt-4 text-sm text-store-muted">
+              <div className="flex items-center justify-between">
+                <span>Subtotal</span>
+                <span className="text-store-foreground">Rs. {subtotal}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Shipping</span>
+                <span className="text-store-foreground">Rs. {shipping}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span>Tax</span>
+                <span className="text-store-foreground">Rs. 0</span>
+              </div>
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Full Name</Label>
-            <Input
-              id="fullName"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Your full name"
-            />
-          </div>
+            <div className="mt-6 flex items-center justify-between border-t border-store-border pt-4 text-lg font-bold text-store-foreground">
+              <span>Total</span>
+              <span>Rs. {total}</span>
+            </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
-            <Input
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="03XXXXXXXXX"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="address">Delivery Address</Label>
-            <textarea
-              id="address"
-              value={address}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAddress(e.target.value)}
-              placeholder="House #, Street, Area, City"
-              rows={3}
-              className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-            />
-          </div>
-        </section>
-
-        {/* Payment method */}
-        <section className="space-y-2">
-          <h2 className="text-lg font-semibold">Payment Method</h2>
-          <div className="border rounded-md p-4 bg-muted/30">
-            <p className="font-medium">Cash on Delivery</p>
-            <p className="text-sm text-muted-foreground">
-              Pay in cash when your order arrives.
-            </p>
-          </div>
-        </section>
-
-        <Button size="lg" className="w-full" onClick={handlePlaceOrder} disabled={submitting}>
-          {submitting ? 'Placing Order...' : `Place Order — Rs. ${total}`}
-        </Button>
+            <Button
+              size="lg"
+              onClick={handlePlaceOrder}
+              disabled={submitting}
+              className="mt-6 w-full bg-store-accent text-store-background hover:bg-store-accent/90"
+            >
+              {submitting ? 'Placing order...' : `Place order — Rs. ${total}`}
+            </Button>
+          </aside>
+        </div>
       </div>
     </main>
   );

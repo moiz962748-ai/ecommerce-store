@@ -49,6 +49,12 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --color-store-background: var(--store-background);
+  --color-store-foreground: var(--store-foreground);
+  --color-store-card: var(--store-card);
+  --color-store-border: var(--store-border);
+  --color-store-accent: var(--store-accent);
+  --color-store-muted: var(--store-muted);
 }
 
 :root {
@@ -99,5 +105,34 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
   }
+}
+/* Storefront per-store themes. Default falls back to the same warm
+   paper look as the admin; Electronics overrides it with a dark/tech
+   palette. Sports and Clothing can get their own blocks the same way. */
+[data-store-theme="default"],
+[data-store-theme="sports"],
+[data-store-theme="clothing"] {
+  --store-background: var(--background);
+  --store-foreground: var(--foreground);
+  --store-card: var(--card);
+  --store-border: var(--border);
+  --store-accent: var(--sidebar-accent);
+  --store-muted: var(--muted-foreground);
+  --store-heading-font: var(--font-display);
+}
+
+[data-store-theme="electronics"] {
+  --store-background: oklch(0.16 0.02 250);
+  --store-foreground: oklch(0.94 0.01 250);
+  --store-card: oklch(0.21 0.025 250);
+  --store-border: oklch(0.32 0.03 250);
+  --store-accent: oklch(0.75 0.15 220);
+  --store-muted: oklch(0.65 0.02 250);
+  --store-heading-font: var(--font-tech-display);
+}
+
+.store-heading {
+  font-family: var(--store-heading-font);
 }
