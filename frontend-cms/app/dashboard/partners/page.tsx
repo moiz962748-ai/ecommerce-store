@@ -50,6 +50,7 @@ export default function PartnersPage() {
     handleSubmit,
     reset,
     control,
+    setFocus,
     formState: { errors },
   } = useForm<AssignFormValues>({
     resolver: zodResolver(assignSchema),
@@ -103,8 +104,14 @@ export default function PartnersPage() {
             Enter the user&apos;s ID and select the store they should manage.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <CardContent className="p-6">
+          <form
+            onSubmit={handleSubmit(onSubmit, (errors) => {
+              const first = Object.keys(errors)[0];
+              if (first) setFocus(first as any);
+            })}
+            className="space-y-4"
+          >
             <div className="space-y-2">
               <Label>Store</Label>
               {loadingStores ? (
@@ -115,7 +122,7 @@ export default function PartnersPage() {
                   name="storeId"
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={(v) => field.onChange(v || '')}>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full" aria-describedby={errors.storeId ? 'storeId-error' : undefined}>
                         <SelectValue>
                           {(value: string | null) => {
                             const store = stores.find((s) => s.id === value);
@@ -148,7 +155,7 @@ export default function PartnersPage() {
                 />
               )}
               {errors.storeId && (
-                <p className="text-sm text-red-500">{errors.storeId.message}</p>
+                <p id="storeId-error" className="text-sm text-red-500">{errors.storeId.message}</p>
               )}
             </div>
 
@@ -159,21 +166,20 @@ export default function PartnersPage() {
                 placeholder="e.g. 862915c5-2f43-474c-8208-75dfa8a7fd51"
                 className="font-mono text-xs"
                 {...register('userId')}
+                aria-describedby={errors.userId ? 'userId-error' : undefined}
               />
               <p className="text-xs text-muted-foreground">
                 Find this in the Users table in Supabase for now.
               </p>
               {errors.userId && (
-                <p className="text-sm text-red-500">{errors.userId.message}</p>
+                <p id="userId-error" className="text-sm text-red-500">{errors.userId.message}</p>
               )}
             </div>
 
-            {submitError && (
-              <p className="text-sm text-red-500">{submitError}</p>
-            )}
-            {success && (
-              <p className="text-sm text-green-600">Partner assigned successfully!</p>
-            )}
+            <div role="status" aria-live="polite">
+              {submitError && <p className="text-sm text-red-500">{submitError}</p>}
+              {success && <p className="text-sm text-green-600">Partner assigned successfully!</p>}
+            </div>
 
             <Button type="submit" className="w-full" disabled={submitting}>
               {submitting ? 'Assigning...' : 'Assign Partner'}

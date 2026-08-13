@@ -77,6 +77,7 @@ export default function PartnerProductsPage() {
     reset,
     control,
     setValue,
+    setFocus,
     formState: { errors },
   } = useForm<CreateProductValues>({
     resolver: zodResolver(createProductSchema),
@@ -164,11 +165,22 @@ export default function PartnerProductsPage() {
             <DialogHeader>
               <DialogTitle className="font-heading">Create a new product</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
+            <form
+              onSubmit={handleSubmit(onSubmit, (errors) => {
+                const first = Object.keys(errors)[0];
+                if (first) setFocus(first as any);
+              })}
+              className="space-y-4 mt-2"
+            >
               <div className="space-y-2">
                 <Label htmlFor="name">Product Name</Label>
-                <Input id="name" placeholder="Red T-Shirt" {...register('name')} />
-                {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+                <Input
+                  id="name"
+                  placeholder="Red T-Shirt"
+                  {...register('name')}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                />
+                {errors.name && <p id="name-error" className="text-sm text-red-500">{errors.name.message}</p>}
               </div>
 
               <div className="space-y-2">
@@ -184,9 +196,10 @@ export default function PartnerProductsPage() {
                   step="0.01"
                   placeholder="999"
                   {...register('basePrice', { valueAsNumber: true })}
+                  aria-describedby={errors.basePrice ? 'basePrice-error' : undefined}
                 />
                 {errors.basePrice && (
-                  <p className="text-sm text-red-500">{errors.basePrice.message}</p>
+                  <p id="basePrice-error" className="text-sm text-red-500">{errors.basePrice.message}</p>
                 )}
               </div>
 
@@ -197,7 +210,7 @@ export default function PartnerProductsPage() {
                   name="categoryId"
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={(v) => field.onChange(v || '')}>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full" aria-describedby={errors.categoryId ? 'categoryId-error' : undefined}>
                         <SelectValue>
                           {(value: string | null) =>
                             categories.find((c) => c.id === value)?.name || 'Select a category'
@@ -215,11 +228,11 @@ export default function PartnerProductsPage() {
                   )}
                 />
                 {errors.categoryId && (
-                  <p className="text-sm text-red-500">{errors.categoryId.message}</p>
+                  <p id="categoryId-error" className="text-sm text-red-500">{errors.categoryId.message}</p>
                 )}
               </div>
 
-              {submitError && <p className="text-sm text-red-500">{submitError}</p>}
+              <div aria-live="polite">{submitError && <p className="text-sm text-red-500">{submitError}</p>}</div>
 
               <Button type="submit" className="w-full" disabled={submitting}>
                 {submitting ? 'Creating...' : 'Create Product'}

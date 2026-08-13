@@ -53,6 +53,7 @@ export default function StoresPage() {
     register,
     handleSubmit,
     reset,
+    setFocus,
     formState: { errors },
   } = useForm<CreateStoreValues>({
     resolver: zodResolver(createStoreSchema),
@@ -106,30 +107,44 @@ export default function StoresPage() {
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger render={<Button>Create Store</Button>} />
-          <DialogContent>
+          <DialogContent className="p-6">
             <DialogHeader>
               <DialogTitle className="font-heading">Create a new store</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
+            <form
+              onSubmit={handleSubmit(onSubmit, (errors) => {
+                const first = Object.keys(errors)[0];
+                if (first) setFocus(first as any);
+              })}
+              className="space-y-4 mt-2"
+            >
               <div className="space-y-2">
                 <Label htmlFor="name">Store Name</Label>
-                <Input id="name" placeholder="My Store" {...register('name')} />
+                <Input
+                  id="name"
+                  placeholder="My Store"
+                  {...register('name')}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                />
                 {errors.name && (
-                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                  <p id="name-error" className="text-sm text-red-500">{errors.name.message}</p>
                 )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="subDomain">Subdomain</Label>
-                <Input id="subDomain" placeholder="my-store" {...register('subDomain')} />
+                <Input
+                  id="subDomain"
+                  placeholder="my-store"
+                  {...register('subDomain')}
+                  aria-describedby={errors.subDomain ? 'subDomain-error' : undefined}
+                />
                 {errors.subDomain && (
-                  <p className="text-sm text-red-500">{errors.subDomain.message}</p>
+                  <p id="subDomain-error" className="text-sm text-red-500">{errors.subDomain.message}</p>
                 )}
               </div>
 
-              {submitError && (
-                <p className="text-sm text-red-500">{submitError}</p>
-              )}
+              <div role="status" aria-live="polite">{submitError && <p className="text-sm text-red-500">{submitError}</p>}</div>
 
               <Button type="submit" className="w-full" disabled={submitting}>
                 {submitting ? 'Creating...' : 'Create Store'}

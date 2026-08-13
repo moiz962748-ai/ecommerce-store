@@ -48,6 +48,7 @@ export default function CategoriesPage() {
     register,
     handleSubmit,
     reset,
+    setFocus,
     formState: { errors },
   } = useForm<CreateCategoryValues>({
     resolver: zodResolver(createCategorySchema),
@@ -105,18 +106,27 @@ export default function CategoriesPage() {
             <DialogHeader>
               <DialogTitle className="font-heading">Create a new category</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
+            <form
+              onSubmit={handleSubmit(onSubmit, (errors) => {
+                const first = Object.keys(errors)[0];
+                if (first) setFocus(first as any);
+              })}
+              className="space-y-4 mt-2"
+            >
               <div className="space-y-2">
                 <Label htmlFor="name">Category Name</Label>
-                <Input id="name" placeholder="Clothing" {...register('name')} />
+                <Input
+                  id="name"
+                  placeholder="Clothing"
+                  {...register('name')}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                />
                 {errors.name && (
-                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                  <p id="name-error" className="text-sm text-red-500">{errors.name.message}</p>
                 )}
               </div>
 
-              {submitError && (
-                <p className="text-sm text-red-500">{submitError}</p>
-              )}
+              <div aria-live="polite">{submitError && <p className="text-sm text-red-500">{submitError}</p>}</div>
 
               <Button type="submit" className="w-full" disabled={submitting}>
                 {submitting ? 'Creating...' : 'Create Category'}

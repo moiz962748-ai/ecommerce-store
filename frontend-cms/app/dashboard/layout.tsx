@@ -66,7 +66,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors border-l-2 ${
+                aria-current={active ? 'page' : undefined}
+                className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors border-l-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 ${
                   active
                     ? 'bg-sidebar-accent text-sidebar-accent-foreground border-l-tag-electronics'
                     : 'border-l-transparent text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'

@@ -78,6 +78,7 @@ export default function ProductsPage() {
     handleSubmit,
     reset,
     control,
+    setFocus,
     formState: { errors },
   } = useForm<CreateProductValues>({
     resolver: zodResolver(createProductSchema),
@@ -146,16 +147,27 @@ export default function ProductsPage() {
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger render={<Button>Create Product</Button>} />
-          <DialogContent>
+            <DialogContent className="p-6">
             <DialogHeader>
               <DialogTitle className="font-heading">Create a new product</DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
+            <form
+              onSubmit={handleSubmit(onSubmit, (errors) => {
+                const first = Object.keys(errors)[0];
+                if (first) setFocus(first as any);
+              })}
+              className="space-y-4 mt-2"
+            >
               <div className="space-y-2">
                 <Label htmlFor="name">Product Name</Label>
-                <Input id="name" placeholder="Red T-Shirt" {...register('name')} />
+                <Input
+                  id="name"
+                  placeholder="Red T-Shirt"
+                  {...register('name')}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
+                />
                 {errors.name && (
-                  <p className="text-sm text-red-500">{errors.name.message}</p>
+                  <p id="name-error" className="text-sm text-red-500">{errors.name.message}</p>
                 )}
               </div>
 
@@ -166,9 +178,16 @@ export default function ProductsPage() {
 
               <div className="space-y-2">
                 <Label htmlFor="basePrice">Price</Label>
-                <Input id="basePrice" type="number" step="0.01" placeholder="999" {...register('basePrice', { valueAsNumber: true })} />
+                <Input
+                  id="basePrice"
+                  type="number"
+                  step="0.01"
+                  placeholder="999"
+                  {...register('basePrice', { valueAsNumber: true })}
+                  aria-describedby={errors.basePrice ? 'basePrice-error' : undefined}
+                />
                 {errors.basePrice && (
-                  <p className="text-sm text-red-500">{errors.basePrice.message}</p>
+                  <p id="basePrice-error" className="text-sm text-red-500">{errors.basePrice.message}</p>
                 )}
               </div>
 
@@ -179,7 +198,7 @@ export default function ProductsPage() {
                   name="storeId"
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
+                      <SelectTrigger aria-describedby={errors.storeId ? 'storeId-error' : undefined}>
                         <SelectValue placeholder="Select a store" />
                       </SelectTrigger>
                       <SelectContent>
@@ -193,7 +212,7 @@ export default function ProductsPage() {
                   )}
                 />
                 {errors.storeId && (
-                  <p className="text-sm text-red-500">{errors.storeId.message}</p>
+                  <p id="storeId-error" className="text-sm text-red-500">{errors.storeId.message}</p>
                 )}
               </div>
 
@@ -204,7 +223,7 @@ export default function ProductsPage() {
                   name="categoryId"
                   render={({ field }) => (
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
+                      <SelectTrigger aria-describedby={errors.categoryId ? 'categoryId-error' : undefined}>
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                       <SelectContent>
@@ -218,13 +237,11 @@ export default function ProductsPage() {
                   )}
                 />
                 {errors.categoryId && (
-                  <p className="text-sm text-red-500">{errors.categoryId.message}</p>
+                  <p id="categoryId-error" className="text-sm text-red-500">{errors.categoryId.message}</p>
                 )}
               </div>
 
-              {submitError && (
-                <p className="text-sm text-red-500">{submitError}</p>
-              )}
+              <div role="status" aria-live="polite">{submitError && <p className="text-sm text-red-500">{submitError}</p>}</div>
 
               <Button type="submit" className="w-full" disabled={submitting}>
                 {submitting ? 'Creating...' : 'Create Product'}

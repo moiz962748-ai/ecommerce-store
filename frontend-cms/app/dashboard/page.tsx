@@ -52,7 +52,7 @@ export default function DashboardHomePage() {
             return (
               <div
                 key={store.id}
-                className={`bg-card rounded-lg border-l-4 border border-border ${tagBorderClass[tag]} p-5`}
+                className={`bg-card rounded-lg border-l-4 border border-border ${tagBorderClass[tag]} p-5 transform transition-transform duration-150 hover:-translate-y-1 hover:shadow-md`}
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className={`inline-block w-2 h-2 rounded-full ${tagDotClass[tag]}`} />
