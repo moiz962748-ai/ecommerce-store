@@ -17,6 +17,7 @@ interface Product {
   name: string;
   description: string;
   basePrice: number;
+  imageUrl?: string | null;
 }
 
 function getProductVisual(productName: string) {
@@ -136,7 +137,7 @@ export default function ProductDetailPage() {
   }
 
   const productEmoji = getProductVisual(product.name);
-  const thumbnails = [productEmoji, '✨', '🚀', '📦'];
+  const thumbnails = [product.imageUrl || productEmoji, '✨', '🚀', '📦'];
 
   return (
     <main className="min-h-screen bg-store-background text-store-foreground">
@@ -185,25 +186,40 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-store-border bg-[linear-gradient(135deg,rgba(117,161,255,0.16),rgba(255,255,255,0.04))] p-6 md:p-8">
-              <div className="flex h-[340px] items-center justify-center text-[130px] text-store-accent md:h-[420px]">
-                {productEmoji}
+              <div className="flex h-[340px] items-center justify-center overflow-hidden rounded-xl bg-store-background md:h-[420px]">
+                {product.imageUrl ? (
+                  <img
+                    src={product.imageUrl}
+                    alt={product.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="text-[130px] text-store-accent">{productEmoji}</span>
+                )}
               </div>
             </div>
 
             <div className="mt-4 grid grid-cols-4 gap-3">
-              {thumbnails.map((icon, index) => (
-                <div
-                  key={`${product.id}-${index}`}
-                  className={[
-                    'flex h-20 cursor-pointer items-center justify-center rounded-2xl border text-4xl transition-all',
-                    index === 0
-                      ? 'border-store-accent bg-store-background text-store-accent'
-                      : 'border-store-border bg-store-background text-store-foreground opacity-75 hover:border-store-accent',
-                  ].join(' ')}
-                >
-                  {icon}
-                </div>
-              ))}
+              {thumbnails.map((item, index) => {
+                const isImage = typeof item === 'string' && item.startsWith('http');
+                return (
+                  <div
+                    key={`${product.id}-${index}`}
+                    className={[
+                      'flex h-20 cursor-pointer items-center justify-center overflow-hidden rounded-2xl border transition-all',
+                      index === 0
+                        ? 'border-store-accent bg-store-background text-store-accent'
+                        : 'border-store-border bg-store-background text-store-foreground opacity-75 hover:border-store-accent',
+                    ].join(' ')}
+                  >
+                    {isImage ? (
+                      <img src={item} alt={product.name} className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="text-4xl">{item}</span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </section>
 

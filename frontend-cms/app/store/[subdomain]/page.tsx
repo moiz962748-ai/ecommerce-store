@@ -18,6 +18,7 @@ interface Product {
   name: string;
   basePrice: number;
   description: string;
+  imageUrl?: string | null;
 }
 
 export default function StoreHomePage() {
@@ -157,8 +158,16 @@ export default function StoreHomePage() {
                 href={`/store/${subdomain}/products/${product.id}`}
                 className="group overflow-hidden rounded-2xl border border-store-border bg-store-card p-4 shadow-sm transition-all hover:-translate-y-1 hover:border-store-accent"
               >
-                <div className="mb-4 flex h-52 items-center justify-center rounded-xl border border-store-border bg-[linear-gradient(135deg,rgba(117,161,255,0.18),rgba(255,255,255,0.03))] text-6xl text-store-accent">
-                  {icon}
+                <div className="mb-4 flex h-52 items-center justify-center overflow-hidden rounded-xl border border-store-border bg-[linear-gradient(135deg,rgba(117,161,255,0.18),rgba(255,255,255,0.03))]">
+                  {product.imageUrl ? (
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <span className="text-6xl text-store-accent">{icon}</span>
+                  )}
                 </div>
                 <div className="flex items-center justify-between gap-3">
                   <div>
@@ -249,7 +258,7 @@ export default function StoreHomePage() {
               </div>
               <div className="rounded-2xl border border-store-border bg-store-background p-4">
                 <p className="text-sm uppercase tracking-[0.18em] text-store-muted">Address</p>
-                <p className="mt-2 text-base text-store-foreground">Lahore, Pakistan</p>
+                <p className="mt-2 text-base text-store-foreground">Islamabad, Pakistan</p>
               </div>
             </div>
           </div>

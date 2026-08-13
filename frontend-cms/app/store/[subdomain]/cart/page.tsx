@@ -15,6 +15,7 @@ interface CartItem {
   price: number;
   productId: string;
   productName: string;
+  imageUrl?: string | null;
 }
 
 function getProductVisual(productName: string) {
@@ -135,8 +136,12 @@ export default function CartPage() {
             <div className="space-y-5">
               {items.map((item) => (
                 <div key={item.id} className="flex flex-col gap-4 rounded-[24px] border border-store-border bg-store-card p-4 sm:flex-row sm:items-center">
-                  <div className="flex h-28 w-28 items-center justify-center rounded-2xl border border-store-border bg-[linear-gradient(135deg,rgba(117,161,255,0.18),rgba(255,255,255,0.04))] text-5xl text-store-accent">
-                    {getProductVisual(item.productName)}
+                  <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-2xl border border-store-border bg-[linear-gradient(135deg,rgba(117,161,255,0.18),rgba(255,255,255,0.04))]">
+                    {item.imageUrl ? (
+                      <img src={item.imageUrl} alt={item.productName} className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="text-5xl text-store-accent">{getProductVisual(item.productName)}</span>
+                    )}
                   </div>
 
                   <div className="flex-1">

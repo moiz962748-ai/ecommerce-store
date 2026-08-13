@@ -37,6 +37,7 @@ interface Product {
   id: string;
   name: string;
   description: string;
+  imageUrl?: string | null;
   basePrice: number;
   storeId: string;
   categoryId: string;
@@ -71,8 +72,12 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [editSubmitError, setEditSubmitError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [editSubmitting, setEditSubmitting] = useState(false);
 
   const {
     register,
@@ -132,6 +137,44 @@ export default function ProductsPage() {
       setSubmitError(err.message);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const openEditDialog = (product: Product) => {
+    setEditingProduct(product);
+    setEditSubmitError(null);
+    setEditDialogOpen(true);
+    reset({
+      name: product.name,
+      description: product.description || '',
+      imageUrl: product.imageUrl || '',
+      basePrice: product.basePrice,
+      storeId: product.storeId,
+      categoryId: product.categoryId,
+    });
+  };
+
+  const onEditSubmit = async (values: CreateProductValues) => {
+    if (!editingProduct) return;
+
+    setEditSubmitError(null);
+    setEditSubmitting(true);
+    try {
+      const token = getStoredToken();
+      await apiClient(`/products/${editingProduct.id}`, {
+        method: 'PATCH',
+        token: token || undefined,
+        body: JSON.stringify(values),
+      });
+
+      setEditDialogOpen(false);
+      setEditingProduct(null);
+      reset();
+      fetchAll();
+    } catch (err: any) {
+      setEditSubmitError(err.message);
+    } finally {
+      setEditSubmitting(false);
     }
   };
 
@@ -268,12 +311,13 @@ export default function ProductsPage() {
               <TableHead>Store</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Price</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {products.length === 0 && (
               <TableRow>
-                <TableCell colSpan={4} className="text-center text-muted-foreground">
+                <TableCell colSpan={5} className="text-center text-muted-foreground">
                   No products yet. Create your first one.
                 </TableCell>
               </TableRow>
@@ -296,12 +340,121 @@ export default function ProductsPage() {
                     {getCategoryName(product.categoryId)}
                   </TableCell>
                   <TableCell className="font-mono text-xs">Rs. {product.basePrice}</TableCell>
+                  <TableCell className="text-right">
+                    <Button type="button" variant="outline" size="sm" onClick={() => openEditDialog(product)}>
+                      Edit
+                    </Button>
+                  </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
       )}
+
+      <Dialog open={editDialogOpen} onOpenChange={(open) => {
+        setEditDialogOpen(open);
+        if (!open) {
+          setEditingProduct(null);
+          setEditSubmitError(null);
+          reset();
+        }
+      }}>
+        <DialogContent className="p-6">
+          <DialogHeader>
+            <DialogTitle className="font-heading">Edit product</DialogTitle>
+          </DialogHeader>
+          <form
+            onSubmit={handleSubmit(onEditSubmit, (errors) => {
+              const first = Object.keys(errors)[0];
+              if (first) setFocus(first as any);
+            })}
+            className="space-y-4 mt-2"
+          >
+            <div className="space-y-2">
+              <Label htmlFor="edit-name">Product Name</Label>
+              <Input id="edit-name" placeholder="Red T-Shirt" {...register('name')} />
+              {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-description">Description</Label>
+              <Input id="edit-description" placeholder="Optional description" {...register('description')} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-imageUrl">Image URL</Label>
+              <Input id="edit-imageUrl" placeholder="https://..." {...register('imageUrl')} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-basePrice">Price</Label>
+              <Input
+                id="edit-basePrice"
+                type="number"
+                step="0.01"
+                placeholder="999"
+                {...register('basePrice', { valueAsNumber: true })}
+              />
+              {errors.basePrice && <p className="text-sm text-red-500">{errors.basePrice.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label>Store</Label>
+              <Controller
+                control={control}
+                name="storeId"
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a store" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {stores.map((store) => (
+                        <SelectItem key={store.id} value={store.id}>
+                          {store.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.storeId && <p className="text-sm text-red-500">{errors.storeId.message}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label>Category</Label>
+              <Controller
+                control={control}
+                name="categoryId"
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.categoryId && <p className="text-sm text-red-500">{errors.categoryId.message}</p>}
+            </div>
+
+            <div role="status" aria-live="polite">
+              {editSubmitError && <p className="text-sm text-red-500">{editSubmitError}</p>}
+            </div>
+
+            <Button type="submit" className="w-full" disabled={editSubmitting}>
+              {editSubmitting ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

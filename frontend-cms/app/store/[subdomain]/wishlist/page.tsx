@@ -14,6 +14,7 @@ interface WishlistItem {
   price: number;
   productId: string;
   productName: string;
+  imageUrl?: string | null;
 }
 
 function getProductVisual(productName: string) {
@@ -158,8 +159,12 @@ export default function WishlistPage() {
             {items.map((item) => (
               <div key={item.id} className="overflow-hidden rounded-[24px] border border-store-border bg-store-card">
                 <div className="border-b border-store-border bg-[linear-gradient(135deg,rgba(117,161,255,0.18),rgba(255,255,255,0.04))] p-5">
-                  <div className="flex h-48 items-center justify-center text-7xl text-store-accent">
-                    {getProductVisual(item.productName)}
+                  <div className="flex h-48 items-center justify-center overflow-hidden">
+                    {item.imageUrl ? (
+                      <img src={item.imageUrl} alt={item.productName} className="h-full w-full object-cover" />
+                    ) : (
+                      <span className="text-7xl text-store-accent">{getProductVisual(item.productName)}</span>
+                    )}
                   </div>
                 </div>
 

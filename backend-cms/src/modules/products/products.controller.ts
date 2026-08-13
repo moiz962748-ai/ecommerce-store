@@ -1,9 +1,9 @@
-import { Controller, Post, Get, Body, Param, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Body, Param, UseGuards, Req } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
-import { CreateProductDto } from './dto/create-product.dto';
+import { CreateProductDto, UpdateProductDto } from './dto/create-product.dto';
 
 @Controller('products')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -14,6 +14,12 @@ export class ProductsController {
   @Roles('ADMIN', 'PARTNER')
   async createProduct(@Body() dto: CreateProductDto, @Req() req: any) {
     return await this.productsService.createProduct(dto, req.user);
+  }
+
+  @Patch(':id')
+  @Roles('ADMIN', 'PARTNER')
+  async updateProduct(@Param('id') id: string, @Body() dto: UpdateProductDto, @Req() req: any) {
+    return await this.productsService.updateProduct(id, dto, req.user);
   }
 
   @Get()

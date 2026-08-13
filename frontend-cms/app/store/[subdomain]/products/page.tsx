@@ -16,6 +16,7 @@ interface Product {
   name: string;
   basePrice: number;
   description: string;
+  imageUrl?: string | null;
 }
 
 function getProductVisual(productName: string) {
@@ -187,8 +188,16 @@ export default function StoreProductsPage() {
                   <div className="absolute right-3 top-3 rounded-full border border-store-border bg-store-background/70 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-store-muted">
                     {getProductCategory(product.name)}
                   </div>
-                  <div className="flex h-52 items-center justify-center text-6xl text-store-accent">
-                    {getProductVisual(product.name)}
+                  <div className="flex h-52 items-center justify-center overflow-hidden">
+                    {product.imageUrl ? (
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <span className="text-6xl text-store-accent">{getProductVisual(product.name)}</span>
+                    )}
                   </div>
                 </div>
 

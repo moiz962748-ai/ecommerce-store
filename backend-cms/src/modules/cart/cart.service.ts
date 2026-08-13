@@ -76,6 +76,7 @@ export class CartService {
         price: schema.productVariant.price,
         productId: schema.products.id,
         productName: schema.products.name,
+        imageUrl: schema.products.imageUrl,
       })
       .from(schema.cart)
       .innerJoin(schema.productVariant, eq(schema.cart.productVariantId, schema.productVariant.id))

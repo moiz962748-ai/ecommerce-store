@@ -73,6 +73,7 @@ export class WishlistService {
         price: schema.productVariant.price,
         productId: schema.products.id,
         productName: schema.products.name,
+        imageUrl: schema.products.imageUrl,
       })
       .from(schema.favouriteWishlist)
       .innerJoin(

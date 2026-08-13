@@ -23,3 +23,31 @@ export class CreateProductDto {
   @IsUUID('4', { message: 'categoryId must be a valid UUID' })
   categoryId!: string;
 }
+
+export class UpdateProductDto {
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty({ message: 'Product name is required' })
+  name?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
+
+  @IsOptional()
+  @IsNumber({}, { message: 'basePrice must be a number' })
+  @Min(0, { message: 'basePrice cannot be negative' })
+  basePrice?: number;
+
+  @IsOptional()
+  @IsUUID('4', { message: 'storeId must be a valid UUID' })
+  storeId?: string;
+
+  @IsOptional()
+  @IsUUID('4', { message: 'categoryId must be a valid UUID' })
+  categoryId?: string;
+}
