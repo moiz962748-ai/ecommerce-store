@@ -106,7 +106,7 @@ export default function StoreHomePage() {
       </header>
 
       <section className="mx-auto max-w-6xl px-4 py-8 md:py-12">
-        <div className="relative overflow-hidden rounded-[28px] border border-store-border bg-[radial-gradient(circle_at_top,_rgba(117,161,255,0.26),_transparent_48%),linear-gradient(135deg,_rgba(255,255,255,0.08),_rgba(255,255,255,0.02))] bg-store-card px-6 py-16 text-center shadow-[0_18px_40px_rgba(0,0,0,0.12)] md:px-10">
+        <div className="store-hero-panel relative overflow-hidden rounded-[28px] border border-store-border bg-store-card px-6 py-16 text-center md:px-10">
           <div className="absolute inset-0 opacity-20">
             <div className="absolute -left-8 top-10 h-44 w-44 rounded-full bg-store-accent blur-3xl" />
             <div className="absolute right-0 top-0 h-56 w-56 rounded-full bg-sky-400/20 blur-3xl" />
@@ -114,7 +114,7 @@ export default function StoreHomePage() {
           </div>
 
           <div className="relative z-10">
-            <p className="mb-6 text-sm uppercase tracking-[0.2em] text-store-muted">Smart tech essentials</p>
+            <p className="store-hero-badge mb-6 text-sm uppercase tracking-[0.2em] text-store-muted">Smart tech essentials</p>
             <h2 className="store-heading text-4xl font-bold text-store-foreground md:text-6xl">
               Welcome to {store.name}
             </h2>
@@ -158,7 +158,7 @@ export default function StoreHomePage() {
                 href={`/store/${subdomain}/products/${product.id}`}
                 className="group overflow-hidden rounded-2xl border border-store-border bg-store-card p-4 shadow-sm transition-all hover:-translate-y-1 hover:border-store-accent"
               >
-                <div className="mb-4 flex h-52 items-center justify-center overflow-hidden rounded-xl border border-store-border bg-[linear-gradient(135deg,rgba(117,161,255,0.18),rgba(255,255,255,0.03))]">
+                <div className="store-product-thumb mb-4 flex h-52 items-center justify-center overflow-hidden rounded-xl border border-store-border">
                   {product.imageUrl ? (
                     <img
                       src={product.imageUrl}
@@ -186,7 +186,7 @@ export default function StoreHomePage() {
 
       <section id="about" className="mx-auto max-w-6xl px-4 py-8 md:py-12">
         <h3 className="mb-6 text-3xl font-bold text-store-foreground store-heading">About Store</h3>
-        <div className="rounded-2xl border border-store-border bg-store-card px-6 py-5 text-store-muted">
+        <div className="store-muted-card rounded-2xl border border-store-border bg-store-card px-6 py-5 text-store-muted">
           <p className="max-w-3xl text-base leading-7">
             Discover premium technology and everyday essentials designed for faster workflows, smarter living, and a seamless shopping experience.
           </p>
@@ -206,7 +206,7 @@ export default function StoreHomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-8 md:py-12">
         <h3 className="mb-6 text-3xl font-bold text-store-foreground store-heading">Why Choose Us</h3>
-        <div className="rounded-2xl border border-store-border bg-store-card px-6 py-5 text-store-muted">
+        <div className="store-muted-card rounded-2xl border border-store-border bg-store-card px-6 py-5 text-store-muted">
           <p className="max-w-4xl text-base leading-8">
             We combine trusted electronics, curated product recommendations, and reliable after-sales support to make every purchase simple, secure, and satisfying. Our platform is designed to help customers discover the right devices faster, compare quality options with confidence, and enjoy a seamless buying journey from start to finish. With dependable service, competitive pricing, and a focus on customer trust, we make technology shopping easier and more enjoyable for everyone.
           </p>

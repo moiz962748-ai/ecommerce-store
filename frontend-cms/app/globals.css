@@ -111,9 +111,7 @@
 /* Storefront per-store themes. Default falls back to the same warm
    paper look as the admin; Electronics overrides it with a dark/tech
    palette. Sports and Clothing can get their own blocks the same way. */
-[data-store-theme="default"],
-[data-store-theme="sports"],
-[data-store-theme="clothing"] {
+[data-store-theme="default"] {
   --store-background: var(--background);
   --store-foreground: var(--foreground);
   --store-card: var(--card);
@@ -121,6 +119,62 @@
   --store-accent: var(--sidebar-accent);
   --store-muted: var(--muted-foreground);
   --store-heading-font: var(--font-display);
+}
+
+[data-store-theme="default"][data-store-mode="light"] {
+  --store-background: oklch(0.985 0.008 220);
+  --store-foreground: oklch(0.19 0.02 220);
+  --store-card: oklch(0.995 0.006 220);
+  --store-border: oklch(0.88 0.012 220);
+  --store-accent: oklch(0.62 0.17 245);
+  --store-muted: oklch(0.47 0.015 220);
+}
+
+[data-store-theme="default"][data-store-mode="dark"] {
+  --store-background: var(--background);
+  --store-foreground: var(--foreground);
+  --store-card: var(--card);
+  --store-border: var(--border);
+  --store-accent: var(--sidebar-accent);
+  --store-muted: var(--muted-foreground);
+}
+
+[data-store-theme="sports"] {
+  --store-background: oklch(0.12 0.016 150);
+  --store-foreground: oklch(0.95 0.012 150);
+  --store-card: oklch(0.17 0.02 150);
+  --store-border: oklch(0.3 0.04 150);
+  --store-accent: oklch(0.68 0.17 145);
+  --store-muted: oklch(0.72 0.018 150);
+  --store-heading-font: var(--font-display);
+}
+
+[data-store-theme="sports"][data-store-mode="light"] {
+  --store-background: oklch(0.985 0.008 150);
+  --store-foreground: oklch(0.18 0.02 150);
+  --store-card: oklch(0.995 0.006 150);
+  --store-border: oklch(0.82 0.03 150);
+  --store-accent: oklch(0.52 0.14 150);
+  --store-muted: oklch(0.46 0.015 150);
+}
+
+[data-store-theme="clothing"] {
+  --store-background: oklch(0.14 0.018 30);
+  --store-foreground: oklch(0.96 0.012 30);
+  --store-card: oklch(0.19 0.022 30);
+  --store-border: oklch(0.32 0.03 30);
+  --store-accent: oklch(0.62 0.16 20);
+  --store-muted: oklch(0.76 0.02 30);
+  --store-heading-font: var(--font-display);
+}
+
+[data-store-theme="clothing"][data-store-mode="light"] {
+  --store-background: oklch(0.985 0.008 30);
+  --store-foreground: oklch(0.18 0.02 30);
+  --store-card: oklch(0.996 0.004 30);
+  --store-border: oklch(0.84 0.02 30);
+  --store-accent: oklch(0.48 0.12 25);
+  --store-muted: oklch(0.46 0.014 30);
 }
 
 [data-store-theme="electronics"] {
@@ -131,6 +185,84 @@
   --store-accent: oklch(0.75 0.15 220);
   --store-muted: oklch(0.65 0.02 250);
   --store-heading-font: var(--font-tech-display);
+}
+
+[data-store-theme="electronics"][data-store-mode="light"] {
+  --store-background: oklch(0.97 0.012 230);
+  --store-foreground: oklch(0.19 0.025 230);
+  --store-card: oklch(1 0.008 230);
+  --store-border: oklch(0.86 0.018 230);
+  --store-accent: oklch(0.58 0.19 230);
+  --store-muted: oklch(0.48 0.016 230);
+}
+
+[data-store-root="true"][data-store-mode="light"][data-store-theme="sports"] .store-hero-panel {
+  background:
+    radial-gradient(circle at top, rgba(34, 197, 94, 0.18), transparent 48%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(236, 253, 245, 0.8));
+  box-shadow: 0 20px 45px rgba(20, 83, 45, 0.08);
+}
+
+[data-store-root="true"][data-store-mode="light"][data-store-theme="sports"] .store-product-thumb {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.14), rgba(255, 255, 255, 0.96));
+}
+
+[data-store-root="true"][data-store-mode="light"][data-store-theme="sports"] .store-hero-badge {
+  color: oklch(0.38 0.12 145);
+}
+
+[data-store-root="true"][data-store-mode="light"][data-store-theme="clothing"] .store-hero-panel {
+  background:
+    radial-gradient(circle at top, rgba(168, 85, 247, 0.14), transparent 48%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(250, 245, 247, 0.82));
+  box-shadow: 0 20px 45px rgba(120, 53, 15, 0.08);
+}
+
+[data-store-root="true"][data-store-mode="light"][data-store-theme="clothing"] .store-product-thumb {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.12), rgba(255, 255, 255, 0.96));
+}
+
+[data-store-root="true"][data-store-mode="light"][data-store-theme="clothing"] .store-hero-badge {
+  color: oklch(0.44 0.12 30);
+}
+
+[data-store-root="true"] {
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+[data-store-root="true"] .store-theme-toggle {
+  background: color-mix(in srgb, var(--store-card) 88%, transparent);
+  border-color: var(--store-border);
+  color: var(--store-foreground);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+[data-store-root="true"][data-store-mode="light"] .store-theme-toggle {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.08);
+}
+
+[data-store-root="true"][data-store-mode="dark"] .store-theme-toggle {
+  background: rgba(15, 23, 42, 0.36);
+}
+
+[data-store-root="true"][data-store-mode="light"] .store-hero-panel {
+  background:
+    radial-gradient(circle at top, rgba(96, 165, 250, 0.18), transparent 48%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(239, 246, 255, 0.8));
+  box-shadow: 0 20px 45px rgba(59, 130, 246, 0.08);
+}
+
+[data-store-root="true"][data-store-mode="light"] .store-product-thumb {
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.12), rgba(255, 255, 255, 0.96));
+}
+
+[data-store-root="true"][data-store-mode="light"] .store-muted-card {
+  background: rgba(148, 163, 184, 0.04);
+}
+
+[data-store-root="true"][data-store-mode="light"] .store-hero-badge {
+  color: oklch(0.49 0.12 245);
 }
 
 .store-heading {

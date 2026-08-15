@@ -38,7 +38,7 @@ export class StoresService {
   }
 
   async createStore(dto: CreateStoreDto) {
-    const { name, slug, subDomain, templateId, logoUrl, templateConfig } = dto;
+    const { name, slug, subDomain, templateId, logoUrl, templateConfig, theme, mode } = dto;
 
     const finalSubDomain = subDomain || slug;
 
@@ -61,6 +61,12 @@ export class StoresService {
       activeTemplateId = defaultTemplate.id;
     }
 
+    const finalTemplateConfig = {
+      ...(templateConfig || {}),
+      theme: theme || templateConfig?.theme || 'default',
+      mode: mode || templateConfig?.mode || 'dark',
+    };
+
     const [newStore] = await this.db
       .insert(schema.stores)
       .values({
@@ -68,7 +74,7 @@ export class StoresService {
         subDomain: finalSubDomain,
         templateId: activeTemplateId,
         logoUrl: logoUrl || null,
-        templateConfig: templateConfig || {},
+        templateConfig: finalTemplateConfig,
       })
       .returning();
 
@@ -129,14 +135,25 @@ export class StoresService {
   async updateStore(storeId: string, dto: UpdateStoreDto, currentUser: { userId: string; role: string }) {
     await this.storeAccessService.assertStoreAccess(currentUser.userId, currentUser.role, storeId);
 
-    const { name, logoUrl, templateConfig } = dto;
+    const { name, logoUrl, templateConfig, theme, mode } = dto;
+
+    const existingStore = await this.db.query.stores.findFirst({
+      where: eq(schema.stores.id, storeId),
+    });
+
+    const mergedTemplateConfig = {
+      ...(existingStore?.templateConfig as Record<string, any> | null || {}),
+      ...(templateConfig || {}),
+      ...(theme && { theme }),
+      ...(mode && { mode }),
+    };
 
     const [updatedStore] = await this.db
       .update(schema.stores)
       .set({
         ...(name && { name }),
         ...(logoUrl !== undefined && { logoUrl }),
-        ...(templateConfig && { templateConfig }),
+        templateConfig: mergedTemplateConfig,
         updatedAt: new Date(),
       })
       .where(eq(schema.stores.id, storeId))

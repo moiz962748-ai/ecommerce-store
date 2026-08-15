@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsUUID, IsObject } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsUUID, IsObject, IsIn } from 'class-validator';
 
 export class CreateStoreDto {
   @IsString()
@@ -12,6 +12,14 @@ export class CreateStoreDto {
   @IsOptional()
   @IsString()
   subDomain?: string;
+
+  @IsOptional()
+  @IsIn(['default', 'electronics', 'sports', 'clothing'])
+  theme?: 'default' | 'electronics' | 'sports' | 'clothing';
+
+  @IsOptional()
+  @IsIn(['dark', 'light'])
+  mode?: 'dark' | 'light';
 
   @IsOptional()
   @IsUUID('4', { message: 'templateId must be a valid UUID' })

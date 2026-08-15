@@ -37,6 +37,8 @@ interface Store {
 const createStoreSchema = z.object({
   name: z.string().min(1, { message: 'Store name is required' }),
   subDomain: z.string().min(1, { message: 'Subdomain is required' }),
+  theme: z.enum(['default', 'electronics', 'sports', 'clothing']),
+  mode: z.enum(['dark', 'light']),
 });
 
 type CreateStoreValues = z.infer<typeof createStoreSchema>;
@@ -57,6 +59,10 @@ export default function StoresPage() {
     formState: { errors },
   } = useForm<CreateStoreValues>({
     resolver: zodResolver(createStoreSchema),
+    defaultValues: {
+      theme: 'default',
+      mode: 'dark',
+    },
   });
 
   const fetchStores = async () => {
@@ -142,6 +148,36 @@ export default function StoresPage() {
                 {errors.subDomain && (
                   <p id="subDomain-error" className="text-sm text-red-500">{errors.subDomain.message}</p>
                 )}
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="theme">Store Theme</Label>
+                  <select
+                    id="theme"
+                    defaultValue="default"
+                    {...register('theme')}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <option value="default">Default</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="sports">Sports</option>
+                    <option value="clothing">Clothing</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="mode">Mode</Label>
+                  <select
+                    id="mode"
+                    defaultValue="dark"
+                    {...register('mode')}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                  </select>
+                </div>
               </div>
 
               <div role="status" aria-live="polite">{submitError && <p className="text-sm text-red-500">{submitError}</p>}</div>
