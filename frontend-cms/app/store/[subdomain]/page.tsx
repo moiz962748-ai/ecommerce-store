@@ -153,31 +153,7 @@ export default function StoreHomePage() {
 
   return (
     <main className="bg-store-background text-store-foreground">
-      <header className="border-b border-store-border bg-store-background/95 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-4 py-3">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold text-store-foreground store-heading">{store.name}</h1>
-            </div>
-
-            <div className="hidden min-w-[260px] items-center gap-2 rounded-full border border-store-border bg-store-card px-3 py-2 md:flex">
-              <span className="text-store-muted">⌕</span>
-              <input
-                aria-label="Search products"
-                placeholder="Search"
-                className="w-full bg-transparent text-sm text-store-foreground placeholder:text-store-muted outline-none"
-              />
-            </div>
-
-            <nav className="flex items-center gap-4 text-sm md:gap-5">
-              <Link href="/login" className="text-store-foreground hover:text-store-accent">Login</Link>
-              <Link href="#about" className="text-store-foreground hover:text-store-accent">About</Link>
-              <a href="#contact" className="text-store-foreground hover:text-store-accent">Contact</a>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+      
       <section className="mx-auto max-w-6xl px-4 py-8 md:py-12">
         <div className="store-hero-panel relative overflow-hidden rounded-[28px] border border-store-border bg-store-card px-6 py-16 text-center md:px-10">
           <div className="absolute inset-0 opacity-20">
