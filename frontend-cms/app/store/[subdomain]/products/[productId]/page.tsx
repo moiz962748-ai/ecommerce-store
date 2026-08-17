@@ -150,28 +150,7 @@ export default function ProductDetailPage() {
 
   return (
     <main className="min-h-screen bg-store-background text-store-foreground">
-      <header className="border-b border-store-border bg-store-background/95 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
-          <Link href={`/store/${subdomain}`} className="flex items-center gap-3">
-            <div>
-              <p className="text-lg font-bold text-store-foreground store-heading">{store.name}</p>
-            </div>
-          </Link>
-
-          <nav className="hidden items-center gap-6 text-sm md:flex">
-            <Link href={`/store/${subdomain}`} className="text-store-muted hover:text-store-accent">Home</Link>
-            <Link href={`/store/${subdomain}/products`} className="text-store-muted hover:text-store-accent">Shop</Link>
-            <Link href={`/store/${subdomain}/wishlist`} className="text-store-muted hover:text-store-accent">Wishlist</Link>
-            <Link href={`/store/${subdomain}/cart`} className="text-store-muted hover:text-store-accent">Cart</Link>
-          </nav>
-
-          <Link href="/login">
-            <Button variant="outline" className="border-store-border bg-store-card text-store-foreground hover:bg-store-accent hover:text-store-background">
-              Login
-            </Button>
-          </Link>
-        </div>
-      </header>
+      
 
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
         <div className="mb-6 flex items-center gap-2 text-sm text-store-muted">
@@ -262,7 +241,7 @@ export default function ProductDetailPage() {
                 size="lg"
                 onClick={handleAddToCart}
                 disabled={adding}
-                className="flex-1 bg-store-accent text-store-background hover:bg-store-accent/90"
+                className="h-12 w-full rounded-xl bg-store-accent text-store-background hover:bg-store-accent/90 sm:flex-1"
               >
                 {adding ? 'Adding...' : 'Add to Cart'}
               </Button>
@@ -271,7 +250,7 @@ export default function ProductDetailPage() {
                 variant="outline"
                 onClick={handleAddToWishlist}
                 disabled={wishlisting}
-                className="flex-1 border-store-border bg-store-card text-store-foreground hover:bg-store-accent hover:text-store-background"
+                className="h-12 w-full rounded-xl border-2 border-store-border bg-store-card text-store-foreground hover:bg-store-accent hover:text-store-background sm:flex-1"
               >
                 {wishlisting ? 'Saving...' : 'Add to Wishlist'}
               </Button>
@@ -282,6 +261,8 @@ export default function ProductDetailPage() {
           </section>
         </div>
 
+
+        
         <section className="mt-10 grid gap-6 lg:grid-cols-2">
           <div className="rounded-[24px] border border-store-border bg-store-card p-6">
             <h2 className="mb-4 text-2xl font-bold text-store-foreground store-heading">Product Details</h2>

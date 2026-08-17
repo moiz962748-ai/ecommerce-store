@@ -163,11 +163,7 @@ export default function CheckoutPage() {
     <main className="min-h-screen bg-store-background text-store-foreground">
       <header className="border-b border-store-border bg-store-background/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
-          <Link href={`/store/${subdomain}`} className="flex items-center gap-3">
-            <div>
-              <p className="text-lg font-bold text-store-foreground store-heading">Checkout</p>
-            </div>
-          </Link>
+          
 
           <Link href={`/store/${subdomain}/cart`}>
             <Button variant="outline" className="border-store-border bg-store-card text-store-foreground hover:bg-store-accent hover:text-store-background">

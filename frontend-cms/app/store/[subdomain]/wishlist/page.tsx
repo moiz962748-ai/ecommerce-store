@@ -117,7 +117,7 @@ export default function WishlistPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
           <Link href={`/store/${subdomain}`} className="flex items-center gap-3">
             <div>
-              <p className="text-lg font-bold text-store-foreground store-heading">Wishlist</p>
+              <p className="text-lg font-bold text-store-foreground store-heading">Back to Store</p>
             </div>
           </Link>
 

@@ -154,31 +154,7 @@ export default function StoreProductsPage() {
 
   return (
     <main className="min-h-screen bg-store-background text-store-foreground">
-      <header className="border-b border-store-border bg-store-background/95 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
-          <div className="flex items-center gap-3">
-            <Link href={`/store/${subdomain}`} className="flex items-center gap-3">
-              <div>
-                <p className="text-lg font-bold text-store-foreground store-heading">{store.name}</p>
-              </div>
-            </Link>
-          </div>
-
-          <nav className="hidden items-center gap-6 text-sm md:flex">
-            <Link href={`/store/${subdomain}`} className="text-store-muted hover:text-store-accent">Home</Link>
-            <Link href={`/store/${subdomain}/products`} className="font-medium text-store-foreground">Shop</Link>
-            <Link href={`/store/${subdomain}/wishlist`} className="text-store-muted hover:text-store-accent">Wishlist</Link>
-            <Link href={`/store/${subdomain}/cart`} className="text-store-muted hover:text-store-accent">Cart</Link>
-          </nav>
-
-          <Link href="/login">
-            <Button variant="outline" className="border-store-border bg-store-card text-store-foreground hover:bg-store-accent hover:text-store-background">
-              Login
-            </Button>
-          </Link>
-        </div>
-      </header>
-
+      
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
         <div className="overflow-hidden rounded-[28px] border border-store-border bg-[radial-gradient(circle_at_left,_rgba(117,161,255,0.18),_transparent_35%),linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] bg-store-card p-6 md:p-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">

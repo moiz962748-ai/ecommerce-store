@@ -268,12 +268,15 @@ export default function StoreHomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-8 md:py-12">
         <h3 className="mb-6 text-3xl font-bold text-store-foreground store-heading">How It Works</h3>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="flex flex-col gap-4 md:flex-row md:items-stretch">
           {storefrontCopy.steps.map((step, index) => (
-            <div key={step.title} className="flex items-center gap-4">
-              <div className="flex min-h-[120px] flex-1 items-center justify-between rounded-2xl border border-store-border bg-store-card p-4 text-left">
+            <div
+              key={step.title}
+              className="flex flex-col items-stretch gap-2 md:flex-1 md:flex-row md:items-center md:gap-4"
+            >
+              <div className="flex min-h-[120px] w-full flex-1 items-center justify-between rounded-2xl border border-store-border bg-store-card p-4 text-left">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-store-background text-xl text-store-accent">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-store-background text-xl text-store-accent">
                     {step.icon}
                   </div>
                   <div>
@@ -282,12 +285,19 @@ export default function StoreHomePage() {
                   </div>
                 </div>
               </div>
-              {index < 2 && <span className="text-2xl text-store-accent">→</span>}
+
+              {index < storefrontCopy.steps.length - 1 && (
+                <span className="self-center text-2xl text-store-accent md:hidden">↓</span>
+              )}
+              {index < storefrontCopy.steps.length - 1 && (
+                <span className="hidden self-center text-2xl text-store-accent md:inline">→</span>
+              )}
             </div>
           ))}
         </div>
       </section>
 
+      
       <section id="contact" className="mx-auto max-w-6xl px-4 py-8 md:py-12">
         <div className="grid gap-6 rounded-[28px] border border-store-border bg-store-card p-6 md:grid-cols-[1.1fr_1.4fr] md:p-8">
           <div className="space-y-6">
