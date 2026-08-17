@@ -91,20 +91,29 @@ export default function PartnersPage() {
   };
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="font-heading text-2xl font-semibold">Assign Partner</h1>
-        <p className="text-muted-foreground">Grant a user access to manage a store</p>
+    <div className="w-full max-w-full space-y-6">
+      {/* Page Header */}
+      <div>
+        <h1 className="font-heading text-xl sm:text-2xl font-semibold tracking-tight">
+          Assign Partner
+        </h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Grant a user access to manage a store
+        </p>
       </div>
 
-      <Card className="max-w-md">
-        <CardHeader>
-          <CardTitle className="font-heading">New Assignment</CardTitle>
-          <CardDescription>
+      {/* Form Card */}
+      <Card className="w-full max-w-lg shadow-sm border">
+        <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-4">
+          <CardTitle className="font-heading text-lg sm:text-xl">
+            New Assignment
+          </CardTitle>
+          <CardDescription className="text-xs sm:text-sm">
             Enter the user&apos;s ID and select the store they should manage.
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-6">
+
+        <CardContent className="p-4 sm:p-6 pt-0 sm:pt-0">
           <form
             onSubmit={handleSubmit(onSubmit, (errors) => {
               const first = Object.keys(errors)[0];
@@ -112,39 +121,52 @@ export default function PartnersPage() {
             })}
             className="space-y-4"
           >
-            <div className="space-y-2">
-              <Label>Store</Label>
+            {/* Store Selection */}
+            <div className="space-y-1.5">
+              <Label className="text-sm font-medium">Store</Label>
               {loadingStores ? (
-                <p className="text-muted-foreground text-sm">Loading stores...</p>
+                <div className="h-10 w-full rounded-md border border-input bg-muted/40 animate-pulse flex items-center px-3 text-xs text-muted-foreground">
+                  Loading stores...
+                </div>
               ) : (
                 <Controller
                   control={control}
                   name="storeId"
                   render={({ field }) => (
-                    <Select value={field.value} onValueChange={(v) => field.onChange(v || '')}>
-                      <SelectTrigger className="w-full" aria-describedby={errors.storeId ? 'storeId-error' : undefined}>
-                        <SelectValue>
+                    <Select
+                      value={field.value}
+                      onValueChange={(v) => field.onChange(v || '')}
+                    >
+                      <SelectTrigger
+                        className="w-full text-sm h-10"
+                        aria-describedby={errors.storeId ? 'storeId-error' : undefined}
+                      >
+                        <SelectValue placeholder="Select a store">
                           {(value: string | null) => {
                             const store = stores.find((s) => s.id === value);
                             if (!store) return 'Select a store';
                             const tag = getStoreTag(store.subDomain);
                             return (
-                              <span className="flex items-center gap-2">
-                                <span className={`inline-block w-1.5 h-1.5 rounded-full ${tagDotClass[tag]}`} />
-                                {store.name}
+                              <span className="flex items-center gap-2 truncate">
+                                <span
+                                  className={`inline-block w-2 h-2 rounded-full shrink-0 ${tagDotClass[tag]}`}
+                                />
+                                <span className="truncate">{store.name}</span>
                               </span>
                             );
                           }}
                         </SelectValue>
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="max-h-60 overflow-y-auto">
                         {stores.map((store) => {
                           const tag = getStoreTag(store.subDomain);
                           return (
                             <SelectItem key={store.id} value={store.id}>
                               <span className="flex items-center gap-2">
-                                <span className={`inline-block w-1.5 h-1.5 rounded-full ${tagDotClass[tag]}`} />
-                                {store.name}
+                                <span
+                                  className={`inline-block w-2 h-2 rounded-full shrink-0 ${tagDotClass[tag]}`}
+                                />
+                                <span className="truncate">{store.name}</span>
                               </span>
                             </SelectItem>
                           );
@@ -155,33 +177,54 @@ export default function PartnersPage() {
                 />
               )}
               {errors.storeId && (
-                <p id="storeId-error" className="text-sm text-red-500">{errors.storeId.message}</p>
+                <p id="storeId-error" className="text-xs text-red-500 font-medium">
+                  {errors.storeId.message}
+                </p>
               )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="userId">User ID</Label>
+            {/* User ID Input */}
+            <div className="space-y-1.5">
+              <Label htmlFor="userId" className="text-sm font-medium">
+                User ID
+              </Label>
               <Input
                 id="userId"
                 placeholder="e.g. 862915c5-2f43-474c-8208-75dfa8a7fd51"
-                className="font-mono text-xs"
+                className="font-mono text-xs sm:text-sm h-10 w-full"
                 {...register('userId')}
                 aria-describedby={errors.userId ? 'userId-error' : undefined}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[11px] sm:text-xs text-muted-foreground">
                 Find this in the Users table in Supabase for now.
               </p>
               {errors.userId && (
-                <p id="userId-error" className="text-sm text-red-500">{errors.userId.message}</p>
+                <p id="userId-error" className="text-xs text-red-500 font-medium">
+                  {errors.userId.message}
+                </p>
               )}
             </div>
 
+            {/* Status Messages */}
             <div role="status" aria-live="polite">
-              {submitError && <p className="text-sm text-red-500">{submitError}</p>}
-              {success && <p className="text-sm text-green-600">Partner assigned successfully!</p>}
+              {submitError && (
+                <p className="text-xs sm:text-sm text-red-500 bg-red-50 p-2.5 rounded-md border border-red-200">
+                  {submitError}
+                </p>
+              )}
+              {success && (
+                <p className="text-xs sm:text-sm text-green-700 bg-green-50 p-2.5 rounded-md border border-green-200">
+                  Partner assigned successfully!
+                </p>
+              )}
             </div>
 
-            <Button type="submit" className="w-full" disabled={submitting}>
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              className="w-full h-10 text-sm font-medium"
+              disabled={submitting}
+            >
               {submitting ? 'Assigning...' : 'Assign Partner'}
             </Button>
           </form>
