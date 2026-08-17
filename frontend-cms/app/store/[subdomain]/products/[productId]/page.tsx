@@ -22,6 +22,9 @@ interface Product {
 
 function getProductVisual(productName: string) {
   const lower = productName.toLowerCase();
+  if (lower.includes('running') || lower.includes('shoe') || lower.includes('sneaker')) return '👟';
+  if (lower.includes('gym') || lower.includes('fitness') || lower.includes('training')) return '🏋️';
+  if (lower.includes('water') || lower.includes('bottle') || lower.includes('hydration')) return '💧';
   if (lower.includes('laptop') || lower.includes('computer')) return '💻';
   if (lower.includes('mouse')) return '🖱️';
   if (lower.includes('headphone') || lower.includes('earbud') || lower.includes('audio')) return '🎧';
@@ -47,6 +50,12 @@ export default function ProductDetailPage() {
   const [addedMessage, setAddedMessage] = useState<string | null>(null);
   const [wishlisting, setWishlisting] = useState(false);
   const [wishlistMessage, setWishlistMessage] = useState<string | null>(null);
+
+  const isSportsStore = (
+    store?.templateConfig?.theme === 'sports' ||
+    subdomain.toLowerCase().includes('sport') ||
+    subdomain.toLowerCase().includes('fitness')
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -137,16 +146,13 @@ export default function ProductDetailPage() {
   }
 
   const productEmoji = getProductVisual(product.name);
-  const thumbnails = [product.imageUrl || productEmoji, '✨', '🚀', '📦'];
+  const thumbnails = [product.imageUrl || productEmoji, isSportsStore ? '🏃' : '✨', isSportsStore ? '⚡' : '🚀', isSportsStore ? '💧' : '📦'];
 
   return (
     <main className="min-h-screen bg-store-background text-store-foreground">
       <header className="border-b border-store-border bg-store-background/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
           <Link href={`/store/${subdomain}`} className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-store-border bg-store-card text-lg text-store-accent">
-              ⚡
-            </div>
             <div>
               <p className="text-lg font-bold text-store-foreground store-heading">{store.name}</p>
             </div>
@@ -180,9 +186,9 @@ export default function ProductDetailPage() {
           <section className="rounded-[28px] border border-store-border bg-store-card p-4 md:p-6">
             <div className="mb-4 flex items-center justify-between text-sm text-store-muted">
               <span className="rounded-full border border-store-border bg-store-background px-3 py-1 uppercase tracking-[0.2em]">
-                Featured item
+                {isSportsStore ? 'Performance pick' : 'Featured item'}
               </span>
-              <span>Free shipping</span>
+              <span>{isSportsStore ? 'Fast shipping' : 'Free shipping'}</span>
             </div>
 
             <div className="overflow-hidden rounded-2xl border border-store-border bg-[linear-gradient(135deg,rgba(117,161,255,0.16),rgba(255,255,255,0.04))] p-6 md:p-8">

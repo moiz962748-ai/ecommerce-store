@@ -116,9 +116,6 @@ export default function WishlistPage() {
       <header className="border-b border-store-border bg-store-background/95 backdrop-blur-sm">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
           <Link href={`/store/${subdomain}`} className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-store-border bg-store-card text-lg text-store-accent">
-              ⚡
-            </div>
             <div>
               <p className="text-lg font-bold text-store-foreground store-heading">Wishlist</p>
             </div>
@@ -134,8 +131,8 @@ export default function WishlistPage() {
 
       <div className="mx-auto max-w-6xl px-4 py-8 md:px-8 md:py-12">
         <div className="mb-8 rounded-[28px] border border-store-border bg-store-card p-6 md:p-8">
-          <p className="text-sm uppercase tracking-[0.25em] text-store-muted">Saved items</p>
-          <h1 className="mt-3 text-4xl font-bold text-store-foreground store-heading">Your wishlist</h1>
+          <p className="text-sm uppercase tracking-[0.25em] text-store-muted">{subdomain.toLowerCase().includes('sport') || subdomain.toLowerCase().includes('fitness') ? 'Saved essentials' : 'Saved items'}</p>
+          <h1 className="mt-3 text-4xl font-bold text-store-foreground store-heading">{subdomain.toLowerCase().includes('sport') || subdomain.toLowerCase().includes('fitness') ? 'Your training wishlist' : 'Your wishlist'}</h1>
         </div>
 
         {error && <p className="mb-5 text-red-500">{error}</p>}

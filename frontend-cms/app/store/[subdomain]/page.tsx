@@ -32,22 +32,22 @@ export default function StoreHomePage() {
 
   useEffect(() => {
     const fetchStore = async () => {
-  try {
-    const found = await apiClient(`/public/stores/${subdomain}`);
-    setStore(found);
+      try {
+        const found = await apiClient(`/public/stores/${subdomain}`);
+        setStore(found);
 
-    try {
-      const productsData = await apiClient(`/public/products/store/${found.id}`);
-      setProducts(productsData.slice(0, 4));
-    } catch {
-      setProducts([]);
-    }
-  } catch (err: any) {
-    setError('Store not found');
-  } finally {
-    setLoading(false);
-  }
-};
+        try {
+          const productsData = await apiClient(`/public/products/store/${found.id}`);
+          setProducts(productsData.slice(0, 4));
+        } catch {
+          setProducts([]);
+        }
+      } catch {
+        setError('Store not found');
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchStore();
   }, [subdomain]);
@@ -68,11 +68,88 @@ export default function StoreHomePage() {
     );
   }
 
-  const showcaseProducts = products.length > 0 ? products.slice(0, 3) : [
-    { id: 'mock-1', name: 'Slim Bezel Laptop', basePrice: 89999, description: 'Lightweight performance laptop' },
-    { id: 'mock-2', name: 'Gaming Mouse', basePrice: 4999, description: 'Ultra-responsive precision mouse' },
-    { id: 'mock-3', name: 'Wireless Headphones', basePrice: 12999, description: 'Immersive sound for daily use' },
-  ];
+  const isClothingStore = (
+    store?.templateConfig?.theme === 'clothing' ||
+    subdomain.toLowerCase().includes('cloth') ||
+    subdomain.toLowerCase().includes('fashion')
+  );
+
+  const isSportsStore = (
+    store?.templateConfig?.theme === 'sports' ||
+    subdomain.toLowerCase().includes('sport') ||
+    subdomain.toLowerCase().includes('fitness')
+  );
+
+  const showcaseProducts = products.length > 0 ? products.slice(0, 3) : (
+    isSportsStore
+      ? [
+          { id: 'mock-1', name: 'Trail Running Shoes', basePrice: 7999, description: 'Lightweight grip and comfort for every mile' },
+          { id: 'mock-2', name: 'Performance Gym Set', basePrice: 6599, description: 'Built for mobility, strength, and everyday training' },
+          { id: 'mock-3', name: 'Training Water Bottle', basePrice: 2999, description: 'Hydration essential for workouts and active routines' },
+        ]
+      : isClothingStore
+        ? [
+            { id: 'mock-1', name: 'Tailored Wool Blazer', basePrice: 8999, description: 'Sharp layering essential for polished everyday looks' },
+            { id: 'mock-2', name: 'Classic Leather Sneakers', basePrice: 5999, description: 'Minimal everyday comfort for both casual and elevated outfits' },
+            { id: 'mock-3', name: 'Silk Printed Dress', basePrice: 10999, description: 'A versatile statement piece for brunches, evenings, and travel' },
+          ]
+        : [
+            { id: 'mock-1', name: 'Slim Bezel Laptop', basePrice: 89999, description: 'Lightweight performance laptop' },
+            { id: 'mock-2', name: 'Gaming Mouse', basePrice: 4999, description: 'Ultra-responsive precision mouse' },
+            { id: 'mock-3', name: 'Wireless Headphones', basePrice: 12999, description: 'Immersive sound for daily use' },
+          ]
+  );
+
+  const storefrontCopy = isSportsStore
+    ? {
+        badge: 'Fuel your performance',
+        heroTitle: `Welcome to ${store.name}`,
+        button: 'Shop Gear',
+        aboutTitle: 'About the Brand',
+        aboutText: 'From performance essentials to everyday training gear, we design products that help athletes move stronger, move faster, and stay motivated through every session.',
+        features: ['Performance Fit', 'Built to Move', 'Everyday Energy'],
+        featureIcons: ['🏃', '⚡', '🔥'],
+        whyChoose: 'We focus on active lifestyles, dependable performance, and gear that keeps up with real routines. Whether you are training, recovering, or heading outdoors, our collection is built to support momentum, resilience, and confidence in every movement.',
+        steps: [
+          { title: 'Step 1', text: 'Explore your training essentials', icon: '🏋️' },
+          { title: 'Step 2', text: 'Choose performance-ready gear', icon: '🧢' },
+          { title: 'Step 3', text: 'Train harder and recover faster', icon: '💪' },
+        ],
+        footerText: 'Performance-driven essentials built for movement, endurance, and everyday athletic life.',
+      }
+    : isClothingStore
+      ? {
+          badge: 'Curated wardrobe essentials',
+          heroTitle: `Welcome to ${store.name}`,
+          button: 'Shop Collection',
+          aboutTitle: 'About the Brand',
+          aboutText: 'Discover elevated essentials, premium fabrics, and timeless silhouettes designed to move effortlessly from day to night.',
+          features: ['Premium Fabric', 'Easy Styling', 'Everyday Comfort'],
+          featureIcons: ['🧵', '👗', '✨'],
+          whyChoose: 'We bring together refined design, comfortable materials, and trend-led styling to help every customer build a wardrobe that feels personal, polished, and easy to wear. From everyday basics to statement pieces, our collection is curated for modern living, effortless confidence, and lasting versatility.',
+          steps: [
+            { title: 'Step 1', text: 'Browse the latest looks', icon: '👀' },
+            { title: 'Step 2', text: 'Choose your perfect fit', icon: '🛍️' },
+            { title: 'Step 3', text: 'Style it with confidence', icon: '✨' },
+          ],
+          footerText: 'Fashion-forward essentials, timeless silhouettes, and premium comfort for your everyday wardrobe.',
+        }
+      : {
+          badge: 'Smart tech essentials',
+          heroTitle: `Welcome to ${store.name}`,
+          button: 'Shop Now',
+          aboutTitle: 'About Store',
+          aboutText: 'Discover premium technology and everyday essentials designed for faster workflows, smarter living, and a seamless shopping experience.',
+          features: ['Fast Service', 'Easy Shopping', 'Low Cost'],
+          featureIcons: ['⚡', '🛒', '💸'],
+          whyChoose: 'We combine trusted electronics, curated product recommendations, and reliable after-sales support to make every purchase simple, secure, and satisfying. Our platform is designed to help customers discover the right devices faster, compare quality options with confidence, and enjoy a seamless buying journey from start to finish. With dependable service, competitive pricing, and a focus on customer trust, we make technology shopping easier and more enjoyable for everyone.',
+          steps: [
+            { title: 'Step 1', text: 'Browse and choose your product', icon: '👤' },
+            { title: 'Step 2', text: 'Add to cart and complete checkout', icon: '💳' },
+            { title: 'Step 3', text: 'Track your order and get fast delivery', icon: '🚚' },
+          ],
+          footerText: 'Smart gadgets, everyday essentials, and trusted support for modern living.',
+        };
 
   return (
     <main className="bg-store-background text-store-foreground">
@@ -80,10 +157,6 @@ export default function StoreHomePage() {
         <div className="mx-auto max-w-7xl px-4 py-3">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="flex min-w-[120px] items-center justify-center rounded-md border border-store-border bg-store-card px-3 py-2 text-sm font-medium text-store-muted">
-                Logo
-              </div>
-
               <h1 className="text-2xl font-bold text-store-foreground store-heading">{store.name}</h1>
             </div>
 
@@ -114,9 +187,9 @@ export default function StoreHomePage() {
           </div>
 
           <div className="relative z-10">
-            <p className="store-hero-badge mb-6 text-sm uppercase tracking-[0.2em] text-store-muted">Smart tech essentials</p>
+            <p className="store-hero-badge mb-6 text-sm uppercase tracking-[0.2em] text-store-muted">{storefrontCopy.badge}</p>
             <h2 className="store-heading text-4xl font-bold text-store-foreground md:text-6xl">
-              Welcome to {store.name}
+              {storefrontCopy.heroTitle}
             </h2>
 
             <div className="mt-10 flex justify-center">
@@ -125,7 +198,7 @@ export default function StoreHomePage() {
                   size="lg"
                   className="bg-store-accent text-store-background transition-colors hover:bg-store-accent/90 hover:text-store-background"
                 >
-                  Shop Now
+                  {storefrontCopy.button}
                 </Button>
               </Link>
             </div>
@@ -138,19 +211,23 @@ export default function StoreHomePage() {
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {showcaseProducts.map((product) => {
-            const icon = product.name.toLowerCase().includes('laptop')
-              ? '💻'
-              : product.name.toLowerCase().includes('mouse')
-                ? '🖱️'
-                : product.name.toLowerCase().includes('headphone')
-                  ? '🎧'
-                  : product.name.toLowerCase().includes('phone')
-                    ? '📱'
-                    : product.name.toLowerCase().includes('watch')
-                      ? '⌚'
-                      : product.name.toLowerCase().includes('speaker')
-                        ? '🔊'
-                        : '⚡';
+            const productIcon = product.name.toLowerCase().includes('running') || product.name.toLowerCase().includes('shoe') || product.name.toLowerCase().includes('sneaker')
+              ? '👟'
+              : product.name.toLowerCase().includes('gym') || product.name.toLowerCase().includes('fitness') || product.name.toLowerCase().includes('set')
+                ? '🏋️'
+                : product.name.toLowerCase().includes('water') || product.name.toLowerCase().includes('bottle')
+                  ? '💧'
+                  : product.name.toLowerCase().includes('blazer') || product.name.toLowerCase().includes('coat')
+                    ? '🧥'
+                    : product.name.toLowerCase().includes('dress') || product.name.toLowerCase().includes('jacket')
+                      ? '👗'
+                      : product.name.toLowerCase().includes('bag') || product.name.toLowerCase().includes('wallet')
+                        ? '👜'
+                        : product.name.toLowerCase().includes('watch')
+                          ? '⌚'
+                          : product.name.toLowerCase().includes('laptop')
+                            ? '💻'
+                            : '✨';
 
             return (
               <Link
@@ -166,7 +243,7 @@ export default function StoreHomePage() {
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
-                    <span className="text-6xl text-store-accent">{icon}</span>
+                    <span className="text-6xl text-store-accent">{productIcon}</span>
                   )}
                 </div>
                 <div className="flex items-center justify-between gap-3">
@@ -185,18 +262,18 @@ export default function StoreHomePage() {
       </section>
 
       <section id="about" className="mx-auto max-w-6xl px-4 py-8 md:py-12">
-        <h3 className="mb-6 text-3xl font-bold text-store-foreground store-heading">About Store</h3>
+        <h3 className="mb-6 text-3xl font-bold text-store-foreground store-heading">{storefrontCopy.aboutTitle}</h3>
         <div className="store-muted-card rounded-2xl border border-store-border bg-store-card px-6 py-5 text-store-muted">
           <p className="max-w-3xl text-base leading-7">
-            Discover premium technology and everyday essentials designed for faster workflows, smarter living, and a seamless shopping experience.
+            {storefrontCopy.aboutText}
           </p>
         </div>
 
         <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {['Fast Service', 'Easy Shopping', 'Low Cost'].map((feature) => (
+          {storefrontCopy.features.map((feature, index) => (
             <div key={feature} className="rounded-2xl border border-store-border bg-store-card px-5 py-6 text-center">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-store-border bg-store-background text-xl text-store-accent">
-                {feature === 'Fast Service' ? '⚡' : feature === 'Easy Shopping' ? '🛒' : '💸'}
+                {storefrontCopy.featureIcons[index]}
               </div>
               <h4 className="text-lg font-semibold text-store-foreground store-heading">{feature}</h4>
             </div>
@@ -208,7 +285,7 @@ export default function StoreHomePage() {
         <h3 className="mb-6 text-3xl font-bold text-store-foreground store-heading">Why Choose Us</h3>
         <div className="store-muted-card rounded-2xl border border-store-border bg-store-card px-6 py-5 text-store-muted">
           <p className="max-w-4xl text-base leading-8">
-            We combine trusted electronics, curated product recommendations, and reliable after-sales support to make every purchase simple, secure, and satisfying. Our platform is designed to help customers discover the right devices faster, compare quality options with confidence, and enjoy a seamless buying journey from start to finish. With dependable service, competitive pricing, and a focus on customer trust, we make technology shopping easier and more enjoyable for everyone.
+            {storefrontCopy.whyChoose}
           </p>
         </div>
       </section>
@@ -216,11 +293,7 @@ export default function StoreHomePage() {
       <section className="mx-auto max-w-6xl px-4 py-8 md:py-12">
         <h3 className="mb-6 text-3xl font-bold text-store-foreground store-heading">How It Works</h3>
         <div className="grid gap-4 md:grid-cols-3">
-          {[
-            { title: 'Step 1', text: 'Browse and choose your product', icon: '👤' },
-            { title: 'Step 2', text: 'Add to cart and complete checkout', icon: '💳' },
-            { title: 'Step 3', text: 'Track your order and get fast delivery', icon: '🚚' },
-          ].map((step, index) => (
+          {storefrontCopy.steps.map((step, index) => (
             <div key={step.title} className="flex items-center gap-4">
               <div className="flex min-h-[120px] flex-1 items-center justify-between rounded-2xl border border-store-border bg-store-card p-4 text-left">
                 <div className="flex items-center gap-3">
@@ -323,7 +396,7 @@ export default function StoreHomePage() {
             <div className="md:col-span-1">
               <p className="store-heading text-xl font-semibold text-store-foreground">{store.name}</p>
               <p className="mt-3 text-sm leading-6 text-store-muted">
-                Smart gadgets, everyday essentials, and trusted support for modern living.
+                {storefrontCopy.footerText}
               </p>
             </div>
 

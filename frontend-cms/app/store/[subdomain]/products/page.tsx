@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 interface Store {
   id: string;
   name: string;
+  templateConfig?: { theme?: string };
 }
 
 interface Product {
@@ -21,6 +22,9 @@ interface Product {
 
 function getProductVisual(productName: string) {
   const lower = productName.toLowerCase();
+  if (lower.includes('running') || lower.includes('sneaker')) return '👟';
+  if (lower.includes('gym') || lower.includes('fitness') || lower.includes('training')) return '🏋️';
+  if (lower.includes('bottle') || lower.includes('hydration')) return '💧';
   if (lower.includes('laptop') || lower.includes('computer')) return '💻';
   if (lower.includes('mouse')) return '🖱️';
   if (lower.includes('headphone') || lower.includes('earbud') || lower.includes('audio')) return '🎧';
@@ -29,15 +33,37 @@ function getProductVisual(productName: string) {
   if (lower.includes('camera')) return '📷';
   if (lower.includes('speaker')) return '🔊';
   if (lower.includes('keyboard')) return '⌨️';
+  if (lower.includes('shirt') || lower.includes('t-shirt')) return '👕';
+  if (lower.includes('dress')) return '👗';
+  if (lower.includes('jacket') || lower.includes('coat')) return '🧥';
+  if (lower.includes('jeans') || lower.includes('pants') || lower.includes('trouser')) return '👖';
+  if (lower.includes('hat') || lower.includes('cap')) return '🧢';
+  if (lower.includes('bag') || lower.includes('handbag')) return '👜';
+  if (lower.includes('shoe')) return '👟';
   return '⚡';
 }
 
 function getProductCategory(productName: string) {
   const lower = productName.toLowerCase();
+  if (lower.includes('running') || lower.includes('sneaker')) return 'Footwear';
+  if (lower.includes('gym') || lower.includes('fitness') || lower.includes('training')) return 'Training';
+  if (lower.includes('bottle') || lower.includes('hydration')) return 'Hydration';
   if (lower.includes('laptop') || lower.includes('computer') || lower.includes('phone')) return 'Tech';
   if (lower.includes('mouse') || lower.includes('keyboard') || lower.includes('speaker')) return 'Accessories';
   if (lower.includes('headphone') || lower.includes('audio')) return 'Audio';
   if (lower.includes('watch') || lower.includes('camera')) return 'Lifestyle';
+  if (
+    lower.includes('shirt') ||
+    lower.includes('t-shirt') ||
+    lower.includes('dress') ||
+    lower.includes('jacket') ||
+    lower.includes('coat') ||
+    lower.includes('jeans') ||
+    lower.includes('pants')
+  )
+    return 'Apparel';
+  if (lower.includes('hat') || lower.includes('cap') || lower.includes('bag')) return 'Accessories';
+  if (lower.includes('shoe')) return 'Footwear';
   return 'Featured';
 }
 
@@ -50,6 +76,17 @@ export default function StoreProductsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const isSportsStore =
+    store?.templateConfig?.theme === 'sports' ||
+    subdomain.toLowerCase().includes('sport') ||
+    subdomain.toLowerCase().includes('fitness');
+
+  const isClothingStore =
+    store?.templateConfig?.theme === 'clothing' ||
+    subdomain.toLowerCase().includes('cloth') ||
+    subdomain.toLowerCase().includes('fashion') ||
+    subdomain.toLowerCase().includes('apparel');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,6 +116,24 @@ export default function StoreProductsPage() {
     return products.filter((product) => getProductCategory(product.name) === selectedCategory);
   }, [products, selectedCategory]);
 
+  const heroEyebrow = isSportsStore
+    ? 'Performance essentials'
+    : isClothingStore
+      ? 'Style essentials'
+      : 'Smart shopping';
+
+  const heroHeadline = isSportsStore
+    ? 'Shop gear built for every workout'
+    : isClothingStore
+      ? "Shop the season's must-have looks"
+      : 'Shop the best gadgets for everyday life';
+
+  const heroButtonText = isSportsStore
+    ? 'Shop Collection'
+    : isClothingStore
+      ? 'Shop the Collection'
+      : 'Browse Now';
+
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-store-background text-store-foreground">
@@ -103,9 +158,6 @@ export default function StoreProductsPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-8">
           <div className="flex items-center gap-3">
             <Link href={`/store/${subdomain}`} className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-store-border bg-store-card text-lg text-store-accent">
-                ⚡
-              </div>
               <div>
                 <p className="text-lg font-bold text-store-foreground store-heading">{store.name}</p>
               </div>
@@ -131,9 +183,11 @@ export default function StoreProductsPage() {
         <div className="overflow-hidden rounded-[28px] border border-store-border bg-[radial-gradient(circle_at_left,_rgba(117,161,255,0.18),_transparent_35%),linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] bg-store-card p-6 md:p-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-xl">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-store-muted">Smart shopping</p>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-store-muted">
+                {heroEyebrow}
+              </p>
               <h1 className="text-4xl font-bold tracking-tight text-store-foreground md:text-5xl store-heading">
-                Shop the best gadgets for everyday life
+                {heroHeadline}
               </h1>
             </div>
 
@@ -145,7 +199,7 @@ export default function StoreProductsPage() {
               </Link>
               <Link href={`/store/${subdomain}/products`}>
                 <Button className="bg-store-accent text-store-background transition-colors hover:bg-store-accent/90 hover:text-store-background">
-                  Browse Now
+                  {heroButtonText}
                 </Button>
               </Link>
             </div>

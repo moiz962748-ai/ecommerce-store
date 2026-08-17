@@ -140,10 +140,10 @@
 }
 
 [data-store-theme="sports"] {
-  --store-background: oklch(0.12 0.016 150);
+  --store-background: oklch(0.18 0.018 150);
   --store-foreground: oklch(0.95 0.012 150);
-  --store-card: oklch(0.17 0.02 150);
-  --store-border: oklch(0.3 0.04 150);
+  --store-card: oklch(0.24 0.02 150);
+  --store-border: oklch(0.32 0.04 150);
   --store-accent: oklch(0.68 0.17 145);
   --store-muted: oklch(0.72 0.018 150);
   --store-heading-font: var(--font-display);
@@ -159,10 +159,10 @@
 }
 
 [data-store-theme="clothing"] {
-  --store-background: oklch(0.14 0.018 30);
+  --store-background: oklch(0.20 0.02 30);
   --store-foreground: oklch(0.96 0.012 30);
-  --store-card: oklch(0.19 0.022 30);
-  --store-border: oklch(0.32 0.03 30);
+  --store-card: oklch(0.26 0.022 30);
+  --store-border: oklch(0.35 0.03 30);
   --store-accent: oklch(0.62 0.16 20);
   --store-muted: oklch(0.76 0.02 30);
   --store-heading-font: var(--font-display);
