@@ -4,7 +4,26 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { StoreThemeToggle } from '@/components/store-theme-toggle';
 
-export function StoreHeader({ storeName, subdomain }: { storeName: string; subdomain: string }) {
+function getStoreLogo(subdomain: string) {
+  const lower = (subdomain || '').toLowerCase();
+  if (lower.includes('sport') || lower.includes('fitness')) {
+    return '/sports-logo.png';
+  }
+  if (lower.includes('cloth') || lower.includes('fashion') || lower.includes('apparel')) {
+    return '/clothing-logo.png';
+  }
+  return '/electronics-logo.png';
+}
+
+export function StoreHeader({
+  storeName,
+  subdomain,
+  logoUrl,
+}: {
+  storeName: string;
+  subdomain: string;
+  logoUrl?: string | null;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [wishlistCount, setWishlistCount] = useState(0);
@@ -12,7 +31,6 @@ export function StoreHeader({ storeName, subdomain }: { storeName: string; subdo
   // Sync cart & wishlist counts from localStorage
   const syncCounts = useCallback(() => {
     try {
-      // Check subdomain-specific or general localStorage keys
       const rawCart =
         localStorage.getItem(`cart_${subdomain}`) ||
         localStorage.getItem('store_cart') ||
@@ -53,7 +71,6 @@ export function StoreHeader({ storeName, subdomain }: { storeName: string; subdo
   useEffect(() => {
     syncCounts();
 
-    // Listen to storage events and custom events triggered on add-to-cart
     window.addEventListener('storage', syncCounts);
     window.addEventListener('cart-updated', syncCounts);
     window.addEventListener('wishlist-updated', syncCounts);
@@ -65,13 +82,19 @@ export function StoreHeader({ storeName, subdomain }: { storeName: string; subdo
     };
   }, [syncCounts]);
 
+  const activeLogo = logoUrl || getStoreLogo(subdomain);
+
   return (
     <div className="sticky top-0 z-50 border-b border-store-border bg-store-background/90 backdrop-blur-sm">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3">
         {/* Brand / Logo */}
         <Link href={`/store/${subdomain}`} className="flex min-w-0 items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-store-border bg-store-card text-lg text-store-accent">
-            ⚡
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-store-border bg-white p-1 shadow-sm">
+            <img
+              src={activeLogo}
+              alt={storeName}
+              className="h-full w-full object-contain"
+            />
           </div>
           <p className="truncate text-lg font-bold text-store-foreground store-heading">{storeName}</p>
         </Link>
@@ -88,7 +111,6 @@ export function StoreHeader({ storeName, subdomain }: { storeName: string; subdo
 
         {/* Nav — desktop only */}
         <nav className="hidden items-center gap-5 text-sm md:flex">
-          {/* Wishlist Link with Badge */}
           <Link
             href={`/store/${subdomain}/wishlist`}
             className="relative text-store-foreground hover:text-store-accent flex items-center gap-1.5"
@@ -101,7 +123,6 @@ export function StoreHeader({ storeName, subdomain }: { storeName: string; subdo
             )}
           </Link>
 
-          {/* Cart Link with Badge */}
           <Link
             href={`/store/${subdomain}/cart`}
             className="relative text-store-foreground hover:text-store-accent flex items-center gap-1.5"
@@ -134,7 +155,6 @@ export function StoreHeader({ storeName, subdomain }: { storeName: string; subdo
 
         {/* Mobile: Quick Cart Icon + Theme Toggle + Hamburger */}
         <div className="flex shrink-0 items-center gap-2 md:hidden">
-          {/* Mobile direct Cart access button */}
           <Link
             href={`/store/${subdomain}/cart`}
             className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-store-border bg-store-card text-store-foreground text-sm"
