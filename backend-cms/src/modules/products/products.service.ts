@@ -69,6 +69,33 @@ export class ProductsService {
     };
   }
 
+  async deleteProduct(id: string, currentUser: { userId: string; role: string }) {
+    const existingProduct = await this.db.query.products.findFirst({
+      where: eq(products.id, id),
+    });
+
+    if (!existingProduct) {
+      throw new NotFoundException('Product not found');
+    }
+
+    // Verify if the partner/admin has permission to delete from this store
+    await this.storeAccessService.assertStoreAccess(
+      currentUser.userId,
+      currentUser.role,
+      existingProduct.storeId,
+    );
+
+    const [deletedProduct] = await this.db
+      .delete(products)
+      .where(eq(products.id, id))
+      .returning();
+
+    return {
+      message: 'Product deleted successfully!',
+      product: deletedProduct,
+    };
+  }
+
   async getAllProducts() {
     return await this.db.select().from(products);
   }

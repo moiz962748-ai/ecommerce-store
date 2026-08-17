@@ -13,6 +13,8 @@ import { Label } from '@/components/ui/label';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -71,13 +73,21 @@ export default function ProductsPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Dialog States
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
+
+  // Loading & Error States
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [editSubmitError, setEditSubmitError] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [editSubmitting, setEditSubmitting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const {
     register,
@@ -178,6 +188,34 @@ export default function ProductsPage() {
     }
   };
 
+  const openDeleteDialog = (product: Product) => {
+    setDeletingProduct(product);
+    setDeleteError(null);
+    setDeleteDialogOpen(true);
+  };
+
+  const onDeleteSubmit = async () => {
+    if (!deletingProduct) return;
+
+    setDeleteError(null);
+    setDeleting(true);
+    try {
+      const token = getStoredToken();
+      await apiClient(`/products/${deletingProduct.id}`, {
+        method: 'DELETE',
+        token: token || undefined,
+      });
+
+      setDeleteDialogOpen(false);
+      setDeletingProduct(null);
+      fetchAll();
+    } catch (err: any) {
+      setDeleteError(err.message);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const getStore = (id: string) => stores.find((s) => s.id === id);
   const getCategoryName = (id: string) => categories.find((c) => c.id === id)?.name || '—';
 
@@ -191,7 +229,7 @@ export default function ProductsPage() {
 
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger render={<Button>Create Product</Button>} />
-            <DialogContent className="p-6">
+          <DialogContent className="p-6">
             <DialogHeader>
               <DialogTitle className="font-heading">Create a new product</DialogTitle>
             </DialogHeader>
@@ -290,7 +328,9 @@ export default function ProductsPage() {
                 )}
               </div>
 
-              <div role="status" aria-live="polite">{submitError && <p className="text-sm text-red-500">{submitError}</p>}</div>
+              <div role="status" aria-live="polite">
+                {submitError && <p className="text-sm text-red-500">{submitError}</p>}
+              </div>
 
               <Button type="submit" className="w-full" disabled={submitting}>
                 {submitting ? 'Creating...' : 'Create Product'}
@@ -340,9 +380,22 @@ export default function ProductsPage() {
                     {getCategoryName(product.categoryId)}
                   </TableCell>
                   <TableCell className="font-mono text-xs">Rs. {product.basePrice}</TableCell>
-                  <TableCell className="text-right">
-                    <Button type="button" variant="outline" size="sm" onClick={() => openEditDialog(product)}>
+                  <TableCell className="text-right space-x-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => openEditDialog(product)}
+                    >
                       Edit
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => openDeleteDialog(product)}
+                    >
+                      Delete
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -352,14 +405,18 @@ export default function ProductsPage() {
         </Table>
       )}
 
-      <Dialog open={editDialogOpen} onOpenChange={(open) => {
-        setEditDialogOpen(open);
-        if (!open) {
-          setEditingProduct(null);
-          setEditSubmitError(null);
-          reset();
-        }
-      }}>
+      {/* Edit Product Dialog */}
+      <Dialog
+        open={editDialogOpen}
+        onOpenChange={(open) => {
+          setEditDialogOpen(open);
+          if (!open) {
+            setEditingProduct(null);
+            setEditSubmitError(null);
+            reset();
+          }
+        }}
+      >
         <DialogContent className="p-6">
           <DialogHeader>
             <DialogTitle className="font-heading">Edit product</DialogTitle>
@@ -453,6 +510,50 @@ export default function ProductsPage() {
               {editSubmitting ? 'Saving...' : 'Save Changes'}
             </Button>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Product Confirmation Dialog */}
+      <Dialog
+        open={deleteDialogOpen}
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open);
+          if (!open) {
+            setDeletingProduct(null);
+            setDeleteError(null);
+          }
+        }}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Delete Product</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete{' '}
+              <strong className="text-foreground">{deletingProduct?.name}</strong>? This action
+              cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+
+          {deleteError && <p className="text-sm text-red-500">{deleteError}</p>}
+
+          <DialogFooter className="gap-2 sm:gap-0 mt-4">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+              disabled={deleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={onDeleteSubmit}
+              disabled={deleting}
+            >
+              {deleting ? 'Deleting...' : 'Delete'}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

@@ -1,4 +1,14 @@
-import { Controller, Post, Get, Patch, Body, Param, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/roles.guard';
@@ -18,7 +28,11 @@ export class ProductsController {
 
   @Patch(':id')
   @Roles('ADMIN', 'PARTNER')
-  async updateProduct(@Param('id') id: string, @Body() dto: UpdateProductDto, @Req() req: any) {
+  async updateProduct(
+    @Param('id') id: string,
+    @Body() dto: UpdateProductDto,
+    @Req() req: any,
+  ) {
     return await this.productsService.updateProduct(id, dto, req.user);
   }
 
@@ -32,5 +46,11 @@ export class ProductsController {
   @Roles('ADMIN', 'PARTNER', 'CUSTOMER')
   async getProductsByStore(@Param('storeId') storeId: string) {
     return await this.productsService.getProductsByStore(storeId);
+  }
+
+  @Delete(':id')
+  @Roles('ADMIN', 'PARTNER')
+  async deleteProduct(@Param('id') id: string, @Req() req: any) {
+    return await this.productsService.deleteProduct(id, req.user);
   }
 }
