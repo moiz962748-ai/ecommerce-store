@@ -108,7 +108,7 @@ export default function RegisterPage() {
           <span className="h-1 w-8 rounded-full bg-tag-clothing" />
         </div>
         <h1 className="font-heading text-xl font-semibold tracking-tight text-foreground">
-          CMS Admin
+          Register
         </h1>
       </div>
 

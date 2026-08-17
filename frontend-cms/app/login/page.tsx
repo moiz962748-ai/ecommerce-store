@@ -74,7 +74,7 @@ export default function LoginPage() {
           <span className="h-1 w-8 rounded-full bg-tag-clothing" />
         </div>
         <h1 className="font-heading text-xl font-semibold tracking-tight text-foreground">
-          CMS Admin
+          Login
         </h1>
       </div>
 
