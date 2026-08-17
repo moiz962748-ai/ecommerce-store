@@ -10,6 +10,9 @@ import { Button } from '@/components/ui/button';
 interface Store {
   id: string;
   name: string;
+  templateConfig?: {
+    theme?: string;
+  };
 }
 
 interface Product {
@@ -47,15 +50,17 @@ export default function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
-  const [addedMessage, setAddedMessage] = useState<string | null>(null);
-  const [wishlisting, setWishlisting] = useState(false);
-  const [wishlistMessage, setWishlistMessage] = useState<string | null>(null);
+  const [addedSuccess, setAddedSuccess] = useState(false);
+  const [cartError, setCartError] = useState<string | null>(null);
 
-  const isSportsStore = (
+  const [wishlisting, setWishlisting] = useState(false);
+  const [wishlistSuccess, setWishlistSuccess] = useState(false);
+  const [wishlistError, setWishlistError] = useState<string | null>(null);
+
+  const isSportsStore =
     store?.templateConfig?.theme === 'sports' ||
     subdomain.toLowerCase().includes('sport') ||
-    subdomain.toLowerCase().includes('fitness')
-  );
+    subdomain.toLowerCase().includes('fitness');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,6 +86,43 @@ export default function ProductDetailPage() {
     fetchData();
   }, [subdomain, productId]);
 
+  const updateLocalStorageCart = () => {
+    try {
+      const storageKey = `cart_${subdomain}`;
+      const existing = localStorage.getItem(storageKey);
+      let cartItems = existing ? JSON.parse(existing) : [];
+      const itemIndex = cartItems.findIndex((item: any) => item.productId === productId);
+
+      if (itemIndex > -1) {
+        cartItems[itemIndex].quantity += 1;
+      } else {
+        cartItems.push({ productId, quantity: 1 });
+      }
+
+      localStorage.setItem(storageKey, JSON.stringify(cartItems));
+      window.dispatchEvent(new Event('cart-updated'));
+    } catch {
+      // Ignore local storage parse error
+    }
+  };
+
+  const updateLocalStorageWishlist = () => {
+    try {
+      const storageKey = `wishlist_${subdomain}`;
+      const existing = localStorage.getItem(storageKey);
+      let wishlistItems = existing ? JSON.parse(existing) : [];
+
+      if (!wishlistItems.includes(productId)) {
+        wishlistItems.push(productId);
+      }
+
+      localStorage.setItem(storageKey, JSON.stringify(wishlistItems));
+      window.dispatchEvent(new Event('wishlist-updated'));
+    } catch {
+      // Ignore local storage parse error
+    }
+  };
+
   const handleAddToCart = async () => {
     const token = getStoredToken();
     if (!token) {
@@ -89,16 +131,21 @@ export default function ProductDetailPage() {
     }
 
     setAdding(true);
-    setAddedMessage(null);
+    setAddedSuccess(false);
+    setCartError(null);
+
     try {
       await apiClient('/cart', {
         method: 'POST',
         token,
         body: JSON.stringify({ productId, quantity: 1 }),
       });
-      setAddedMessage('Added to cart!');
+
+      updateLocalStorageCart();
+      setAddedSuccess(true);
+      setTimeout(() => setAddedSuccess(false), 5000);
     } catch (err: any) {
-      setAddedMessage(err.message);
+      setCartError(err.message || 'Failed to add to cart');
     } finally {
       setAdding(false);
     }
@@ -112,16 +159,21 @@ export default function ProductDetailPage() {
     }
 
     setWishlisting(true);
-    setWishlistMessage(null);
+    setWishlistSuccess(false);
+    setWishlistError(null);
+
     try {
       await apiClient('/wishlist', {
         method: 'POST',
         token,
         body: JSON.stringify({ productId }),
       });
-      setWishlistMessage('Added to wishlist!');
+
+      updateLocalStorageWishlist();
+      setWishlistSuccess(true);
+      setTimeout(() => setWishlistSuccess(false), 5000);
     } catch (err: any) {
-      setWishlistMessage(err.message);
+      setWishlistError(err.message || 'Failed to add to wishlist');
     } finally {
       setWishlisting(false);
     }
@@ -146,17 +198,24 @@ export default function ProductDetailPage() {
   }
 
   const productEmoji = getProductVisual(product.name);
-  const thumbnails = [product.imageUrl || productEmoji, isSportsStore ? '🏃' : '✨', isSportsStore ? '⚡' : '🚀', isSportsStore ? '💧' : '📦'];
+  const thumbnails = [
+    product.imageUrl || productEmoji,
+    isSportsStore ? '🏃' : '✨',
+    isSportsStore ? '⚡' : '🚀',
+    isSportsStore ? '💧' : '📦',
+  ];
 
   return (
     <main className="min-h-screen bg-store-background text-store-foreground">
-      
-
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
         <div className="mb-6 flex items-center gap-2 text-sm text-store-muted">
-          <Link href={`/store/${subdomain}`} className="hover:text-store-accent">Home</Link>
+          <Link href={`/store/${subdomain}`} className="hover:text-store-accent">
+            Home
+          </Link>
           <span>/</span>
-          <Link href={`/store/${subdomain}/products`} className="hover:text-store-accent">Products</Link>
+          <Link href={`/store/${subdomain}/products`} className="hover:text-store-accent">
+            Products
+          </Link>
           <span>/</span>
           <span className="text-store-foreground">{product.name}</span>
         </div>
@@ -211,7 +270,9 @@ export default function ProductDetailPage() {
           <section className="space-y-6">
             <div>
               <p className="mb-2 text-sm uppercase tracking-[0.2em] text-store-muted">{store.name}</p>
-              <h1 className="text-4xl font-bold tracking-tight text-store-foreground store-heading">{product.name}</h1>
+              <h1 className="text-4xl font-bold tracking-tight text-store-foreground store-heading">
+                {product.name}
+              </h1>
             </div>
 
             <div className="flex items-center gap-3">
@@ -230,12 +291,16 @@ export default function ProductDetailPage() {
 
             <div className="grid gap-3 sm:grid-cols-3">
               {['Free delivery', '7-day return', 'Secure payment'].map((item) => (
-                <div key={item} className="rounded-xl border border-store-border bg-store-card px-3 py-3 text-center text-sm text-store-foreground">
+                <div
+                  key={item}
+                  className="rounded-xl border border-store-border bg-store-card px-3 py-3 text-center text-sm text-store-foreground"
+                >
                   {item}
                 </div>
               ))}
             </div>
 
+            {/* Action Buttons */}
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button
                 size="lg"
@@ -256,26 +321,65 @@ export default function ProductDetailPage() {
               </Button>
             </div>
 
-            {addedMessage && <p className="text-sm text-green-600">{addedMessage}</p>}
-            {wishlistMessage && <p className="text-sm text-green-600">{wishlistMessage}</p>}
+            {/* Instant Feedback Banners for Cart & Wishlist */}
+            {addedSuccess && (
+              <div className="flex items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-sm text-emerald-600 dark:text-emerald-400">
+                <span className="font-medium">✓ Item successfully added to cart!</span>
+                <Link
+                  href={`/store/${subdomain}/cart`}
+                  className="font-semibold underline hover:opacity-80"
+                >
+                  View Cart →
+                </Link>
+              </div>
+            )}
+
+            {wishlistSuccess && (
+              <div className="flex items-center justify-between rounded-xl border border-rose-500/30 bg-rose-500/10 p-3.5 text-sm text-rose-600 dark:text-rose-400">
+                <span className="font-medium">♥ Item saved to wishlist!</span>
+                <Link
+                  href={`/store/${subdomain}/wishlist`}
+                  className="font-semibold underline hover:opacity-80"
+                >
+                  View Wishlist →
+                </Link>
+              </div>
+            )}
+
+            {cartError && <p className="text-sm text-red-500">{cartError}</p>}
+            {wishlistError && <p className="text-sm text-red-500">{wishlistError}</p>}
           </section>
         </div>
 
-
-        
         <section className="mt-10 grid gap-6 lg:grid-cols-2">
           <div className="rounded-[24px] border border-store-border bg-store-card p-6">
-            <h2 className="mb-4 text-2xl font-bold text-store-foreground store-heading">Product Details</h2>
+            <h2 className="mb-4 text-2xl font-bold text-store-foreground store-heading">
+              Product Details
+            </h2>
             <ul className="space-y-3 text-store-muted">
-              <li className="flex justify-between gap-4 border-b border-store-border pb-2"><span>Brand</span><span className="text-store-foreground">Premium Series</span></li>
-              <li className="flex justify-between gap-4 border-b border-store-border pb-2"><span>Warranty</span><span className="text-store-foreground">12 months</span></li>
-              <li className="flex justify-between gap-4 border-b border-store-border pb-2"><span>Condition</span><span className="text-store-foreground">New</span></li>
-              <li className="flex justify-between gap-4"><span>Availability</span><span className="text-store-foreground">In stock</span></li>
+              <li className="flex justify-between gap-4 border-b border-store-border pb-2">
+                <span>Brand</span>
+                <span className="text-store-foreground">Premium Series</span>
+              </li>
+              <li className="flex justify-between gap-4 border-b border-store-border pb-2">
+                <span>Warranty</span>
+                <span className="text-store-foreground">12 months</span>
+              </li>
+              <li className="flex justify-between gap-4 border-b border-store-border pb-2">
+                <span>Condition</span>
+                <span className="text-store-foreground">New</span>
+              </li>
+              <li className="flex justify-between gap-4">
+                <span>Availability</span>
+                <span className="text-store-foreground">In stock</span>
+              </li>
             </ul>
           </div>
 
           <div className="rounded-[24px] border border-store-border bg-store-card p-6">
-            <h2 className="mb-4 text-2xl font-bold text-store-foreground store-heading">Why customers buy</h2>
+            <h2 className="mb-4 text-2xl font-bold text-store-foreground store-heading">
+              Why customers buy
+            </h2>
             <div className="space-y-4 text-store-muted">
               <div className="rounded-2xl border border-store-border bg-store-background p-4">
                 <p className="font-semibold text-store-foreground">High performance</p>
