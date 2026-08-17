@@ -24,7 +24,7 @@ export default async function StoreLayout({
       storeName = store.name;
     }
 
-    if (configuredTheme && ['default', 'electronics', 'sports', 'clothing'].includes(configuredTheme)) {
+    if (configuredTheme && ['default', 'ES', 'sports', 'clothing'].includes(configuredTheme)) {
       storeTheme = configuredTheme;
     }
 

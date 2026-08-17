@@ -111,6 +111,18 @@ export function StoreHeader({
 
         {/* Nav — desktop only */}
         <nav className="hidden items-center gap-5 text-sm md:flex">
+          <Link href="/login" className="text-store-foreground hover:text-store-accent">
+            Login
+          </Link>
+          <Link href={`/store/${subdomain}#about`} className="text-store-foreground hover:text-store-accent">
+            About
+          </Link>
+          <Link href={`/store/${subdomain}#contact`} className="text-store-foreground hover:text-store-accent">
+            Contact
+          </Link>
+          <Link href={`/store/${subdomain}/orders`} className="text-store-foreground hover:text-store-accent">
+            Orders
+          </Link>
           <Link
             href={`/store/${subdomain}/wishlist`}
             className="relative text-store-foreground hover:text-store-accent flex items-center gap-1.5"
@@ -134,19 +146,7 @@ export function StoreHeader({
               </span>
             )}
           </Link>
-
-          <Link href={`/store/${subdomain}/orders`} className="text-store-foreground hover:text-store-accent">
-            Orders
-          </Link>
-          <Link href="/login" className="text-store-foreground hover:text-store-accent">
-            Login
-          </Link>
-          <Link href={`/store/${subdomain}#about`} className="text-store-foreground hover:text-store-accent">
-            About
-          </Link>
-          <Link href={`/store/${subdomain}#contact`} className="text-store-foreground hover:text-store-accent">
-            Contact
-          </Link>
+          
         </nav>
 
         <div className="hidden md:block">
@@ -195,6 +195,37 @@ export function StoreHeader({
           </div>
           <nav className="flex flex-col gap-3 text-sm">
             <Link
+              href="/login"
+              onClick={() => setMenuOpen(false)}
+              className="text-store-foreground hover:text-store-accent py-1"
+            >
+              Login
+            </Link>
+
+            <Link
+              href={`/store/${subdomain}#about`}
+              onClick={() => setMenuOpen(false)}
+              className="text-store-foreground hover:text-store-accent py-1"
+            >
+              About
+            </Link>
+            <Link
+              href={`/store/${subdomain}#contact`}
+              onClick={() => setMenuOpen(false)}
+              className="text-store-foreground hover:text-store-accent py-1"
+            >
+              Contact
+            </Link>
+
+            <Link
+              href={`/store/${subdomain}/orders`}
+              onClick={() => setMenuOpen(false)}
+              className="text-store-foreground hover:text-store-accent py-1"
+            >
+              My Orders
+            </Link>
+
+            <Link
               href={`/store/${subdomain}/wishlist`}
               onClick={() => setMenuOpen(false)}
               className="flex items-center justify-between text-store-foreground hover:text-store-accent py-1"
@@ -218,35 +249,6 @@ export function StoreHeader({
                   {cartCount}
                 </span>
               )}
-            </Link>
-
-            <Link
-              href={`/store/${subdomain}/orders`}
-              onClick={() => setMenuOpen(false)}
-              className="text-store-foreground hover:text-store-accent py-1"
-            >
-              My Orders
-            </Link>
-            <Link
-              href="/login"
-              onClick={() => setMenuOpen(false)}
-              className="text-store-foreground hover:text-store-accent py-1"
-            >
-              Login
-            </Link>
-            <Link
-              href={`/store/${subdomain}#about`}
-              onClick={() => setMenuOpen(false)}
-              className="text-store-foreground hover:text-store-accent py-1"
-            >
-              About
-            </Link>
-            <Link
-              href={`/store/${subdomain}#contact`}
-              onClick={() => setMenuOpen(false)}
-              className="text-store-foreground hover:text-store-accent py-1"
-            >
-              Contact
             </Link>
           </nav>
         </div>
