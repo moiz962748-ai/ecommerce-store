@@ -1,11 +1,12 @@
 "use client";
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import Link from 'next/link';
 import { apiClient } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 const Input = dynamic(() => import('@/components/ui/input').then((m) => m.Input), { ssr: false });
@@ -26,8 +27,11 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
+
   const [serverError, setServerError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -41,29 +45,64 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    setServerError(null);
-    setLoading(true);
-    try {
-      const data = await apiClient('/auth/login', {
-        method: 'POST',
-        body: JSON.stringify(values),
-      });
+  setServerError(null);
+  setLoading(true);
+  try {
+    const data = await apiClient('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(values),
+    });
 
-      // Stored in localStorage for now — will upgrade to httpOnly cookies later
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('user', JSON.stringify(data.user));
+    localStorage.setItem('accessToken', data.accessToken);
+    localStorage.setItem('user', JSON.stringify(data.user));
 
-      if (data.user.role === 'PARTNER') {
-        router.push('/partner');
-      } else {
-        router.push('/dashboard');
-      }
-    } catch (err: any) {
-      setServerError(err.message);
-    } finally {
-      setLoading(false);
+    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new Event('cart-updated'));
+
+    // 1. Direct search param check
+    const rawParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const directUrlRedirect = rawParams?.get('redirect');
+    const sessionRedirect = typeof window !== 'undefined' ? sessionStorage.getItem('redirect_after_login') : null;
+
+    let targetDestination = redirectUrl || directUrlRedirect || sessionRedirect;
+
+    // Decode URL if encoded
+    if (targetDestination) {
+      targetDestination = decodeURIComponent(targetDestination);
     }
-  };
+
+    // 2. Strict Check: Agar destination mojood hai to direct wahan bhejo
+    if (targetDestination && targetDestination !== '/login') {
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('redirect_after_login');
+        window.location.assign(targetDestination);
+      } else {
+        router.push(targetDestination);
+      }
+      return;
+    }
+
+    // 3. Fallback only if no redirect exists
+    const role = data.user?.role?.toUpperCase();
+    if (role === 'PARTNER') {
+      window.location.assign('/partner');
+    } else if (role === 'ADMIN') {
+      window.location.assign('/dashboard');
+    } else {
+      const targetStore = data.user?.subdomain || 'electronics';
+      window.location.assign(`/store/${targetStore}`);
+    }
+  } catch (err: any) {
+    setServerError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const currentRedirectParam = redirectUrl || (typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('redirect') : null);
+  const registerRedirectLink = currentRedirectParam
+    ? `/register?redirect=${encodeURIComponent(currentRedirectParam)}`
+    : '/register';
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
@@ -81,7 +120,9 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm bg-card border border-border shadow-sm">
         <CardHeader>
           <CardTitle className="font-heading text-2xl font-semibold text-foreground">Login</CardTitle>
-          <CardDescription className="text-muted-foreground">Sign in to your CMS account</CardDescription>
+          <CardDescription className="text-muted-foreground">
+            Sign in to your account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -137,13 +178,24 @@ export default function LoginPage() {
 
             <p className="text-sm text-center text-foreground">
               Don&apos;t have an account?{' '}
-              <a href="/register" className="underline text-sidebar-accent">
+              <Link
+                href={registerRedirectLink}
+                className="underline text-sidebar-accent"
+              >
                 Register
-              </a>
+              </Link>
             </p>
           </form>
         </CardContent>
       </Card>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
   );
 }

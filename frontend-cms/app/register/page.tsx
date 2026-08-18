@@ -1,9 +1,9 @@
 "use client";
 
 import dynamic from 'next/dynamic';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Suspense } from 'react';
 import zxcvbn from 'zxcvbn';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -35,8 +35,11 @@ const registerSchema = z
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
+
   const [serverError, setServerError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -61,13 +64,21 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const { confirmPassword, ...payload } = values as any;
+      
+      // Backend direct payload accept karta hai (fullName, email, password)
       await apiClient('/auth/register', {
         method: 'POST',
         body: JSON.stringify(payload),
       });
 
       setSuccess(true);
-      setTimeout(() => router.push('/login'), 1500);
+      setTimeout(() => {
+        if (redirectUrl) {
+          router.push(`/login?redirect=${encodeURIComponent(redirectUrl)}`);
+        } else {
+          router.push('/login');
+        }
+      }, 1500);
     } catch (err: any) {
       const msg = err?.message || 'Registration failed';
       setServerError(msg);
@@ -115,7 +126,7 @@ export default function RegisterPage() {
       <Card className="w-full max-w-sm bg-card border border-border shadow-sm">
         <CardHeader>
           <CardTitle className="font-heading text-2xl font-semibold text-foreground">Create Account</CardTitle>
-          <CardDescription className="text-muted-foreground">Sign up for a new CMS account</CardDescription>
+          <CardDescription className="text-muted-foreground">Sign up for an account</CardDescription>
         </CardHeader>
         <CardContent>
           <form
@@ -269,7 +280,6 @@ export default function RegisterPage() {
                 {loading ? 'Creating account...' : 'Register'}
               </Button>
 
-              {/* success animation */}
               <div
                 aria-hidden={!success}
                 className={`absolute right-3 top-1/2 -translate-y-1/2 transform transition-all duration-300 ${
@@ -288,7 +298,10 @@ export default function RegisterPage() {
 
             <p className="text-sm text-center text-foreground">
               Already have an account?{' '}
-              <Link href="/login" className="underline text-sidebar-accent">
+              <Link
+                href={redirectUrl ? `/login?redirect=${encodeURIComponent(redirectUrl)}` : '/login'}
+                className="underline text-sidebar-accent"
+              >
                 Login
               </Link>
             </p>
@@ -296,5 +309,13 @@ export default function RegisterPage() {
         </CardContent>
       </Card>
     </main>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Loading...</div>}>
+      <RegisterForm />
+    </Suspense>
   );
 }

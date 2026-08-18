@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { apiClient } from '@/lib/api-client';
@@ -41,26 +41,32 @@ export default function CartPage() {
   const [error, setError] = useState<string | null>(null);
   const [removingId, setRemovingId] = useState<string | null>(null);
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     const token = getStoredToken();
+    const cartUrl = `/store/${subdomain}/cart`;
+
     if (!token) {
-      router.push('/login');
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('redirect_after_login', cartUrl);
+        window.location.assign(`/login?redirect=${encodeURIComponent(cartUrl)}`);
+      }
       return;
     }
 
     try {
       const data = await apiClient('/cart', { token });
-      setItems(data);
+      setItems(Array.isArray(data) ? data : []);
+      window.dispatchEvent(new Event('cart-updated'));
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'Failed to load cart');
     } finally {
       setLoading(false);
     }
-  };
+  }, [subdomain]);
 
   useEffect(() => {
     fetchCart();
-  }, []);
+  }, [fetchCart]);
 
   const handleRemove = async (id: string) => {
     const token = getStoredToken();
@@ -73,6 +79,20 @@ export default function CartPage() {
     } finally {
       setRemovingId(null);
     }
+  };
+
+  const handleProceedToCheckout = () => {
+    const token = getStoredToken();
+    const checkoutUrl = `/store/${subdomain}/checkout`;
+
+    if (!token) {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('redirect_after_login', checkoutUrl);
+        window.location.assign(`/login?redirect=${encodeURIComponent(checkoutUrl)}`);
+      }
+      return;
+    }
+    router.push(checkoutUrl);
   };
 
   const subtotal = items.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
@@ -109,8 +129,12 @@ export default function CartPage() {
 
       <div className="mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-12">
         <div className="mb-8 rounded-[28px] border border-store-border bg-store-card p-6 md:p-8">
-          <p className="text-sm uppercase tracking-[0.25em] text-store-muted">{subdomain.toLowerCase().includes('sport') || subdomain.toLowerCase().includes('fitness') ? 'Ready to train' : 'Your basket'}</p>
-          <h1 className="mt-3 text-4xl font-bold text-store-foreground store-heading">{subdomain.toLowerCase().includes('sport') || subdomain.toLowerCase().includes('fitness') ? 'Training gear cart' : 'Shopping cart'}</h1>
+          <p className="text-sm uppercase tracking-[0.25em] text-store-muted">
+            {subdomain.toLowerCase().includes('sport') || subdomain.toLowerCase().includes('fitness') ? 'Ready to train' : 'Your basket'}
+          </p>
+          <h1 className="mt-3 text-4xl font-bold text-store-foreground store-heading">
+            {subdomain.toLowerCase().includes('sport') || subdomain.toLowerCase().includes('fitness') ? 'Training gear cart' : 'Shopping cart'}
+          </h1>
         </div>
 
         {error && <p className="mb-5 text-red-500">{error}</p>}
@@ -204,11 +228,13 @@ export default function CartPage() {
                 </div>
               </div>
 
-              <Link href={`/store/${subdomain}/checkout`} className="mt-6 block">
-                <Button size="lg" className="w-full bg-store-accent text-store-background hover:bg-store-accent/90">
-                  Proceed to checkout
-                </Button>
-              </Link>
+              <Button
+                size="lg"
+                onClick={handleProceedToCheckout}
+                className="mt-6 w-full bg-store-accent text-store-background hover:bg-store-accent/90"
+              >
+                Proceed to checkout
+              </Button>
 
               <Link href={`/store/${subdomain}/products`} className="mt-3 block text-center text-sm text-store-muted hover:text-store-accent">
                 Continue shopping

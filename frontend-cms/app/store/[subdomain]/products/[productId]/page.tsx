@@ -126,7 +126,9 @@ export default function ProductDetailPage() {
   const handleAddToCart = async () => {
     const token = getStoredToken();
     if (!token) {
-      router.push('/login');
+      const returnUrl = `/store/${subdomain}/cart`;
+      sessionStorage.setItem('redirect_after_login', returnUrl);
+      window.location.assign(`/login?redirect=${encodeURIComponent(returnUrl)}`);
       return;
     }
 
@@ -154,7 +156,9 @@ export default function ProductDetailPage() {
   const handleAddToWishlist = async () => {
     const token = getStoredToken();
     if (!token) {
-      router.push('/login');
+      const returnUrl = `/store/${subdomain}/wishlist`;
+      sessionStorage.setItem('redirect_after_login', returnUrl);
+      window.location.assign(`/login?redirect=${encodeURIComponent(returnUrl)}`);
       return;
     }
 
@@ -177,6 +181,21 @@ export default function ProductDetailPage() {
     } finally {
       setWishlisting(false);
     }
+  };
+
+  const handleBuyNow = () => {
+    if (!product) return;
+
+    const token = getStoredToken();
+    const checkoutUrl = `/store/${subdomain}/checkout?productId=${product.id}`;
+
+    if (!token) {
+      sessionStorage.setItem('redirect_after_login', checkoutUrl);
+      window.location.assign(`/login?redirect=${encodeURIComponent(checkoutUrl)}`);
+      return;
+    }
+
+    router.push(checkoutUrl);
   };
 
   if (loading) {
@@ -321,7 +340,7 @@ export default function ProductDetailPage() {
               </Button>
             </div>
 
-            {/* Instant Feedback Banners for Cart & Wishlist */}
+            {/* Instant Feedback Banners */}
             {addedSuccess && (
               <div className="flex items-center justify-between rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 text-sm text-emerald-600 dark:text-emerald-400">
                 <span className="font-medium">✓ Item successfully added to cart!</span>
