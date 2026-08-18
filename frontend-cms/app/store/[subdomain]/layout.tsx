@@ -1,4 +1,5 @@
 import { StoreHeader } from '@/components/store-header';
+import { StoreFooter } from '@/components/store/StoreFooter';
 import { apiClient } from '@/lib/api-client';
 import { getStoreTheme } from '@/lib/store-theme';
 
@@ -44,6 +45,7 @@ export default async function StoreLayout({
     >
       <StoreHeader storeName={storeName} subdomain={subdomain} />
       <main className="flex-1">{children}</main>
+      <StoreFooter storeName={storeName} subdomain={subdomain} />
     </div>
   );
 }
