@@ -11,7 +11,6 @@ export function StoreThemeToggle({ subdomain }: { subdomain?: string }) {
   const isClothing = lowerSub.includes('cloth') || lowerSub.includes('fashion') || lowerSub.includes('apparel');
 
   useEffect(() => {
-    // Check localStorage or root attribute
     const stored = localStorage.getItem(`store_mode_${subdomain || 'default'}`);
     const rootMode = document.querySelector('[data-store-root="true"]')?.getAttribute('data-store-mode');
     
@@ -42,24 +41,32 @@ export function StoreThemeToggle({ subdomain }: { subdomain?: string }) {
     applyMode(nextMode);
   };
 
+  const isLight = mode === 'light';
+
   return (
     <button
       type="button"
       onClick={toggleMode}
       aria-label="Toggle Light / Dark Mode"
-      title={`Switch to ${mode === 'dark' ? 'Light' : 'Dark'} Mode`}
-      className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-all ${
-        isSports
-          ? 'border-emerald-900/60 bg-slate-900/80 text-emerald-300 hover:border-emerald-500/50 hover:bg-emerald-950/40'
+      title={`Switch to ${isLight ? 'Dark' : 'Light'} Mode`}
+      className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-all duration-200 ${
+        isLight
+          ? isSports
+            ? 'border-slate-200 bg-slate-100/90 text-slate-700 hover:border-emerald-500/60 hover:bg-emerald-50 hover:text-emerald-600'
+            : isClothing
+            ? 'border-slate-200 bg-slate-100/90 text-slate-700 hover:border-purple-500/60 hover:bg-purple-50 hover:text-purple-600'
+            : 'border-slate-200 bg-slate-100/90 text-slate-700 hover:border-cyan-500/60 hover:bg-cyan-50 hover:text-cyan-600'
+          : isSports
+          ? 'border-emerald-950/80 bg-slate-900/80 text-emerald-300 hover:border-emerald-500/60 hover:bg-emerald-950/40 hover:text-emerald-200'
           : isClothing
-          ? 'border-purple-900/60 bg-slate-900/80 text-purple-300 hover:border-purple-500/50 hover:bg-purple-950/40'
-          : 'border-slate-800 bg-slate-900/80 text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-800'
+          ? 'border-purple-950/80 bg-slate-900/80 text-purple-300 hover:border-purple-500/60 hover:bg-purple-950/40 hover:text-purple-200'
+          : 'border-slate-800 bg-slate-900/80 text-cyan-300 hover:border-cyan-500/60 hover:bg-cyan-950/40 hover:text-cyan-200'
       }`}
     >
-      {mode === 'dark' ? (
-        <Sun size={17} className="transition-transform duration-300 hover:rotate-45" />
+      {isLight ? (
+        <Moon size={16} className="transition-transform duration-300 hover:-rotate-12" />
       ) : (
-        <Moon size={17} className="transition-transform duration-300 hover:-rotate-12" />
+        <Sun size={16} className="transition-transform duration-300 hover:rotate-45" />
       )}
     </button>
   );

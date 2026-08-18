@@ -3,8 +3,9 @@
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Search, LogIn, LogOut, Menu, X, Sun, Moon } from 'lucide-react';
+import { Search, LogIn, LogOut, Menu, X } from 'lucide-react';
 import { apiClient } from '@/lib/api-client';
+import { StoreThemeToggle } from '@/components/store-theme-toggle';
 
 function getStoreLogo(subdomain: string) {
   const lower = (subdomain || '').toLowerCase();
@@ -31,32 +32,10 @@ export function StoreHeader({
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [mode, setMode] = useState<'dark' | 'light'>('dark');
 
   const lowerSub = (subdomain || '').toLowerCase();
   const isSports = lowerSub.includes('sport') || lowerSub.includes('fitness');
   const isClothing = lowerSub.includes('cloth') || lowerSub.includes('fashion') || lowerSub.includes('apparel');
-
-  // Sync mode on load
-  useEffect(() => {
-    const savedMode = localStorage.getItem(`store_mode_${subdomain || 'default'}`) as 'dark' | 'light';
-    const rootMode = document.querySelector('[data-store-root="true"]')?.getAttribute('data-store-mode') as 'dark' | 'light';
-    const initialMode = savedMode || rootMode || 'dark';
-    setMode(initialMode);
-    applyMode(initialMode);
-  }, [subdomain]);
-
-  const applyMode = (newMode: 'dark' | 'light') => {
-    const root = document.querySelector('[data-store-root="true"]') || document.documentElement;
-    root.setAttribute('data-store-mode', newMode);
-  };
-
-  const toggleThemeMode = () => {
-    const nextMode = mode === 'dark' ? 'light' : 'dark';
-    setMode(nextMode);
-    localStorage.setItem(`store_mode_${subdomain || 'default'}`, nextMode);
-    applyMode(nextMode);
-  };
 
   // Sync Cart & Wishlist counts
   const syncCounts = useCallback(async () => {
@@ -129,8 +108,6 @@ export function StoreHeader({
     setSearchOpen(false);
   };
 
-  const isLight = mode === 'light';
-
   const navLinks = [
     { name: 'Home', href: `/store/${subdomain}` },
     { name: 'Products', href: `/store/${subdomain}/products` },
@@ -142,10 +119,8 @@ export function StoreHeader({
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b backdrop-blur-md transition-colors duration-200 ${
-        isLight
-          ? 'bg-white/95 border-slate-200 text-slate-900 shadow-sm'
-          : isSports
+      className={`sticky top-0 z-50 border-b backdrop-blur-md transition-colors duration-300 ${
+        isSports
           ? 'bg-[#020d09]/95 border-emerald-950/80 text-emerald-50'
           : isClothing
           ? 'bg-[#0b0314]/95 border-purple-950/80 text-purple-50'
@@ -157,10 +132,8 @@ export function StoreHeader({
         {/* 1. Brand / Logo */}
         <Link href={`/store/${subdomain}`} className="flex min-w-0 items-center gap-3 group">
           <div
-            className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border p-1 shadow-sm transition-transform group-hover:scale-105 ${
-              isLight
-                ? 'border-slate-200 bg-slate-50'
-                : isSports
+            className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border p-1 shadow-md transition-transform group-hover:scale-105 ${
+              isSports
                 ? 'border-emerald-500/40 bg-slate-900'
                 : isClothing
                 ? 'border-purple-500/40 bg-slate-900'
@@ -175,19 +148,17 @@ export function StoreHeader({
           </div>
           <div className="flex flex-col leading-tight">
             <span
-              className={`font-extrabold text-lg tracking-tight transition-colors ${
-                isLight
-                  ? 'text-slate-900 group-hover:text-cyan-600'
-                  : 'text-white group-hover:text-cyan-300'
+              className={`font-bold text-lg tracking-tight text-white transition-colors ${
+                isSports
+                  ? 'group-hover:text-emerald-400'
+                  : isClothing
+                  ? 'group-hover:text-purple-300'
+                  : 'group-hover:text-cyan-300'
               }`}
             >
               {storeName}
             </span>
-            <span
-              className={`text-[10px] tracking-widest font-semibold uppercase ${
-                isLight ? 'text-slate-500' : 'text-slate-400'
-              }`}
-            >
+            <span className="text-[10px] tracking-widest text-slate-400 font-semibold uppercase">
               PAKISTAN
             </span>
           </div>
@@ -203,19 +174,11 @@ export function StoreHeader({
                 href={link.href}
                 className={`relative py-1 transition-colors flex items-center gap-1.5 ${
                   isActive
-                    ? isLight
-                      ? isSports
-                        ? 'text-emerald-700 font-bold border-b-2 border-emerald-600'
-                        : isClothing
-                        ? 'text-purple-700 font-bold border-b-2 border-purple-600'
-                        : 'text-cyan-700 font-bold border-b-2 border-cyan-600'
-                      : isSports
+                    ? isSports
                       ? 'text-emerald-400 font-bold border-b-2 border-emerald-400'
                       : isClothing
                       ? 'text-purple-300 font-bold border-b-2 border-purple-400'
                       : 'text-cyan-400 font-bold border-b-2 border-cyan-400'
-                    : isLight
-                    ? 'text-slate-600 hover:text-slate-950 font-medium'
                     : isSports
                     ? 'text-slate-300 hover:text-emerald-400'
                     : isClothing
@@ -244,10 +207,10 @@ export function StoreHeader({
           })}
         </nav>
 
-        {/* 3. Right Actions: Search + Theme Toggle + Sign In */}
+        {/* 3. Action Controls: Search, Theme Toggle, Auth */}
         <div className="hidden md:flex items-center gap-3">
           
-          {/* Search Bar / Icon */}
+          {/* Search Toggle / Form */}
           <div className="relative flex items-center">
             {searchOpen ? (
               <form onSubmit={handleSearch} className="flex items-center">
@@ -257,16 +220,18 @@ export function StoreHeader({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className={`h-9 w-44 rounded-lg border px-3 text-xs focus:outline-none transition-all ${
-                    isLight
-                      ? 'bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-cyan-600'
-                      : 'bg-slate-900 border-slate-800 text-white placeholder:text-slate-500 focus:border-cyan-500'
+                  className={`h-9 w-44 rounded-lg border bg-slate-900 px-3 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${
+                    isSports
+                      ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500'
+                      : isClothing
+                      ? 'border-purple-500 focus:ring-1 focus:ring-purple-500'
+                      : 'border-cyan-500 focus:ring-1 focus:ring-cyan-500'
                   }`}
                 />
                 <button
                   type="button"
                   onClick={() => setSearchOpen(false)}
-                  className={`ml-1.5 text-xs ${isLight ? 'text-slate-500 hover:text-slate-800' : 'text-slate-400 hover:text-white'}`}
+                  className="ml-1.5 text-xs text-slate-400 hover:text-white"
                 >
                   ✕
                 </button>
@@ -276,10 +241,12 @@ export function StoreHeader({
                 type="button"
                 onClick={() => setSearchOpen(true)}
                 aria-label="Search"
-                className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${
-                  isLight
-                    ? 'border-slate-200 bg-slate-100/80 text-slate-700 hover:bg-slate-200'
-                    : 'border-slate-800 bg-slate-900/80 text-slate-300 hover:border-slate-700 hover:text-white'
+                className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-all ${
+                  isSports
+                    ? 'border-emerald-950/80 bg-slate-900/80 text-slate-300 hover:border-emerald-500/60 hover:bg-emerald-950/40 hover:text-emerald-300'
+                    : isClothing
+                    ? 'border-purple-950/80 bg-slate-900/80 text-slate-300 hover:border-purple-500/60 hover:bg-purple-950/40 hover:text-purple-300'
+                    : 'border-slate-800 bg-slate-900/80 text-slate-300 hover:border-cyan-500/60 hover:bg-cyan-950/40 hover:text-cyan-300'
                 }`}
               >
                 <Search size={16} />
@@ -287,31 +254,15 @@ export function StoreHeader({
             )}
           </div>
 
-          {/* Sun / Moon Toggle */}
-          <button
-            type="button"
-            onClick={toggleThemeMode}
-            aria-label="Toggle Light / Dark Mode"
-            title={`Switch to ${isLight ? 'Dark' : 'Light'} Mode`}
-            className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-all ${
-              isLight
-                ? 'border-slate-200 bg-slate-100 text-amber-600 hover:bg-slate-200'
-                : 'border-slate-800 bg-slate-900/80 text-cyan-300 hover:border-cyan-500/50 hover:bg-slate-800'
-            }`}
-          >
-            {isLight ? <Moon size={16} /> : <Sun size={16} />}
-          </button>
+          {/* Dynamic Light/Dark Mode Toggle */}
+          <StoreThemeToggle subdomain={subdomain} />
 
           {/* Auth Button */}
           {isLoggedIn ? (
             <button
               type="button"
               onClick={handleLogout}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border text-xs font-bold transition-all ${
-                isLight
-                  ? 'border-slate-200 bg-slate-100 text-slate-700 hover:text-rose-600 hover:border-rose-300'
-                  : 'border-slate-800 bg-slate-900/80 text-slate-300 hover:text-rose-400 hover:border-rose-500/40'
-              }`}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-800 bg-slate-900/80 text-xs font-bold text-slate-300 hover:text-rose-400 hover:border-rose-500/40 transition-all"
             >
               <LogOut size={14} />
               <span>Logout</span>
@@ -320,12 +271,12 @@ export function StoreHeader({
             <Link
               href={`/login?redirect=${encodeURIComponent(currentReturnUrl)}`}
               onClick={() => sessionStorage.setItem('redirect_after_login', currentReturnUrl)}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-sm ${
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-md ${
                 isSports
-                  ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
+                  ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-emerald-500/20'
                   : isClothing
-                  ? 'bg-purple-600 text-white hover:bg-purple-500'
-                  : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
+                  ? 'bg-purple-600 text-white hover:bg-purple-500 shadow-purple-500/25'
+                  : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-cyan-500/20'
               }`}
             >
               <LogIn size={15} />
@@ -336,21 +287,18 @@ export function StoreHeader({
 
         {/* 4. Mobile Controls */}
         <div className="flex shrink-0 items-center gap-2 md:hidden">
-          <button
-            type="button"
-            onClick={toggleThemeMode}
-            className={`flex h-9 w-9 items-center justify-center rounded-lg border ${
-              isLight ? 'border-slate-200 bg-slate-100 text-amber-600' : 'border-slate-800 bg-slate-900 text-cyan-300'
-            }`}
-          >
-            {isLight ? <Moon size={16} /> : <Sun size={16} />}
-          </button>
+          <StoreThemeToggle subdomain={subdomain} />
 
           <button
             type="button"
             onClick={() => router.push(`/store/${subdomain}/products`)}
-            className={`flex h-9 w-9 items-center justify-center rounded-lg border ${
-              isLight ? 'border-slate-200 bg-slate-100 text-slate-700' : 'border-slate-800 bg-slate-900 text-slate-300'
+            aria-label="Search"
+            className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${
+              isSports
+                ? 'border-emerald-950 bg-slate-900 text-slate-300 hover:text-emerald-400'
+                : isClothing
+                ? 'border-purple-950 bg-slate-900 text-slate-300 hover:text-purple-300'
+                : 'border-slate-800 bg-slate-900 text-slate-300 hover:text-cyan-300'
             }`}
           >
             <Search size={16} />
@@ -359,22 +307,23 @@ export function StoreHeader({
           <button
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
-            className={`flex h-9 w-9 items-center justify-center rounded-lg border ${
-              isLight ? 'border-slate-200 bg-slate-100 text-slate-700' : 'border-slate-800 bg-slate-900 text-slate-200'
-            }`}
+            aria-label="Menu"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-200"
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Dropdown */}
       {menuOpen && (
         <div
           className={`border-t px-4 py-4 md:hidden backdrop-blur-xl ${
-            isLight
-              ? 'border-slate-200 bg-white/98 text-slate-900'
-              : 'border-slate-900 bg-slate-950/98 text-white'
+            isSports
+              ? 'border-emerald-950/80 bg-[#020d09]/95'
+              : isClothing
+              ? 'border-purple-950/80 bg-[#0b0314]/95'
+              : 'border-slate-900 bg-slate-950/95'
           }`}
         >
           <div className="flex flex-col gap-3 text-sm font-medium">
@@ -383,20 +332,24 @@ export function StoreHeader({
                 key={link.name}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
-                className={`flex items-center justify-between py-1 ${
-                  isLight ? 'text-slate-700 hover:text-slate-950' : 'text-slate-200 hover:text-white'
+                className={`flex items-center justify-between py-1 transition-colors ${
+                  isSports
+                    ? 'text-slate-200 hover:text-emerald-400'
+                    : isClothing
+                    ? 'text-slate-200 hover:text-purple-300'
+                    : 'text-slate-200 hover:text-cyan-300'
                 }`}
               >
                 <span>{link.name}</span>
                 {typeof link.count === 'number' && link.count > 0 && (
-                  <span className="rounded-full bg-slate-200 text-slate-800 px-2 py-0.5 text-[10px] font-bold">
+                  <span className="rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-white border border-slate-700">
                     {link.count}
                   </span>
                 )}
               </Link>
             ))}
 
-            <div className="pt-3 border-t border-slate-200">
+            <div className="pt-3 border-t border-slate-800">
               {isLoggedIn ? (
                 <button
                   type="button"
@@ -404,7 +357,7 @@ export function StoreHeader({
                     setMenuOpen(false);
                     handleLogout();
                   }}
-                  className="w-full text-left font-semibold text-rose-600 py-1"
+                  className="w-full text-left font-semibold text-rose-400 py-1"
                 >
                   Logout
                 </button>
