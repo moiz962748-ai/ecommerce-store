@@ -18,7 +18,10 @@ import {
   Monitor,
   RotateCw,
   Eye,
-  EyeOff
+  EyeOff,
+  UploadCloud,
+  Image as ImageIcon,
+  Trash2
 } from 'lucide-react';
 
 const DEFAULT_STORES = [
@@ -31,7 +34,7 @@ export default function StoreCustomizerPage() {
   const [stores, setStores] = useState<any[]>(DEFAULT_STORES);
   const [selectedSubdomain, setSelectedSubdomain] = useState<string>('electronics');
   const [activeTab, setActiveTab] = useState<'branding' | 'announcement' | 'hero' | 'about' | 'contact'>('branding');
-  const [showPreview, setShowPreview] = useState<boolean>(true); // Default open with toggle button
+  const [showPreview, setShowPreview] = useState<boolean>(true);
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [previewKey, setPreviewKey] = useState<number>(Date.now());
   const [loading, setLoading] = useState<boolean>(false);
@@ -39,6 +42,7 @@ export default function StoreCustomizerPage() {
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -142,7 +146,30 @@ export default function StoreCustomizerPage() {
     loadStoreConfig();
   }, [selectedSubdomain]);
 
-  // 3. Save Handler
+  // 3. Direct Image Upload Handler
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check size limit (max 3MB)
+    if (file.size > 3 * 1024 * 1024) {
+      setMessage({ text: 'File size exceeds 3MB limit. Please upload a smaller image.', type: 'error' });
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      setFormData((prev) => ({
+        ...prev,
+        logoUrl: base64String,
+      }));
+      setMessage({ text: 'Logo selected successfully!', type: 'success' });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // 4. Save Handler
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedSubdomain) return;
@@ -206,9 +233,8 @@ export default function StoreCustomizerPage() {
           </p>
         </div>
 
-        {/* Top Controls: Preview Toggle & Store Selector */}
+        {/* Top Controls */}
         <div className="flex items-center gap-3">
-          {/* Live Preview Toggle Button */}
           <button
             type="button"
             onClick={() => setShowPreview(!showPreview)}
@@ -222,7 +248,6 @@ export default function StoreCustomizerPage() {
             <span>{showPreview ? 'Hide Preview' : 'Show Preview'}</span>
           </button>
 
-          {/* Store Selector */}
           <div className="flex items-center gap-2 bg-card border rounded-lg p-1.5 shadow-sm">
             <span className="text-xs font-semibold text-muted-foreground px-1">Store:</span>
             <select
@@ -299,7 +324,7 @@ export default function StoreCustomizerPage() {
                 <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
                   <div>
                     <h2 className="text-base font-semibold">Store Identity & Visual Theme</h2>
-                    <p className="text-xs text-muted-foreground">Manage store title, logo URL, and theme style presets.</p>
+                    <p className="text-xs text-muted-foreground">Manage store title, direct logo upload, and theme style presets.</p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -316,17 +341,81 @@ export default function StoreCustomizerPage() {
                       />
                     </div>
 
-                    <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-                        Logo Image URL
+                    {/* Direct Image Upload Field */}
+                    <div className="sm:col-span-2 space-y-3">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                        Store Logo
                       </label>
-                      <input
-                        type="text"
-                        placeholder="https://example.com/logo.png"
-                        value={formData.logoUrl}
-                        onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                      />
+
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl border-2 border-dashed border-border bg-accent/20">
+                        {/* Logo Thumbnail Preview */}
+                        <div className="relative h-16 w-16 shrink-0 rounded-lg border bg-background flex items-center justify-center overflow-hidden shadow-sm">
+                          {formData.logoUrl ? (
+                            <img
+                              src={formData.logoUrl}
+                              alt="Store Logo Preview"
+                              className="h-full w-full object-contain p-1"
+                            />
+                          ) : (
+                            <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                          )}
+                        </div>
+
+                        {/* Upload & Action Controls */}
+                        <div className="flex-1 space-y-2">
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                          />
+
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={() => fileInputRef.current?.click()}
+                              className="text-xs flex items-center gap-1.5"
+                            >
+                              <UploadCloud className="h-4 w-4" />
+                              <span>Upload from Device</span>
+                            </Button>
+
+                            {formData.logoUrl && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setFormData({ ...formData, logoUrl: '' })}
+                                className="text-xs text-destructive hover:text-destructive flex items-center gap-1"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                                <span>Remove</span>
+                              </Button>
+                            )}
+                          </div>
+
+                          <p className="text-[11px] text-muted-foreground">
+                            PNG, JPG, WebP or SVG (Max 3MB). Direct image upload with instant preview.
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Or direct URL fallback */}
+                      <div>
+                        <span className="text-[11px] font-medium text-muted-foreground block mb-1">
+                          Or enter logo image URL:
+                        </span>
+                        <input
+                          type="text"
+                          placeholder="https://example.com/logo.png"
+                          value={formData.logoUrl}
+                          onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
+                          className="w-full bg-background border rounded-lg px-3.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        />
+                      </div>
                     </div>
 
                     <div className="sm:col-span-2">
@@ -615,7 +704,7 @@ export default function StoreCustomizerPage() {
           )}
         </div>
 
-        {/* RIGHT COLUMN: Live Iframe Preview (Conditionally Rendered) */}
+        {/* RIGHT COLUMN: Live Iframe Preview */}
         {showPreview && (
           <div className="xl:col-span-6 sticky top-6">
             <div className="bg-card border rounded-2xl p-4 shadow-md space-y-3">
