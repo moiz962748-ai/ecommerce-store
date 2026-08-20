@@ -121,10 +121,10 @@ export function StoreHeader({
     <header
       className={`sticky top-0 z-50 border-b backdrop-blur-md transition-colors duration-300 ${
         isSports
-          ? 'bg-[#020d09]/95 border-emerald-950/80 text-emerald-50'
+          ? 'bg-white/95 border-emerald-100 text-slate-900 dark:bg-[#020d09]/95 dark:border-emerald-950/80 dark:text-emerald-50'
           : isClothing
-          ? 'bg-[#0b0314]/95 border-purple-950/80 text-purple-50'
-          : 'bg-slate-950/95 border-slate-900 text-slate-100'
+          ? 'bg-white/95 border-purple-100 text-slate-900 dark:bg-[#0b0314]/95 dark:border-purple-950/80 dark:text-purple-50'
+          : 'bg-white/95 border-slate-200 text-slate-900 dark:bg-slate-950/95 dark:border-slate-900 dark:text-slate-100'
       }`}
     >
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6 lg:px-8">
@@ -132,12 +132,12 @@ export function StoreHeader({
         {/* 1. Brand / Logo */}
         <Link href={`/store/${subdomain}`} className="flex min-w-0 items-center gap-3 group">
           <div
-            className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border p-1 shadow-md transition-transform group-hover:scale-105 ${
+            className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border p-1 shadow-sm transition-transform group-hover:scale-105 ${
               isSports
-                ? 'border-emerald-500/40 bg-slate-900'
+                ? 'border-emerald-500/40 bg-emerald-50 dark:bg-slate-900'
                 : isClothing
-                ? 'border-purple-500/40 bg-slate-900'
-                : 'border-cyan-500/40 bg-slate-900'
+                ? 'border-purple-500/40 bg-purple-50 dark:bg-slate-900'
+                : 'border-cyan-500/40 bg-cyan-50 dark:bg-slate-900'
             }`}
           >
             <img
@@ -148,17 +148,17 @@ export function StoreHeader({
           </div>
           <div className="flex flex-col leading-tight">
             <span
-              className={`font-bold text-lg tracking-tight text-white transition-colors ${
+              className={`font-bold text-lg tracking-tight text-slate-900 dark:text-white transition-colors ${
                 isSports
-                  ? 'group-hover:text-emerald-400'
+                  ? 'group-hover:text-emerald-500 dark:group-hover:text-emerald-400'
                   : isClothing
-                  ? 'group-hover:text-purple-300'
-                  : 'group-hover:text-cyan-300'
+                  ? 'group-hover:text-purple-600 dark:group-hover:text-purple-300'
+                  : 'group-hover:text-cyan-600 dark:group-hover:text-cyan-300'
               }`}
             >
               {storeName}
             </span>
-            <span className="text-[10px] tracking-widest text-slate-400 font-semibold uppercase">
+            <span className="text-[10px] tracking-widest text-slate-500 dark:text-slate-400 font-semibold uppercase">
               PAKISTAN
             </span>
           </div>
@@ -175,15 +175,15 @@ export function StoreHeader({
                 className={`relative py-1 transition-colors flex items-center gap-1.5 ${
                   isActive
                     ? isSports
-                      ? 'text-emerald-400 font-bold border-b-2 border-emerald-400'
+                      ? 'text-emerald-600 dark:text-emerald-400 font-bold border-b-2 border-emerald-500'
                       : isClothing
-                      ? 'text-purple-300 font-bold border-b-2 border-purple-400'
-                      : 'text-cyan-400 font-bold border-b-2 border-cyan-400'
+                      ? 'text-purple-600 dark:text-purple-300 font-bold border-b-2 border-purple-500'
+                      : 'text-cyan-600 dark:text-cyan-400 font-bold border-b-2 border-cyan-500'
                     : isSports
-                    ? 'text-slate-300 hover:text-emerald-400'
+                    ? 'text-slate-600 hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400'
                     : isClothing
-                    ? 'text-slate-300 hover:text-purple-300'
-                    : 'text-slate-300 hover:text-cyan-400'
+                    ? 'text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-300'
+                    : 'text-slate-600 hover:text-cyan-600 dark:text-slate-300 dark:hover:text-cyan-400'
                 }`}
               >
                 <span>{link.name}</span>
@@ -207,10 +207,10 @@ export function StoreHeader({
           })}
         </nav>
 
-        {/* 3. Action Controls: Search, Theme Toggle, Auth */}
+        {/* 3. Action Controls */}
         <div className="hidden md:flex items-center gap-3">
           
-          {/* Search Toggle / Form */}
+          {/* Search */}
           <div className="relative flex items-center">
             {searchOpen ? (
               <form onSubmit={handleSearch} className="flex items-center">
@@ -220,7 +220,7 @@ export function StoreHeader({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className={`h-9 w-44 rounded-lg border bg-slate-900 px-3 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${
+                  className={`h-9 w-44 rounded-lg border bg-slate-100 text-slate-900 placeholder:text-slate-400 dark:bg-slate-900 px-3 text-xs dark:text-white dark:placeholder:text-slate-500 focus:outline-none transition-all ${
                     isSports
                       ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500'
                       : isClothing
@@ -231,7 +231,7 @@ export function StoreHeader({
                 <button
                   type="button"
                   onClick={() => setSearchOpen(false)}
-                  className="ml-1.5 text-xs text-slate-400 hover:text-white"
+                  className="ml-1.5 text-xs text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white"
                 >
                   ✕
                 </button>
@@ -243,10 +243,10 @@ export function StoreHeader({
                 aria-label="Search"
                 className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-all ${
                   isSports
-                    ? 'border-emerald-950/80 bg-slate-900/80 text-slate-300 hover:border-emerald-500/60 hover:bg-emerald-950/40 hover:text-emerald-300'
+                    ? 'border-slate-200 bg-slate-100 text-slate-700 hover:border-emerald-500/60 hover:text-emerald-600 dark:border-emerald-950/80 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:text-emerald-300'
                     : isClothing
-                    ? 'border-purple-950/80 bg-slate-900/80 text-slate-300 hover:border-purple-500/60 hover:bg-purple-950/40 hover:text-purple-300'
-                    : 'border-slate-800 bg-slate-900/80 text-slate-300 hover:border-cyan-500/60 hover:bg-cyan-950/40 hover:text-cyan-300'
+                    ? 'border-slate-200 bg-slate-100 text-slate-700 hover:border-purple-500/60 hover:text-purple-600 dark:border-purple-950/80 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:text-purple-300'
+                    : 'border-slate-200 bg-slate-100 text-slate-700 hover:border-cyan-500/60 hover:text-cyan-600 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300 dark:hover:text-cyan-300'
                 }`}
               >
                 <Search size={16} />
@@ -254,7 +254,6 @@ export function StoreHeader({
             )}
           </div>
 
-          {/* Dynamic Light/Dark Mode Toggle */}
           <StoreThemeToggle subdomain={subdomain} />
 
           {/* Auth Button */}
@@ -262,7 +261,7 @@ export function StoreHeader({
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-800 bg-slate-900/80 text-xs font-bold text-slate-300 hover:text-rose-400 hover:border-rose-500/40 transition-all"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-200 bg-slate-100 text-slate-700 hover:text-rose-600 hover:border-rose-300 dark:border-slate-800 dark:bg-slate-900/80 text-xs font-bold dark:text-slate-300 dark:hover:text-rose-400 dark:hover:border-rose-500/40 transition-all"
             >
               <LogOut size={14} />
               <span>Logout</span>
@@ -293,13 +292,7 @@ export function StoreHeader({
             type="button"
             onClick={() => router.push(`/store/${subdomain}/products`)}
             aria-label="Search"
-            className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${
-              isSports
-                ? 'border-emerald-950 bg-slate-900 text-slate-300 hover:text-emerald-400'
-                : isClothing
-                ? 'border-purple-950 bg-slate-900 text-slate-300 hover:text-purple-300'
-                : 'border-slate-800 bg-slate-900 text-slate-300 hover:text-cyan-300'
-            }`}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-700 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300"
           >
             <Search size={16} />
           </button>
@@ -308,7 +301,7 @@ export function StoreHeader({
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Menu"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-200"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-800 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -318,38 +311,57 @@ export function StoreHeader({
       {/* Mobile Dropdown */}
       {menuOpen && (
         <div
-          className={`border-t px-4 py-4 md:hidden backdrop-blur-xl ${
+          className={`border-t px-4 py-4 md:hidden backdrop-blur-xl shadow-xl transition-colors duration-300 ${
             isSports
-              ? 'border-emerald-950/80 bg-[#020d09]/95'
+              ? 'bg-white/98 border-emerald-100 dark:border-emerald-950/80 dark:bg-[#020d09]/98'
               : isClothing
-              ? 'border-purple-950/80 bg-[#0b0314]/95'
-              : 'border-slate-900 bg-slate-950/95'
+              ? 'bg-white/98 border-purple-100 dark:border-purple-950/80 dark:bg-[#0b0314]/98'
+              : 'bg-white/98 border-slate-200 dark:border-slate-900 dark:bg-slate-950/98'
           }`}
         >
-          <div className="flex flex-col gap-3 text-sm font-medium">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-                className={`flex items-center justify-between py-1 transition-colors ${
-                  isSports
-                    ? 'text-slate-200 hover:text-emerald-400'
-                    : isClothing
-                    ? 'text-slate-200 hover:text-purple-300'
-                    : 'text-slate-200 hover:text-cyan-300'
-                }`}
-              >
-                <span>{link.name}</span>
-                {typeof link.count === 'number' && link.count > 0 && (
-                  <span className="rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-white border border-slate-700">
-                    {link.count}
-                  </span>
-                )}
-              </Link>
-            ))}
+          <div className="flex flex-col gap-2.5 text-sm font-medium">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`flex items-center justify-between py-2 px-3 rounded-lg transition-colors ${
+                    isActive
+                      ? isSports
+                        ? 'bg-emerald-50 text-emerald-700 font-bold dark:bg-emerald-950/50 dark:text-emerald-400'
+                        : isClothing
+                        ? 'bg-purple-50 text-purple-700 font-bold dark:bg-purple-950/50 dark:text-purple-300'
+                        : 'bg-cyan-50 text-cyan-700 font-bold dark:bg-cyan-950/50 dark:text-cyan-400'
+                      : isSports
+                      ? 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900/60 dark:hover:text-emerald-400'
+                      : isClothing
+                      ? 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900/60 dark:hover:text-purple-300'
+                      : 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-900/60 dark:hover:text-cyan-300'
+                  }`}
+                >
+                  <span>{link.name}</span>
+                  {typeof link.count === 'number' && link.count > 0 && (
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                        link.name === 'Wishlist'
+                          ? 'bg-rose-500 text-white'
+                          : isSports
+                          ? 'bg-emerald-500 text-slate-950'
+                          : isClothing
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-cyan-500 text-slate-950'
+                      }`}
+                    >
+                      {link.count}
+                    </span>
+                  )}
+                </Link>
+              );
+            })}
 
-            <div className="pt-3 border-t border-slate-800">
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800">
               {isLoggedIn ? (
                 <button
                   type="button"
@@ -357,7 +369,7 @@ export function StoreHeader({
                     setMenuOpen(false);
                     handleLogout();
                   }}
-                  className="w-full text-left font-semibold text-rose-400 py-1"
+                  className="w-full text-left font-semibold text-rose-600 dark:text-rose-400 py-2 px-3 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
                 >
                   Logout
                 </button>
@@ -368,7 +380,7 @@ export function StoreHeader({
                     setMenuOpen(false);
                     sessionStorage.setItem('redirect_after_login', currentReturnUrl);
                   }}
-                  className={`block text-center w-full py-2.5 rounded-lg font-bold text-xs ${
+                  className={`block text-center w-full py-2.5 rounded-lg font-bold text-xs shadow-md ${
                     isSports
                       ? 'bg-emerald-500 text-slate-950'
                       : isClothing
