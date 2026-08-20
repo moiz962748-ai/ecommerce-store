@@ -151,7 +151,6 @@ export default function StoreCustomizerPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check size limit (max 3MB)
     if (file.size > 3 * 1024 * 1024) {
       setMessage({ text: 'File size exceeds 3MB limit. Please upload a smaller image.', type: 'error' });
       return;
@@ -220,40 +219,40 @@ export default function StoreCustomizerPage() {
     : `/store/${selectedSubdomain}`;
 
   return (
-    <div className="space-y-6">
+    <div className="w-full max-w-full overflow-hidden space-y-5 px-1 sm:px-0">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col gap-4">
         <div>
-          <h1 className="font-heading text-2xl md:text-3xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
-            <Palette className="h-7 w-7 text-primary" />
-            Store Customizer
+          <h1 className="font-heading text-xl sm:text-2xl md:text-3xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            <Palette className="h-6 w-6 text-primary shrink-0" />
+            <span>Store Customizer</span>
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Customize branding, promotional tickers, storefront themes, and page content.
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            Customize branding, promotional tickers, themes, and store content.
           </p>
         </div>
 
-        {/* Top Controls */}
-        <div className="flex items-center gap-3">
+        {/* Top Controls: Mobile Stack / Desktop Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:flex sm:items-center sm:justify-between w-full">
           <button
             type="button"
             onClick={() => setShowPreview(!showPreview)}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold shadow-sm transition-all ${
+            className={`w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-xs font-semibold shadow-sm transition-all ${
               showPreview
                 ? 'bg-primary/10 text-primary border-primary/30'
                 : 'bg-card text-muted-foreground border-border hover:text-foreground'
             }`}
           >
-            {showPreview ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
-            <span>{showPreview ? 'Hide Preview' : 'Show Preview'}</span>
+            {showPreview ? <Eye className="h-4 w-4 shrink-0" /> : <EyeOff className="h-4 w-4 shrink-0" />}
+            <span>{showPreview ? 'Hide Live Preview' : 'Show Live Preview'}</span>
           </button>
 
-          <div className="flex items-center gap-2 bg-card border rounded-lg p-1.5 shadow-sm">
-            <span className="text-xs font-semibold text-muted-foreground px-1">Store:</span>
+          <div className="flex items-center gap-2 bg-card border rounded-lg p-1.5 shadow-sm w-full sm:w-auto min-w-0">
+            <span className="text-xs font-semibold text-muted-foreground px-1 shrink-0">Store:</span>
             <select
               value={selectedSubdomain}
               onChange={(e) => setSelectedSubdomain(e.target.value)}
-              className="bg-background border rounded-md px-3 py-1 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+              className="bg-background border rounded-md px-2 py-1 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer w-full min-w-0 truncate"
             >
               {stores.map((s) => (
                 <option key={s.subdomain} value={s.subdomain}>
@@ -268,30 +267,31 @@ export default function StoreCustomizerPage() {
       {/* Alert Notifications */}
       {message && (
         <div
-          className={`p-4 rounded-lg text-sm font-medium flex items-center gap-2.5 border ${
+          className={`p-3 sm:p-4 rounded-lg text-xs sm:text-sm font-medium flex items-center gap-2 border ${
             message.type === 'success'
               ? 'bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
               : 'bg-destructive/10 text-destructive border-destructive/20'
           }`}
         >
-          {message.type === 'success' ? <CheckCircle2 className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />}
-          <span>{message.text}</span>
+          {message.type === 'success' ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <AlertCircle className="h-4 w-4 shrink-0" />}
+          <span className="break-words">{message.text}</span>
         </div>
       )}
 
       {/* Responsive Grid Layout */}
-      <div className={`grid grid-cols-1 ${showPreview ? 'xl:grid-cols-12' : 'max-w-4xl mx-auto'} gap-6 items-start transition-all`}>
+      <div className={`grid grid-cols-1 ${showPreview ? 'xl:grid-cols-12' : 'max-w-4xl mx-auto'} gap-6 items-start transition-all w-full`}>
         
         {/* LEFT COLUMN: Controls Form */}
-        <div className={`${showPreview ? 'xl:col-span-6' : 'w-full'} space-y-6`}>
-          {/* Tabs */}
-          <div className="flex flex-wrap gap-1.5 border-b pb-2">
+        <div className={`${showPreview ? 'xl:col-span-6' : 'w-full'} space-y-5 w-full min-w-0`}>
+          
+          {/* Scrollable Tabs Bar for Mobile */}
+          <div className="flex items-center gap-1.5 border-b pb-2 overflow-x-auto no-scrollbar w-full">
             {[
               { id: 'branding', label: 'Identity & Theme', icon: Sparkles },
-              { id: 'announcement', label: 'Announcement Bar', icon: Megaphone },
+              { id: 'announcement', label: 'Announcement', icon: Megaphone },
               { id: 'hero', label: 'Hero Banner', icon: Layout },
               { id: 'about', label: 'About Us', icon: FileText },
-              { id: 'contact', label: 'Contact Details', icon: PhoneCall },
+              { id: 'contact', label: 'Contact', icon: PhoneCall },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -300,14 +300,14 @@ export default function StoreCustomizerPage() {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap shrink-0 transition-colors ${
                     isActive
                       ? 'bg-primary text-primary-foreground shadow-sm'
                       : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
-                  {tab.label}
+                  <Icon className="h-3.5 w-3.5" />
+                  <span>{tab.label}</span>
                 </button>
               );
             })}
@@ -318,38 +318,37 @@ export default function StoreCustomizerPage() {
               Loading {selectedSubdomain} configuration...
             </div>
           ) : (
-            <form onSubmit={handleSave} className="space-y-6">
+            <form onSubmit={handleSave} className="space-y-5 w-full min-w-0">
               {/* TAB 1: BRANDING */}
               {activeTab === 'branding' && (
-                <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
+                <div className="bg-card text-card-foreground border rounded-xl p-4 sm:p-5 shadow-sm space-y-4 w-full">
                   <div>
-                    <h2 className="text-base font-semibold">Store Identity & Visual Theme</h2>
+                    <h2 className="text-sm sm:text-base font-semibold">Store Identity & Visual Theme</h2>
                     <p className="text-xs text-muted-foreground">Manage store title, direct logo upload, and theme style presets.</p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Store Name
                       </label>
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                         required
                       />
                     </div>
 
                     {/* Direct Image Upload Field */}
-                    <div className="sm:col-span-2 space-y-3">
+                    <div className="space-y-2.5">
                       <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Store Logo
                       </label>
 
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 rounded-xl border-2 border-dashed border-border bg-accent/20">
-                        {/* Logo Thumbnail Preview */}
-                        <div className="relative h-16 w-16 shrink-0 rounded-lg border bg-background flex items-center justify-center overflow-hidden shadow-sm">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 sm:p-4 rounded-xl border-2 border-dashed border-border bg-accent/20 w-full">
+                        <div className="relative h-14 w-14 shrink-0 rounded-lg border bg-background flex items-center justify-center overflow-hidden shadow-sm">
                           {formData.logoUrl ? (
                             <img
                               src={formData.logoUrl}
@@ -357,12 +356,11 @@ export default function StoreCustomizerPage() {
                               className="h-full w-full object-contain p-1"
                             />
                           ) : (
-                            <ImageIcon className="h-6 w-6 text-muted-foreground" />
+                            <ImageIcon className="h-5 w-5 text-muted-foreground" />
                           )}
                         </div>
 
-                        {/* Upload & Action Controls */}
-                        <div className="flex-1 space-y-2">
+                        <div className="flex-1 w-full space-y-2">
                           <input
                             ref={fileInputRef}
                             type="file"
@@ -377,10 +375,10 @@ export default function StoreCustomizerPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => fileInputRef.current?.click()}
-                              className="text-xs flex items-center gap-1.5"
+                              className="text-xs flex items-center gap-1.5 h-8"
                             >
-                              <UploadCloud className="h-4 w-4" />
-                              <span>Upload from Device</span>
+                              <UploadCloud className="h-3.5 w-3.5" />
+                              <span>Upload File</span>
                             </Button>
 
                             {formData.logoUrl && (
@@ -389,7 +387,7 @@ export default function StoreCustomizerPage() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => setFormData({ ...formData, logoUrl: '' })}
-                                className="text-xs text-destructive hover:text-destructive flex items-center gap-1"
+                                className="text-xs text-destructive hover:text-destructive flex items-center gap-1 h-8"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
                                 <span>Remove</span>
@@ -397,13 +395,12 @@ export default function StoreCustomizerPage() {
                             )}
                           </div>
 
-                          <p className="text-[11px] text-muted-foreground">
-                            PNG, JPG, WebP or SVG (Max 3MB). Direct image upload with instant preview.
+                          <p className="text-[10px] sm:text-[11px] text-muted-foreground">
+                            PNG, JPG, WebP or SVG (Max 3MB).
                           </p>
                         </div>
                       </div>
 
-                      {/* Or direct URL fallback */}
                       <div>
                         <span className="text-[11px] font-medium text-muted-foreground block mb-1">
                           Or enter logo image URL:
@@ -413,19 +410,19 @@ export default function StoreCustomizerPage() {
                           placeholder="https://example.com/logo.png"
                           value={formData.logoUrl}
                           onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })}
-                          className="w-full bg-background border rounded-lg px-3.5 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                          className="w-full bg-background border rounded-lg px-3 py-1.5 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-ring truncate"
                         />
                       </div>
                     </div>
 
-                    <div className="sm:col-span-2">
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Theme Preset
                       </label>
                       <select
                         value={formData.theme}
                         onChange={(e) => setFormData({ ...formData, theme: e.target.value })}
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer"
                       >
                         <option value="electronics">Electronics (Cyan & Blue Tech Theme)</option>
                         <option value="sports">Sports & Gym (Emerald & Forest Green Theme)</option>
@@ -438,17 +435,17 @@ export default function StoreCustomizerPage() {
 
               {/* TAB 2: ANNOUNCEMENT BAR */}
               {activeTab === 'announcement' && (
-                <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
+                <div className="bg-card text-card-foreground border rounded-xl p-4 sm:p-5 shadow-sm space-y-4 w-full">
                   <div>
-                    <h2 className="text-base font-semibold">Top Announcement Bar / Promotional Ticker</h2>
-                    <p className="text-xs text-muted-foreground">Show promotional discounts, coupon codes, or shipping alerts at top of your store.</p>
+                    <h2 className="text-sm sm:text-base font-semibold">Top Announcement Bar</h2>
+                    <p className="text-xs text-muted-foreground">Show promo ticker and shipping alerts.</p>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3.5">
                     <div className="flex items-center justify-between p-3 rounded-lg border bg-accent/40">
                       <div>
-                        <span className="text-xs font-bold block text-foreground">Enable Announcement Bar</span>
-                        <span className="text-[11px] text-muted-foreground">Show or hide the top promo banner for this store.</span>
+                        <span className="text-xs font-bold block text-foreground">Enable Announcement</span>
+                        <span className="text-[10px] text-muted-foreground">Show top promo banner.</span>
                       </div>
                       <input
                         type="checkbox"
@@ -459,17 +456,17 @@ export default function StoreCustomizerPage() {
                             announcement: { ...formData.announcement, enabled: e.target.checked },
                           })
                         }
-                        className="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                        className="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer shrink-0"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Promo Message Text
                       </label>
                       <input
                         type="text"
-                        placeholder="e.g. Free Express Nationwide Delivery on all orders over Rs. 3,000!"
+                        placeholder="e.g. Free Nationwide Delivery over Rs. 3,000!"
                         value={formData.announcement.text}
                         onChange={(e) =>
                           setFormData({
@@ -477,18 +474,18 @@ export default function StoreCustomizerPage() {
                             announcement: { ...formData.announcement, text: e.target.value },
                           })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                           Badge / Tag
                         </label>
                         <input
                           type="text"
-                          placeholder="e.g. LIMITED OFFER, SALE, CODE: TECH20"
+                          placeholder="e.g. LIMITED OFFER"
                           value={formData.announcement.badge}
                           onChange={(e) =>
                             setFormData({
@@ -496,13 +493,13 @@ export default function StoreCustomizerPage() {
                               announcement: { ...formData.announcement, badge: e.target.value },
                             })
                           }
-                          className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                          className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-                          Optional Redirect Link
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
+                          Redirect Link
                         </label>
                         <input
                           type="text"
@@ -514,7 +511,7 @@ export default function StoreCustomizerPage() {
                               announcement: { ...formData.announcement, link: e.target.value },
                             })
                           }
-                          className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                          className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                         />
                       </div>
                     </div>
@@ -524,15 +521,15 @@ export default function StoreCustomizerPage() {
 
               {/* TAB 3: HERO */}
               {activeTab === 'hero' && (
-                <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
+                <div className="bg-card text-card-foreground border rounded-xl p-4 sm:p-5 shadow-sm space-y-4 w-full">
                   <div>
-                    <h2 className="text-base font-semibold">Homepage Hero Banner</h2>
-                    <p className="text-xs text-muted-foreground">Catch customer attention with personalized titles and badge texts.</p>
+                    <h2 className="text-sm sm:text-base font-semibold">Homepage Hero Banner</h2>
+                    <p className="text-xs text-muted-foreground">Catch customer attention with personalized titles.</p>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3.5">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Badge / Eyebrow Text
                       </label>
                       <input
@@ -541,12 +538,12 @@ export default function StoreCustomizerPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, hero: { ...formData.hero, eyebrow: e.target.value } })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Main Headline
                       </label>
                       <input
@@ -555,12 +552,12 @@ export default function StoreCustomizerPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, hero: { ...formData.hero, headline: e.target.value } })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Primary CTA Button Text
                       </label>
                       <input
@@ -569,7 +566,7 @@ export default function StoreCustomizerPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, hero: { ...formData.hero, buttonText: e.target.value } })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
                   </div>
@@ -578,29 +575,29 @@ export default function StoreCustomizerPage() {
 
               {/* TAB 4: ABOUT */}
               {activeTab === 'about' && (
-                <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
+                <div className="bg-card text-card-foreground border rounded-xl p-4 sm:p-5 shadow-sm space-y-4 w-full">
                   <div>
-                    <h2 className="text-base font-semibold">About Us Page Content</h2>
-                    <p className="text-xs text-muted-foreground">Share your brand story and mission statement with shoppers.</p>
+                    <h2 className="text-sm sm:text-base font-semibold">About Us Page Content</h2>
+                    <p className="text-xs text-muted-foreground">Share your brand story and mission statement.</p>
                   </div>
 
-                  <div className="space-y-4">
+                  <div className="space-y-3.5">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Brand Story
                       </label>
                       <textarea
-                        rows={4}
+                        rows={3}
                         value={formData.about.story}
                         onChange={(e) =>
                           setFormData({ ...formData, about: { ...formData.about, story: e.target.value } })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Mission Statement
                       </label>
                       <input
@@ -609,7 +606,7 @@ export default function StoreCustomizerPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, about: { ...formData.about, mission: e.target.value } })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
                   </div>
@@ -618,15 +615,15 @@ export default function StoreCustomizerPage() {
 
               {/* TAB 5: CONTACT */}
               {activeTab === 'contact' && (
-                <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
+                <div className="bg-card text-card-foreground border rounded-xl p-4 sm:p-5 shadow-sm space-y-4 w-full">
                   <div>
-                    <h2 className="text-base font-semibold">Contact & Support Details</h2>
-                    <p className="text-xs text-muted-foreground">Update customer care helpline, email address and store timings.</p>
+                    <h2 className="text-sm sm:text-base font-semibold">Contact & Support Details</h2>
+                    <p className="text-xs text-muted-foreground">Update customer care helpline and email.</p>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-3.5">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Support Email
                       </label>
                       <input
@@ -635,12 +632,12 @@ export default function StoreCustomizerPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, contact: { ...formData.contact, email: e.target.value } })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Helpline / Phone
                       </label>
                       <input
@@ -649,12 +646,12 @@ export default function StoreCustomizerPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, contact: { ...formData.contact, phone: e.target.value } })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Location / Address
                       </label>
                       <input
@@ -663,12 +660,12 @@ export default function StoreCustomizerPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, contact: { ...formData.contact, address: e.target.value } })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1.5">
                         Office Hours
                       </label>
                       <input
@@ -677,26 +674,26 @@ export default function StoreCustomizerPage() {
                         onChange={(e) =>
                           setFormData({ ...formData, contact: { ...formData.contact, officeHours: e.target.value } })
                         }
-                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                       />
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Actions */}
-              <div className="flex items-center justify-between pt-2">
+              {/* Mobile Actions: Stacked Buttons */}
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
                 <a
                   href={`/store/${selectedSubdomain}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-medium text-primary hover:underline"
+                  className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-medium text-primary hover:underline py-2"
                 >
                   <ExternalLink className="h-4 w-4" />
-                  Open Live Store
+                  <span>Open Live Store</span>
                 </a>
 
-                <Button type="submit" disabled={saving}>
+                <Button type="submit" disabled={saving} className="w-full sm:w-auto h-10 text-xs sm:text-sm font-bold">
                   {saving ? 'Saving...' : 'Save Configuration'}
                 </Button>
               </div>
@@ -706,67 +703,67 @@ export default function StoreCustomizerPage() {
 
         {/* RIGHT COLUMN: Live Iframe Preview */}
         {showPreview && (
-          <div className="xl:col-span-6 sticky top-6">
-            <div className="bg-card border rounded-2xl p-4 shadow-md space-y-3">
+          <div className="xl:col-span-6 sticky top-6 w-full min-w-0">
+            <div className="bg-card border rounded-2xl p-3 sm:p-4 shadow-md space-y-3 w-full">
               {/* Toolbar */}
-              <div className="flex items-center justify-between border-b pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+              <div className="flex items-center justify-between border-b pb-2.5 gap-2">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-foreground flex items-center gap-1 shrink-0">
                     <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                    Live Preview
+                    Preview
                   </span>
-                  <span className="text-[11px] text-muted-foreground font-mono bg-accent px-2 py-0.5 rounded">
+                  <span className="text-[10px] text-muted-foreground font-mono bg-accent px-1.5 py-0.5 rounded truncate max-w-[120px] sm:max-w-[200px]">
                     {previewPath}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1 shrink-0">
                   <button
                     type="button"
                     onClick={() => setPreviewDevice('desktop')}
-                    className={`p-1.5 rounded-md text-xs font-medium transition-colors ${
+                    className={`p-1.5 rounded-md text-xs transition-colors ${
                       previewDevice === 'desktop'
                         ? 'bg-primary text-primary-foreground shadow-sm'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                        : 'text-muted-foreground hover:bg-accent'
                     }`}
                     title="Desktop View"
                   >
-                    <Monitor className="h-4 w-4" />
+                    <Monitor className="h-3.5 w-3.5" />
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setPreviewDevice('mobile')}
-                    className={`p-1.5 rounded-md text-xs font-medium transition-colors ${
+                    className={`p-1.5 rounded-md text-xs transition-colors ${
                       previewDevice === 'mobile'
                         ? 'bg-primary text-primary-foreground shadow-sm'
-                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                        : 'text-muted-foreground hover:bg-accent'
                     }`}
                     title="Mobile View"
                   >
-                    <Smartphone className="h-4 w-4" />
+                    <Smartphone className="h-3.5 w-3.5" />
                   </button>
 
-                  <div className="h-4 w-[1px] bg-border mx-1" />
+                  <div className="h-3 w-[1px] bg-border mx-0.5" />
 
                   <button
                     type="button"
                     onClick={handleRefreshPreview}
-                    className="p-1.5 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                    className="p-1.5 rounded-md text-muted-foreground hover:bg-accent transition-colors"
                     title="Refresh Preview"
                   >
-                    <RotateCw className="h-4 w-4" />
+                    <RotateCw className="h-3.5 w-3.5" />
                   </button>
                 </div>
               </div>
 
               {/* Iframe Viewport */}
-              <div className="w-full flex justify-center items-center bg-muted/40 rounded-xl p-2 sm:p-4 min-h-[620px] overflow-hidden border">
+              <div className="w-full flex justify-center items-center bg-muted/40 rounded-xl p-1.5 sm:p-4 min-h-[480px] sm:min-h-[600px] overflow-hidden border">
                 <div
-                  className={`transition-all duration-300 overflow-hidden bg-background rounded-lg shadow-xl border ${
+                  className={`transition-all duration-300 overflow-hidden bg-background rounded-lg shadow-xl border w-full ${
                     previewDevice === 'mobile'
-                      ? 'w-[375px] h-[600px] ring-8 ring-slate-800 rounded-[36px]'
-                      : 'w-full h-[600px]'
+                      ? 'max-w-[340px] sm:max-w-[375px] h-[520px] sm:h-[580px] ring-4 sm:ring-8 ring-slate-800 rounded-[28px]'
+                      : 'w-full h-[520px] sm:h-[580px]'
                   }`}
                 >
                   <iframe
