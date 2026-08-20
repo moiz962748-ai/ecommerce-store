@@ -1,5 +1,6 @@
 import { StoreHeader } from '@/components/store-header';
 import { StoreFooter } from '@/components/store/StoreFooter';
+import { StoreWhatsAppButton } from '@/components/store/StoreWhatsAppButton';
 import { apiClient } from '@/lib/api-client';
 import { getStoreTheme } from '@/lib/store-theme';
 
@@ -58,6 +59,8 @@ export default async function StoreLayout({
         storeName={storeName} 
         subdomain={subdomain} 
       />
+      {/* Floating WhatsApp Widget */}
+      <StoreWhatsAppButton subdomain={subdomain} />
     </div>
   );
 }

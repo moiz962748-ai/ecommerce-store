@@ -21,7 +21,9 @@ import {
   EyeOff,
   UploadCloud,
   Image as ImageIcon,
-  Trash2
+  Trash2,
+  Share2,
+  MessageCircle
 } from 'lucide-react';
 
 const DEFAULT_STORES = [
@@ -33,7 +35,7 @@ const DEFAULT_STORES = [
 export default function StoreCustomizerPage() {
   const [stores, setStores] = useState<any[]>(DEFAULT_STORES);
   const [selectedSubdomain, setSelectedSubdomain] = useState<string>('electronics');
-  const [activeTab, setActiveTab] = useState<'branding' | 'announcement' | 'hero' | 'about' | 'contact'>('branding');
+  const [activeTab, setActiveTab] = useState<'branding' | 'announcement' | 'hero' | 'about' | 'contact' | 'social'>('branding');
   const [showPreview, setShowPreview] = useState<boolean>(true);
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [previewKey, setPreviewKey] = useState<number>(Date.now());
@@ -68,6 +70,17 @@ export default function StoreCustomizerPage() {
       phone: '',
       address: '',
       officeHours: '',
+    },
+    social: {
+      whatsapp: {
+        enabled: true,
+        phone: '+923001234567',
+        defaultMessage: 'Hi! I need help with an order on your store.',
+      },
+      instagram: '',
+      facebook: '',
+      twitter: '',
+      tiktok: '',
     },
   });
 
@@ -133,6 +146,17 @@ export default function StoreCustomizerPage() {
             address: config.contact?.address || 'Islamabad & Lahore, Pakistan',
             officeHours: config.contact?.officeHours || 'Mon – Sat (9AM – 8PM)',
           },
+          social: {
+            whatsapp: {
+              enabled: config.social?.whatsapp?.enabled !== undefined ? config.social.whatsapp.enabled : true,
+              phone: config.social?.whatsapp?.phone || '+923001234567',
+              defaultMessage: config.social?.whatsapp?.defaultMessage || 'Hi! I have an inquiry regarding your products.',
+            },
+            instagram: config.social?.instagram || '',
+            facebook: config.social?.facebook || '',
+            twitter: config.social?.twitter || '',
+            tiktok: config.social?.tiktok || '',
+          },
         });
 
         setPreviewKey(Date.now());
@@ -187,6 +211,7 @@ export default function StoreCustomizerPage() {
           hero: formData.hero,
           about: formData.about,
           contact: formData.contact,
+          social: formData.social,
         },
       };
 
@@ -228,11 +253,11 @@ export default function StoreCustomizerPage() {
             <span>Store Customizer</span>
           </h1>
           <p className="text-xs sm:text-sm text-muted-foreground mt-1">
-            Customize branding, promotional tickers, themes, and store content.
+            Customize branding, promotional tickers, themes, WhatsApp chat, and social channels.
           </p>
         </div>
 
-        {/* Top Controls: Mobile Stack / Desktop Row */}
+        {/* Top Controls */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:flex sm:items-center sm:justify-between w-full">
           <button
             type="button"
@@ -284,7 +309,7 @@ export default function StoreCustomizerPage() {
         {/* LEFT COLUMN: Controls Form */}
         <div className={`${showPreview ? 'xl:col-span-6' : 'w-full'} space-y-5 w-full min-w-0`}>
           
-          {/* Scrollable Tabs Bar for Mobile */}
+          {/* Scrollable Tabs Bar */}
           <div className="flex items-center gap-1.5 border-b pb-2 overflow-x-auto no-scrollbar w-full">
             {[
               { id: 'branding', label: 'Identity & Theme', icon: Sparkles },
@@ -292,6 +317,7 @@ export default function StoreCustomizerPage() {
               { id: 'hero', label: 'Hero Banner', icon: Layout },
               { id: 'about', label: 'About Us', icon: FileText },
               { id: 'contact', label: 'Contact', icon: PhoneCall },
+              { id: 'social', label: 'WhatsApp & Social', icon: Share2 },
             ].map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -341,7 +367,6 @@ export default function StoreCustomizerPage() {
                       />
                     </div>
 
-                    {/* Direct Image Upload Field */}
                     <div className="space-y-2.5">
                       <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Store Logo
@@ -681,7 +706,162 @@ export default function StoreCustomizerPage() {
                 </div>
               )}
 
-              {/* Mobile Actions: Stacked Buttons */}
+              {/* TAB 6: WHATSAPP & SOCIAL */}
+              {activeTab === 'social' && (
+                <div className="bg-card text-card-foreground border rounded-xl p-4 sm:p-5 shadow-sm space-y-4 w-full">
+                  <div>
+                    <h2 className="text-sm sm:text-base font-semibold">Floating WhatsApp & Social Media</h2>
+                    <p className="text-xs text-muted-foreground">Setup customer WhatsApp floating chat button and brand social pages.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    {/* WhatsApp Box */}
+                    <div className="p-3.5 rounded-xl border bg-accent/20 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <MessageCircle className="h-4 w-4 text-emerald-500" />
+                          <span className="text-xs font-bold text-foreground">Floating WhatsApp Chat Widget</span>
+                        </div>
+                        <input
+                          type="checkbox"
+                          checked={formData.social.whatsapp.enabled}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              social: {
+                                ...formData.social,
+                                whatsapp: { ...formData.social.whatsapp, enabled: e.target.checked },
+                              },
+                            })
+                          }
+                          className="h-5 w-5 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                            WhatsApp Number (with country code)
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="+923001234567"
+                            value={formData.social.whatsapp.phone}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                social: {
+                                  ...formData.social,
+                                  whatsapp: { ...formData.social.whatsapp, phone: e.target.value },
+                                },
+                              })
+                            }
+                            className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                            Default Prefilled Message
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Hi! I need help with an order."
+                            value={formData.social.whatsapp.defaultMessage}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                social: {
+                                  ...formData.social,
+                                  whatsapp: { ...formData.social.whatsapp, defaultMessage: e.target.value },
+                                },
+                              })
+                            }
+                            className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Social Media Links */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Instagram URL / Handle
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="https://instagram.com/yourstore"
+                          value={formData.social.instagram}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              social: { ...formData.social, instagram: e.target.value },
+                            })
+                          }
+                          className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Facebook URL
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="https://facebook.com/yourstore"
+                          value={formData.social.facebook}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              social: { ...formData.social, facebook: e.target.value },
+                            })
+                          }
+                          className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          Twitter / X URL
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="https://x.com/yourstore"
+                          value={formData.social.twitter}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              social: { ...formData.social, twitter: e.target.value },
+                            })
+                          }
+                          className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
+                          TikTok URL
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="https://tiktok.com/@yourstore"
+                          value={formData.social.tiktok}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              social: { ...formData.social, tiktok: e.target.value },
+                            })
+                          }
+                          className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Mobile Actions */}
               <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
                 <a
                   href={`/store/${selectedSubdomain}`}
