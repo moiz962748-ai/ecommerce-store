@@ -3,6 +3,7 @@ import { DRIZZLE } from '../../db/drizzle.provider';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from '../../db/schema';
 import { eq, inArray } from 'drizzle-orm';
+import { UpdateStoreConfigDto } from './dto/update-store-config.dto';
 
 @Injectable()
 export class StoresService {
@@ -51,46 +52,41 @@ export class StoresService {
     return store;
   }
 
-  // Inside StoresService class:
+  // 4. Partner assignments
+  async assignPartner(body: { storeId: string; userId: string }) {
+    const { storeId, userId } = body;
 
-async assignPartner(body: { storeId: string; userId: string }) {
-  const { storeId, userId } = body;
+    const [assignment] = await this.db
+      .insert(schema.storePartner)
+      .values({
+        storeId,
+        userId,
+      })
+      .returning();
 
-  // Insert assignment into the storePartner table
-  const [assignment] = await this.db
-    .insert(schema.storePartner)
-    .values({
-      storeId,
-      userId,
-    })
-    .returning();
-
-  return {
-    message: 'Partner assigned successfully!',
-    assignment,
-  };
-}
-
-// Inside StoresService class:
-
-async getStoresByPartner(userId: string) {
-  // Find all store assignments for this user
-  const assignments = await this.db.query.storePartner.findMany({
-    where: eq(schema.storePartner.userId, userId),
-  });
-
-  if (!assignments || assignments.length === 0) {
-    return [];
+    return {
+      message: 'Partner assigned successfully!',
+      assignment,
+    };
   }
 
-  const storeIds = assignments.map((a) => a.storeId);
+  async getStoresByPartner(userId: string) {
+    const assignments = await this.db.query.storePartner.findMany({
+      where: eq(schema.storePartner.userId, userId),
+    });
 
-  // Fetch the actual store records
-  return await this.db.query.stores.findMany({
-    where: inArray(schema.stores.id, storeIds),
-  });
-}
-  // 4. Fetch store by subdomain (used by public controller)
+    if (!assignments || assignments.length === 0) {
+      return [];
+    }
+
+    const storeIds = assignments.map((a) => a.storeId);
+
+    return await this.db.query.stores.findMany({
+      where: inArray(schema.stores.id, storeIds),
+    });
+  }
+
+  // 5. Fetch store by subdomain (used by public controller)
   async getStoreBySubdomain(subdomain: string) {
     const store = await this.db.query.stores.findFirst({
       where: eq(schema.stores.subDomain, subdomain),
@@ -103,7 +99,51 @@ async getStoresByPartner(userId: string) {
     return store;
   }
 
-  // 5. Update an existing store
+  // 6. CMS Customizer Update (By Subdomain)
+  async updateStoreConfig(subdomain: string, dto: UpdateStoreConfigDto) {
+    const existingStore = await this.getStoreBySubdomain(subdomain);
+
+    const currentConfig = (existingStore.templateConfig as Record<string, any>) || {};
+    const incomingConfig = (dto.templateConfig as Record<string, any>) || {};
+
+    const updatedTemplateConfig = {
+      ...currentConfig,
+      ...incomingConfig,
+      hero: {
+        ...(currentConfig.hero || {}),
+        ...(incomingConfig.hero || {}),
+      },
+      about: {
+        ...(currentConfig.about || {}),
+        ...(incomingConfig.about || {}),
+      },
+      contact: {
+        ...(currentConfig.contact || {}),
+        ...(incomingConfig.contact || {}),
+      },
+    };
+
+    const updatePayload: Record<string, any> = {
+      templateConfig: updatedTemplateConfig,
+      updatedAt: new Date(),
+    };
+
+    if (dto.name !== undefined) updatePayload.name = dto.name;
+    if (dto.logoUrl !== undefined) updatePayload.logoUrl = dto.logoUrl;
+
+    const [updated] = await this.db
+      .update(schema.stores)
+      .set(updatePayload)
+      .where(eq(schema.stores.subDomain, subdomain))
+      .returning();
+
+    return {
+      message: 'Store configuration updated successfully!',
+      store: updated,
+    };
+  }
+
+  // 7. Update an existing store (By ID)
   async updateStore(id: string, body: any) {
     const updatePayload: Record<string, any> = {};
 
@@ -137,10 +177,9 @@ async getStoresByPartner(userId: string) {
     };
   }
 
-  // 6. Delete a store and clean up dependent records safely
+  // 8. Delete a store and clean up dependent records safely
   async deleteStore(id: string) {
     return await this.db.transaction(async (tx) => {
-      // Step A: Find all products associated with this store
       const storeProducts = await tx
         .select({ id: schema.products.id })
         .from(schema.products)
@@ -148,7 +187,6 @@ async getStoresByPartner(userId: string) {
 
       const productIds = storeProducts.map((p) => p.id);
 
-      // Step B: Delete order items and cart items linked to store's products if present in schema
       if (productIds.length > 0) {
         if ('orderItems' in schema) {
           await tx
@@ -163,26 +201,22 @@ async getStoresByPartner(userId: string) {
         }
       }
 
-      // Step C: Delete orders linked directly to this store
       if ('orders' in schema) {
         await tx
           .delete((schema as any).orders)
           .where(eq((schema as any).orders.storeId, id));
       }
 
-      // Step D: Delete carts linked directly to this store
       if ('carts' in schema) {
         await tx
           .delete((schema as any).carts)
           .where(eq((schema as any).carts.storeId, id));
       }
 
-      // Step E: Delete products of this store
       await tx
         .delete(schema.products)
         .where(eq(schema.products.storeId, id));
 
-      // Step F: Delete the store record
       const [deletedStore] = await tx
         .delete(schema.stores)
         .where(eq(schema.stores.id, id))

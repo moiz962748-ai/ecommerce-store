@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Patch,
   Delete,
   Param,
@@ -13,6 +14,7 @@ import { StoresService } from './stores.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { UpdateStoreConfigDto } from './dto/update-store-config.dto';
 
 @Controller('stores')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -31,7 +33,6 @@ export class StoresController {
     return await this.storesService.assignPartner(body);
   }
 
-  // Add this endpoint above @Get(':id')
   @Get('my-stores')
   @Roles('ADMIN', 'PARTNER')
   async getMyStores(@Request() req: any) {
@@ -43,6 +44,16 @@ export class StoresController {
   @Roles('ADMIN', 'PARTNER')
   async getAllStores() {
     return await this.storesService.getAllStores();
+  }
+
+  // CMS Customizer Config Update Route (Subdomain based)
+  @Put('customizer/:subdomain')
+  @Roles('ADMIN', 'PARTNER')
+  async updateStoreConfig(
+    @Param('subdomain') subdomain: string,
+    @Body() dto: UpdateStoreConfigDto,
+  ) {
+    return await this.storesService.updateStoreConfig(subdomain, dto);
   }
 
   @Get(':id')

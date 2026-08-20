@@ -1,12 +1,48 @@
 'use client';
 
-import { Mail, MapPin, Clock, Send, MessageSquare } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { Mail, MapPin, Clock, Phone, Send, MessageSquare } from 'lucide-react';
+import { apiClient } from '@/lib/api-client';
 
 export default function StoreContactPage() {
+  const params = useParams();
+  const subdomain = params?.subdomain as string;
+
+  const [contactData, setContactData] = useState({
+    email: 'support@store.pk',
+    phone: '',
+    address: 'Islamabad & Lahore, Pakistan',
+    officeHours: 'Mon – Sat (9AM – 8PM)',
+  });
+
+  useEffect(() => {
+    if (!subdomain) return;
+
+    async function fetchContactDetails() {
+      try {
+        const store = await apiClient(`/public/stores/${subdomain}`);
+        const contact = store?.templateConfig?.contact;
+        if (contact) {
+          setContactData({
+            email: contact.email || 'support@store.pk',
+            phone: contact.phone || '',
+            address: contact.address || 'Islamabad & Lahore, Pakistan',
+            officeHours: contact.officeHours || 'Mon – Sat (9AM – 8PM)',
+          });
+        }
+      } catch {
+        // Fallback default values remain active if API fails
+      }
+    }
+
+    fetchContactDetails();
+  }, [subdomain]);
+
   return (
     <main className="min-h-screen w-full transition-colors duration-300 pb-20">
       
-      {/* 1. Header with Generous Padding */}
+      {/* 1. Header */}
       <section className="mx-auto max-w-7xl px-4 pt-10 pb-8 sm:px-6 md:px-8 md:pt-14 md:pb-12 text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-slate-700/80 bg-slate-900/60 px-4 py-1.5 text-xs font-bold uppercase tracking-wider mb-5">
           <MessageSquare size={13} className="text-emerald-400" />
@@ -20,19 +56,32 @@ export default function StoreContactPage() {
         </p>
       </section>
 
-      {/* 2. Contact Info Cards (Separated with clean top/bottom padding) */}
+      {/* 2. Contact Info Cards */}
       <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:px-8">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <div className={`grid grid-cols-1 gap-6 ${contactData.phone ? 'sm:grid-cols-2 lg:grid-cols-4' : 'sm:grid-cols-3'}`}>
           <div className="flex items-center gap-4 rounded-2xl border border-slate-800/80 bg-slate-900/60 p-6 backdrop-blur-md shadow-lg">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
               <Mail size={20} />
             </div>
             <div>
               <p className="text-[10px] uppercase font-bold tracking-widest text-slate-500">Email Us</p>
-              <p className="text-sm font-bold">support@store.pk</p>
+              <p className="text-sm font-bold">{contactData.email}</p>
               <p className="text-[11px] text-slate-400">Response within 24 hours</p>
             </div>
           </div>
+
+          {contactData.phone && (
+            <div className="flex items-center gap-4 rounded-2xl border border-slate-800/80 bg-slate-900/60 p-6 backdrop-blur-md shadow-lg">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400">
+                <Phone size={20} />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase font-bold tracking-widest text-slate-500">Call Us</p>
+                <p className="text-sm font-bold">{contactData.phone}</p>
+                <p className="text-[11px] text-slate-400">Direct helpline</p>
+              </div>
+            </div>
+          )}
 
           <div className="flex items-center gap-4 rounded-2xl border border-slate-800/80 bg-slate-900/60 p-6 backdrop-blur-md shadow-lg">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-500/10 text-teal-400">
@@ -40,7 +89,7 @@ export default function StoreContactPage() {
             </div>
             <div>
               <p className="text-[10px] uppercase font-bold tracking-widest text-slate-500">Location</p>
-              <p className="text-sm font-bold">Islamabad & Lahore</p>
+              <p className="text-sm font-bold">{contactData.address}</p>
               <p className="text-[11px] text-slate-400">Nationwide Express Delivery</p>
             </div>
           </div>
@@ -51,14 +100,14 @@ export default function StoreContactPage() {
             </div>
             <div>
               <p className="text-[10px] uppercase font-bold tracking-widest text-slate-500">Office Hours</p>
-              <p className="text-sm font-bold">Mon – Sat (9AM – 8PM)</p>
-              <p className="text-[11px] text-slate-400">Sunday Closed</p>
+              <p className="text-sm font-bold">{contactData.officeHours}</p>
+              <p className="text-[11px] text-slate-400">Support Availability</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. Message Form Section (Spaced Out) */}
+      {/* 3. Message Form Section */}
       <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 md:px-8">
         <div className="rounded-3xl border border-slate-800/80 bg-slate-900/60 p-8 md:p-12 shadow-xl backdrop-blur-md">
           <h2 className="text-2xl font-bold mb-6">Send Us a Direct Message</h2>

@@ -15,6 +15,7 @@ export default async function StoreLayout({
   let storeTheme = getStoreTheme(subdomain);
   let storeMode = 'dark';
   let storeName = subdomain;
+  let logoUrl: string | undefined = undefined;
 
   try {
     const store = await apiClient(`/public/stores/${subdomain}`);
@@ -25,7 +26,11 @@ export default async function StoreLayout({
       storeName = store.name;
     }
 
-    if (configuredTheme && ['default', 'ES', 'sports', 'clothing'].includes(configuredTheme)) {
+    if (store?.logoUrl) {
+      logoUrl = store.logoUrl;
+    }
+
+    if (configuredTheme && ['default', 'ES', 'sports', 'clothing', 'electronics'].includes(configuredTheme)) {
       storeTheme = configuredTheme;
     }
 
@@ -33,7 +38,7 @@ export default async function StoreLayout({
       storeMode = configuredMode;
     }
   } catch {
-    // Fall back to the default subdomain-based theme when the store is not found.
+    // Fall back to default subdomain theme if store not found
   }
 
   return (
@@ -43,9 +48,16 @@ export default async function StoreLayout({
       data-store-mode={storeMode}
       className="flex min-h-screen flex-col bg-store-background text-store-foreground"
     >
-      <StoreHeader storeName={storeName} subdomain={subdomain} />
+      <StoreHeader 
+        storeName={storeName} 
+        subdomain={subdomain} 
+        logoUrl={logoUrl} 
+      />
       <main className="flex-1">{children}</main>
-      <StoreFooter storeName={storeName} subdomain={subdomain} />
+      <StoreFooter 
+        storeName={storeName} 
+        subdomain={subdomain} 
+      />
     </div>
   );
 }

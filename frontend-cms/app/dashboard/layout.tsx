@@ -13,6 +13,7 @@ const navItems = [
   { label: 'Categories', href: '/dashboard/categories' },
   { label: 'Orders', href: '/dashboard/orders' },
   { label: 'Partners', href: '/dashboard/partners' },
+  { label: 'Customizer', href: '/dashboard/customizer' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -130,7 +131,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 aria-current={active ? 'page' : undefined}
                 className={`flex items-center gap-2 px-3 py-2.5 rounded-md text-sm transition-colors border-l-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 ${
                   active
-                    ? 'bg-sidebar-accent text-sidebar-accent-foreground border-l-tag-electronics font-medium'
+                    ? 'bg-sidebar-accent text-sidebar-accent-foreground border-l-cyan-500 font-medium'
                     : 'border-l-transparent text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground'
                 }`}
               >

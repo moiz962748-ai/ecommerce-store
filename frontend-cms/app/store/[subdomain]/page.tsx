@@ -5,6 +5,7 @@ import { StoreFeaturedProducts } from "@/components/store/StoreFeaturedProducts"
 import { StoreRecentlyViewed } from "@/components/store/StoreRecentlyViewed";
 import { StoreHowItWorks } from "@/components/store/StoreHowItWorks";
 import { StoreTestimonials } from "@/components/store/StoreTestimonials";
+import { apiClient } from "@/lib/api-client";
 
 export default async function StoreHomePage({
   params,
@@ -12,14 +13,27 @@ export default async function StoreHomePage({
   params: Promise<{ subdomain: string }>;
 }) {
   const { subdomain } = await params;
-  const storeDisplayName =
-    subdomain.charAt(0).toUpperCase() + subdomain.slice(1);
+
+  let storeData: any = null;
+  let storeDisplayName = subdomain.charAt(0).toUpperCase() + subdomain.slice(1);
+
+  try {
+    storeData = await apiClient(`/public/stores/${subdomain}`);
+    if (storeData?.name) {
+      storeDisplayName = storeData.name;
+    }
+  } catch {
+    // Fallback if store fetch fails
+  }
+
+  const templateConfig = storeData?.templateConfig || {};
+  const selectedTheme = templateConfig.theme || "";
 
   const sub = subdomain.toLowerCase();
-  const isSports = sub.includes("sport");
-  const isClothing = sub.includes("cloth");
+  const isSports = selectedTheme === "sports" || sub.includes("sport");
+  const isClothing = selectedTheme === "clothing" || sub.includes("cloth");
 
-  // Dynamic Root Wrapper Styles for all 3 themes
+  // Dynamic Root Wrapper Styles for themes
   const rootThemeClass = isSports
     ? "bg-[#020d09] text-emerald-50 selection:bg-emerald-500 selection:text-slate-950"
     : isClothing
@@ -29,7 +43,11 @@ export default async function StoreHomePage({
   return (
     <main className={`min-h-screen transition-colors duration-300 ${rootThemeClass}`}>
       {/* 1. Hero Section */}
-      <StoreHeroSection subdomain={subdomain} storeName={storeDisplayName} />
+      <StoreHeroSection
+        subdomain={subdomain}
+        storeName={storeDisplayName}
+        heroConfig={templateConfig.hero}
+      />
 
       {/* 2. Impact Counter Numbers */}
       <StoreStatsSection subdomain={subdomain} />

@@ -8,6 +8,11 @@ import { Sparkles, ArrowRight, ShoppingBag, Search, ChevronDown } from "lucide-r
 interface StoreHeroProps {
   subdomain: string;
   storeName: string;
+  heroConfig?: {
+    eyebrow?: string;
+    headline?: string;
+    buttonText?: string;
+  };
 }
 
 const STORE_CONFIGS: Record<string, {
@@ -95,7 +100,7 @@ const STORE_CONFIGS: Record<string, {
   },
 };
 
-export function StoreHeroSection({ subdomain, storeName }: StoreHeroProps) {
+export function StoreHeroSection({ subdomain, storeName, heroConfig }: StoreHeroProps) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -107,6 +112,11 @@ export function StoreHeroSection({ subdomain, storeName }: StoreHeroProps) {
     : "electronics";
 
   const currentTheme = STORE_CONFIGS[configKey];
+
+  // Dynamic CMS Config overrides with fallbacks
+  const displayEyebrow = heroConfig?.eyebrow?.trim() || currentTheme.tag;
+  const customHeadline = heroConfig?.headline?.trim();
+  const displayCta = heroConfig?.buttonText?.trim() || "Browse All Products";
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -181,25 +191,41 @@ export function StoreHeroSection({ subdomain, storeName }: StoreHeroProps) {
               >
                 <Sparkles size={14} className={currentTheme.badgeText} />
                 <span className={`text-xs font-semibold ${currentTheme.badgeText} tracking-wide uppercase`}>
-                  {currentTheme.tag}
+                  {displayEyebrow}
                 </span>
               </div>
             </div>
 
             {/* Main Heading */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12] mb-6">
-              <span>{currentTheme.title1}</span>{" "}
-              <span
-                className={`bg-gradient-to-r ${
-                  configKey === "sports"
-                    ? "from-emerald-400 via-teal-400 to-green-300"
-                    : configKey === "clothing"
-                    ? "from-purple-400 via-fuchsia-400 to-pink-300"
-                    : "from-cyan-400 via-blue-400 to-indigo-300"
-                } bg-clip-text text-transparent`}
-              >
-                {currentTheme.title2}
-              </span>
+              {customHeadline ? (
+                <span
+                  className={`bg-gradient-to-r ${
+                    configKey === "sports"
+                      ? "from-emerald-400 via-teal-400 to-green-300"
+                      : configKey === "clothing"
+                      ? "from-purple-400 via-fuchsia-400 to-pink-300"
+                      : "from-cyan-400 via-blue-400 to-indigo-300"
+                  } bg-clip-text text-transparent`}
+                >
+                  {customHeadline}
+                </span>
+              ) : (
+                <>
+                  <span>{currentTheme.title1}</span>{" "}
+                  <span
+                    className={`bg-gradient-to-r ${
+                      configKey === "sports"
+                        ? "from-emerald-400 via-teal-400 to-green-300"
+                        : configKey === "clothing"
+                        ? "from-purple-400 via-fuchsia-400 to-pink-300"
+                        : "from-cyan-400 via-blue-400 to-indigo-300"
+                    } bg-clip-text text-transparent`}
+                  >
+                    {currentTheme.title2}
+                  </span>
+                </>
+              )}
             </h1>
 
             {/* Subtitle */}
@@ -266,7 +292,7 @@ export function StoreHeroSection({ subdomain, storeName }: StoreHeroProps) {
                     : "bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-cyan-500/20"
                 }`}
               >
-                Browse All Products
+                {displayCta}
                 <ArrowRight size={16} />
               </Link>
 

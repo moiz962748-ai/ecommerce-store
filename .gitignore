@@ -1,10 +1,34 @@
+# Dependencies
+node_modules/
 backend-cms/node_modules/
-backend-cms/dist/
-backend-cms/.env
-
 frontend-cms/node_modules/
+
+# Production Builds
+dist/
+build/
+backend-cms/dist/
+backend-cms/build/
 frontend-cms/.next/
+frontend-cms/out/
+
+# Environment Variables & Secrets (Sensitive Data)
+.env
+.env*.local
+backend-cms/.env
+backend-cms/.env.*
 frontend-cms/.env
 frontend-cms/.env.local
+frontend-cms/.env.*
 
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

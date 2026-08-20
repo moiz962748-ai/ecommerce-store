@@ -14,6 +14,29 @@ import {
 } from 'drizzle-orm/pg-core';
 
 // --------------------------------------------------------
+// TYPES FOR CMS TEMPLATE CONFIG
+// --------------------------------------------------------
+export interface StoreTemplateConfig {
+  theme?: 'electronics' | 'sports' | 'clothing' | 'custom';
+  primaryColor?: string;
+  hero?: {
+    eyebrow?: string;
+    headline?: string;
+    buttonText?: string;
+  };
+  about?: {
+    story?: string;
+    mission?: string;
+  };
+  contact?: {
+    email?: string;
+    phone?: string;
+    address?: string;
+    officeHours?: string;
+  };
+}
+
+// --------------------------------------------------------
 // ENUMS
 // --------------------------------------------------------
 export const userRoleEnum = pgEnum('user_role', ['ADMIN', 'PARTNER', 'CUSTOMER']);
@@ -50,7 +73,7 @@ export const templates = pgTable('templates', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
-// 3. Stores Table
+// 3. Stores Table (Enhanced TemplateConfig for CMS Customizer)
 export const stores = pgTable(
   'stores',
   {
@@ -59,7 +82,7 @@ export const stores = pgTable(
     subDomain: varchar('sub_domain').notNull().unique(),
     logoUrl: varchar('logo_url'),
     templateId: uuid('template_id').references(() => templates.id),
-    templateConfig: jsonb('template_config'),
+    templateConfig: jsonb('template_config').$type<StoreTemplateConfig>(),
     isActive: boolean('is_active').default(true).notNull(),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
@@ -255,7 +278,7 @@ export const orderItem = pgTable(
   {
     id: uuid('id').defaultRandom().primaryKey(),
     orderId: uuid('order_id')
-      .references(() => orders.id, { onDelete: 'cascade' })
+      .references(() => stores.id, { onDelete: 'cascade' })
       .notNull(),
     productVariantId: uuid('product_variant_id')
       .references(() => productVariant.id, { onDelete: 'cascade' })
