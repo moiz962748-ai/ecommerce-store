@@ -161,7 +161,7 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-8 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
           
-          {/* Col 1: Brand & Tagline (5 cols) */}
+          {/* Col 1: Brand & Tagline */}
           <div className="md:col-span-5 space-y-4">
             <div className="flex items-center gap-2">
               <span
@@ -198,7 +198,7 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
             </div>
           </div>
 
-          {/* Col 2: Quick Links (3 cols) */}
+          {/* Col 2: Categories */}
           <div className="md:col-span-3 space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-widest text-slate-200">
               Categories
@@ -237,7 +237,7 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
             </ul>
           </div>
 
-          {/* Col 3: Newsletter & Updates (4 cols) */}
+          {/* Col 3: Newsletter */}
           <div className="md:col-span-4 space-y-3.5">
             <h4 className="text-xs font-bold uppercase tracking-widest text-slate-200">
               Stay in the Loop
@@ -254,6 +254,7 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
                   placeholder="Enter your email address"
+                  suppressHydrationWarning
                   className={`w-full rounded-xl border bg-slate-900/90 py-2.5 pl-10 pr-24 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${
                     isSports
                       ? 'border-emerald-950 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500'
@@ -264,6 +265,7 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
                 />
                 <button
                   type="submit"
+                  suppressHydrationWarning
                   className={`absolute right-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                     isSports
                       ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
@@ -315,7 +317,7 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
 
         </div>
 
-        {/* Bottom Copyright Bar */}
+        {/* Bottom Copyright */}
         <div className="mt-12 pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} {storeName}. All rights reserved.</p>
           <div className="flex items-center gap-1">

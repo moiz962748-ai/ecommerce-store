@@ -10,12 +10,15 @@ import {
   Layout, 
   FileText, 
   PhoneCall, 
+  Megaphone,
   CheckCircle2, 
   AlertCircle, 
   ExternalLink,
   Smartphone,
   Monitor,
-  RotateCw
+  RotateCw,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 const DEFAULT_STORES = [
@@ -27,7 +30,8 @@ const DEFAULT_STORES = [
 export default function StoreCustomizerPage() {
   const [stores, setStores] = useState<any[]>(DEFAULT_STORES);
   const [selectedSubdomain, setSelectedSubdomain] = useState<string>('electronics');
-  const [activeTab, setActiveTab] = useState<'branding' | 'hero' | 'about' | 'contact'>('branding');
+  const [activeTab, setActiveTab] = useState<'branding' | 'announcement' | 'hero' | 'about' | 'contact'>('branding');
+  const [showPreview, setShowPreview] = useState<boolean>(true); // Default open with toggle button
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [previewKey, setPreviewKey] = useState<number>(Date.now());
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,6 +44,12 @@ export default function StoreCustomizerPage() {
     name: '',
     logoUrl: '',
     theme: 'electronics',
+    announcement: {
+      enabled: true,
+      text: 'Free Express Nationwide Delivery on all orders over Rs. 3,000!',
+      badge: 'LIMITED OFFER',
+      link: '/products',
+    },
     hero: {
       eyebrow: '',
       headline: '',
@@ -98,6 +108,12 @@ export default function StoreCustomizerPage() {
           name: store?.name || (selectedSubdomain === 'electronics' ? 'Electronics Store' : selectedSubdomain === 'sports' ? 'Sports Store' : 'Clothing Store'),
           logoUrl: store?.logoUrl || '',
           theme: config.theme || selectedSubdomain,
+          announcement: {
+            enabled: config.announcement?.enabled !== undefined ? config.announcement.enabled : true,
+            text: config.announcement?.text || (selectedSubdomain === 'sports' ? '⚡ Free Workout Guide with orders over Rs. 4,000!' : selectedSubdomain === 'clothing' ? '✨ Flat 20% Off on New Season Arrivals | Code: TREND20' : '⚡ Free Express Nationwide Delivery on orders over Rs. 3,000!'),
+            badge: config.announcement?.badge || 'PROMO',
+            link: config.announcement?.link || `/store/${selectedSubdomain}/products`,
+          },
           hero: {
             eyebrow: config.hero?.eyebrow || (selectedSubdomain === 'sports' ? 'Peak Athletic Performance' : selectedSubdomain === 'clothing' ? 'Curated Fashion & Apparel' : 'Next-Gen Tech Essentials'),
             headline: config.hero?.headline || (selectedSubdomain === 'sports' ? 'Elevate Your Fitness Journey' : selectedSubdomain === 'clothing' ? 'Define Your Signature Style' : 'Discover Smart Modern Technology'),
@@ -141,6 +157,7 @@ export default function StoreCustomizerPage() {
         logoUrl: formData.logoUrl,
         templateConfig: {
           theme: formData.theme,
+          announcement: formData.announcement,
           hero: formData.hero,
           about: formData.about,
           contact: formData.contact,
@@ -185,24 +202,41 @@ export default function StoreCustomizerPage() {
             Store Customizer
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Customize branding, storefront theme presets, and page content.
+            Customize branding, promotional tickers, storefront themes, and page content.
           </p>
         </div>
 
-        {/* Store Selector */}
-        <div className="flex items-center gap-3 bg-card border rounded-lg p-1.5 shadow-sm">
-          <span className="text-xs font-semibold text-muted-foreground px-2">Store:</span>
-          <select
-            value={selectedSubdomain}
-            onChange={(e) => setSelectedSubdomain(e.target.value)}
-            className="bg-background border rounded-md px-3 py-1.5 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+        {/* Top Controls: Preview Toggle & Store Selector */}
+        <div className="flex items-center gap-3">
+          {/* Live Preview Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setShowPreview(!showPreview)}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold shadow-sm transition-all ${
+              showPreview
+                ? 'bg-primary/10 text-primary border-primary/30'
+                : 'bg-card text-muted-foreground border-border hover:text-foreground'
+            }`}
           >
-            {stores.map((s) => (
-              <option key={s.subdomain} value={s.subdomain}>
-                {s.name} ({s.subdomain})
-              </option>
-            ))}
-          </select>
+            {showPreview ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+            <span>{showPreview ? 'Hide Preview' : 'Show Preview'}</span>
+          </button>
+
+          {/* Store Selector */}
+          <div className="flex items-center gap-2 bg-card border rounded-lg p-1.5 shadow-sm">
+            <span className="text-xs font-semibold text-muted-foreground px-1">Store:</span>
+            <select
+              value={selectedSubdomain}
+              onChange={(e) => setSelectedSubdomain(e.target.value)}
+              className="bg-background border rounded-md px-3 py-1 text-xs font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+            >
+              {stores.map((s) => (
+                <option key={s.subdomain} value={s.subdomain}>
+                  {s.name} ({s.subdomain})
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
@@ -220,15 +254,16 @@ export default function StoreCustomizerPage() {
         </div>
       )}
 
-      {/* Split-Screen Layout */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+      {/* Responsive Grid Layout */}
+      <div className={`grid grid-cols-1 ${showPreview ? 'xl:grid-cols-12' : 'max-w-4xl mx-auto'} gap-6 items-start transition-all`}>
         
         {/* LEFT COLUMN: Controls Form */}
-        <div className="xl:col-span-6 space-y-6">
+        <div className={`${showPreview ? 'xl:col-span-6' : 'w-full'} space-y-6`}>
           {/* Tabs */}
           <div className="flex flex-wrap gap-1.5 border-b pb-2">
             {[
               { id: 'branding', label: 'Identity & Theme', icon: Sparkles },
+              { id: 'announcement', label: 'Announcement Bar', icon: Megaphone },
               { id: 'hero', label: 'Hero Banner', icon: Layout },
               { id: 'about', label: 'About Us', icon: FileText },
               { id: 'contact', label: 'Contact Details', icon: PhoneCall },
@@ -312,7 +347,93 @@ export default function StoreCustomizerPage() {
                 </div>
               )}
 
-              {/* TAB 2: HERO */}
+              {/* TAB 2: ANNOUNCEMENT BAR */}
+              {activeTab === 'announcement' && (
+                <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
+                  <div>
+                    <h2 className="text-base font-semibold">Top Announcement Bar / Promotional Ticker</h2>
+                    <p className="text-xs text-muted-foreground">Show promotional discounts, coupon codes, or shipping alerts at top of your store.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-3 rounded-lg border bg-accent/40">
+                      <div>
+                        <span className="text-xs font-bold block text-foreground">Enable Announcement Bar</span>
+                        <span className="text-[11px] text-muted-foreground">Show or hide the top promo banner for this store.</span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={formData.announcement.enabled}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            announcement: { ...formData.announcement, enabled: e.target.checked },
+                          })
+                        }
+                        className="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                        Promo Message Text
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Free Express Nationwide Delivery on all orders over Rs. 3,000!"
+                        value={formData.announcement.text}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            announcement: { ...formData.announcement, text: e.target.value },
+                          })
+                        }
+                        className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                          Badge / Tag
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. LIMITED OFFER, SALE, CODE: TECH20"
+                          value={formData.announcement.badge}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              announcement: { ...formData.announcement, badge: e.target.value },
+                            })
+                          }
+                          className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                          Optional Redirect Link
+                        </label>
+                        <input
+                          type="text"
+                          placeholder={`/store/${selectedSubdomain}/products`}
+                          value={formData.announcement.link}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              announcement: { ...formData.announcement, link: e.target.value },
+                            })
+                          }
+                          className="w-full bg-background border rounded-lg px-3.5 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: HERO */}
               {activeTab === 'hero' && (
                 <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
                   <div>
@@ -366,7 +487,7 @@ export default function StoreCustomizerPage() {
                 </div>
               )}
 
-              {/* TAB 3: ABOUT */}
+              {/* TAB 4: ABOUT */}
               {activeTab === 'about' && (
                 <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
                   <div>
@@ -406,7 +527,7 @@ export default function StoreCustomizerPage() {
                 </div>
               )}
 
-              {/* TAB 4: CONTACT */}
+              {/* TAB 5: CONTACT */}
               {activeTab === 'contact' && (
                 <div className="bg-card text-card-foreground border rounded-xl p-5 shadow-sm space-y-5">
                   <div>
@@ -494,81 +615,83 @@ export default function StoreCustomizerPage() {
           )}
         </div>
 
-        {/* RIGHT COLUMN: Live Iframe Preview */}
-        <div className="xl:col-span-6 sticky top-6">
-          <div className="bg-card border rounded-2xl p-4 shadow-md space-y-3">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between border-b pb-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Live Preview
-                </span>
-                <span className="text-[11px] text-muted-foreground font-mono bg-accent px-2 py-0.5 rounded">
-                  {previewPath}
-                </span>
+        {/* RIGHT COLUMN: Live Iframe Preview (Conditionally Rendered) */}
+        {showPreview && (
+          <div className="xl:col-span-6 sticky top-6">
+            <div className="bg-card border rounded-2xl p-4 shadow-md space-y-3">
+              {/* Toolbar */}
+              <div className="flex items-center justify-between border-b pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Live Preview
+                  </span>
+                  <span className="text-[11px] text-muted-foreground font-mono bg-accent px-2 py-0.5 rounded">
+                    {previewPath}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setPreviewDevice('desktop')}
+                    className={`p-1.5 rounded-md text-xs font-medium transition-colors ${
+                      previewDevice === 'desktop'
+                        ? 'bg-primary text-primary-foreground shadow-sm'
+                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    }`}
+                    title="Desktop View"
+                  >
+                    <Monitor className="h-4 w-4" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setPreviewDevice('mobile')}
+                    className={`p-1.5 rounded-md text-xs font-medium transition-colors ${
+                      previewDevice === 'mobile'
+                        ? 'bg-primary text-primary-foreground shadow-sm'
+                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                    }`}
+                    title="Mobile View"
+                  >
+                    <Smartphone className="h-4 w-4" />
+                  </button>
+
+                  <div className="h-4 w-[1px] bg-border mx-1" />
+
+                  <button
+                    type="button"
+                    onClick={handleRefreshPreview}
+                    className="p-1.5 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                    title="Refresh Preview"
+                  >
+                    <RotateCw className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
 
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setPreviewDevice('desktop')}
-                  className={`p-1.5 rounded-md text-xs font-medium transition-colors ${
-                    previewDevice === 'desktop'
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-                  }`}
-                  title="Desktop View"
-                >
-                  <Monitor className="h-4 w-4" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setPreviewDevice('mobile')}
-                  className={`p-1.5 rounded-md text-xs font-medium transition-colors ${
+              {/* Iframe Viewport */}
+              <div className="w-full flex justify-center items-center bg-muted/40 rounded-xl p-2 sm:p-4 min-h-[620px] overflow-hidden border">
+                <div
+                  className={`transition-all duration-300 overflow-hidden bg-background rounded-lg shadow-xl border ${
                     previewDevice === 'mobile'
-                      ? 'bg-primary text-primary-foreground shadow-sm'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                      ? 'w-[375px] h-[600px] ring-8 ring-slate-800 rounded-[36px]'
+                      : 'w-full h-[600px]'
                   }`}
-                  title="Mobile View"
                 >
-                  <Smartphone className="h-4 w-4" />
-                </button>
-
-                <div className="h-4 w-[1px] bg-border mx-1" />
-
-                <button
-                  type="button"
-                  onClick={handleRefreshPreview}
-                  className="p-1.5 rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                  title="Refresh Preview"
-                >
-                  <RotateCw className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Iframe Viewport */}
-            <div className="w-full flex justify-center items-center bg-muted/40 rounded-xl p-2 sm:p-4 min-h-[620px] overflow-hidden border">
-              <div
-                className={`transition-all duration-300 overflow-hidden bg-background rounded-lg shadow-xl border ${
-                  previewDevice === 'mobile'
-                    ? 'w-[375px] h-[600px] ring-8 ring-slate-800 rounded-[36px]'
-                    : 'w-full h-[600px]'
-                }`}
-              >
-                <iframe
-                  ref={iframeRef}
-                  key={`${previewPath}-${previewKey}`}
-                  src={previewPath}
-                  className="w-full h-full border-0"
-                  title="Store Live Preview"
-                />
+                  <iframe
+                    ref={iframeRef}
+                    key={`${previewPath}-${previewKey}`}
+                    src={previewPath}
+                    className="w-full h-full border-0"
+                    title="Store Live Preview"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>

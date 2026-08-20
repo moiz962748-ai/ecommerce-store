@@ -367,6 +367,8 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
           {/* Carousel Arrows & Dots */}
           <div className="flex items-center justify-between mt-5">
             <button
+              type="button"
+              suppressHydrationWarning
               onClick={() => {
                 setIsAutoPlaying(false);
                 setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
@@ -380,6 +382,8 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
               {reviews.map((_, i) => (
                 <button
                   key={i}
+                  type="button"
+                  suppressHydrationWarning
                   onClick={() => {
                     setIsAutoPlaying(false);
                     setCurrentIndex(i);
@@ -398,6 +402,8 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
             </div>
 
             <button
+              type="button"
+              suppressHydrationWarning
               onClick={() => {
                 setIsAutoPlaying(false);
                 setCurrentIndex((prev) => (prev + 1) % reviews.length);
