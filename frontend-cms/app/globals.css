@@ -625,3 +625,70 @@
   border-color: #e2e8f0 !important;
   color: #0f172a !important;
 }
+
+/* ==========================================================
+   Cyber & Frosted Glass Utilities (Electronics Theme)
+   ========================================================== */
+
+/* Dark Mode Frosted Glass Card */
+.cyber-glass-dark {
+  background: rgba(10, 20, 42, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(6, 182, 212, 0.18);
+  box-shadow: 0 8px 32px 0 rgba(0, 217, 255, 0.06);
+}
+
+/* Hover Glowing Cyber Card */
+.cyber-glass-card {
+  background: rgba(11, 22, 44, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  box-shadow: 0 10px 30px -10px rgba(2, 132, 199, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cyber-glass-card:hover {
+  border-color: rgba(6, 182, 212, 0.55);
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.2), 0 12px 35px -5px rgba(2, 132, 199, 0.3);
+  transform: translateY(-3px);
+}
+
+/* Light Mode Soft Frosted Card */
+.cyber-glass-light {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+/* ==========================================================
+   Boutique Theme - Admin Portal Aesthetic (Warm Paper & Pure White)
+   ========================================================== */
+[data-store-theme="boutique"] {
+  --store-background: var(--background);
+  --store-foreground: var(--foreground);
+  --store-card: var(--card);
+  --store-border: var(--border);
+  --store-accent: var(--primary);
+  --store-muted: var(--muted-foreground);
+  --store-heading-font: var(--font-display);
+}
+
+[data-store-theme="boutique"][data-store-mode="light"],
+[data-store-theme="boutique"][data-store-mode="dark"] {
+  --store-background: var(--background);
+  --store-foreground: var(--foreground);
+  --store-card: var(--card);
+  --store-border: var(--border);
+  --store-accent: var(--primary);
+  --store-muted: var(--muted-foreground);
+}
+
+/* Light mode specific styling for Boutique sections */
+[data-store-theme="boutique"] main {
+  background-color: var(--background);
+  color: var(--foreground);
+}

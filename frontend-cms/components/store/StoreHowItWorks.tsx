@@ -30,6 +30,52 @@ const STORE_STEPS: Record<
     nextColor: string | null;
   }>
 > = {
+  boutique: [
+    {
+      id: 1,
+      iconName: "Search",
+      title: "Explore Luxury Pret & Couture",
+      description:
+        "Browse artisanal bridal wear, raw silk pishwas, hand-embroidered maxis, and contemporary festive edits crafted by seasoned couturiers.",
+      features: ["100% Pure silk & organza", "Artisanal handwork", "Exclusive collections"],
+      color: "#18181b",
+      gradient: "linear-gradient(135deg, #27272a 0%, #09090b 100%)",
+      nextColor: "#27272a",
+    },
+    {
+      id: 2,
+      iconName: "SlidersHorizontal",
+      title: "Select Silhouette & Sizing",
+      description:
+        "Choose standard ready-to-wear sizes or request bespoke made-to-measure tailoring adjustments with custom neckline & sleeve options.",
+      features: ["Made-to-measure guide", "Color customization", "Fabric swatches"],
+      color: "#27272a",
+      gradient: "linear-gradient(135deg, #3f3f46 0%, #18181b 100%)",
+      nextColor: "#3f3f46",
+    },
+    {
+      id: 3,
+      iconName: "CreditCard",
+      title: "Secure Checkout & Order Booking",
+      description:
+        "Confirm your order effortlessly with secure online debit/credit cards, direct bank transfer, or Cash on Delivery across Pakistan.",
+      features: ["Encrypted checkout", "Direct bank transfer", "Cash on Delivery"],
+      color: "#3f3f46",
+      gradient: "linear-gradient(135deg, #52525b 0%, #27272a 100%)",
+      nextColor: "#18181b",
+    },
+    {
+      id: 4,
+      iconName: "Truck",
+      title: "Handcrafted Luxury Delivery",
+      description:
+        "Each outfit is steam-finished, packaged in keepsake garment bags, and dispatched with real-time tracking to your doorstep.",
+      features: ["Keepsake packaging", "Nationwide express delivery", "Doorstep exchange"],
+      color: "#18181b",
+      gradient: "linear-gradient(135deg, #27272a 0%, #09090b 100%)",
+      nextColor: null,
+    },
+  ],
   electronics: [
     {
       id: 1,
@@ -206,42 +252,49 @@ function StepIcon({ name }: { name: string }) {
 
 export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
   const lowerSubdomain = (subdomain || "").toLowerCase();
+  const isBoutique = lowerSubdomain.includes("boutique") || lowerSubdomain.includes("luxury");
   const isSports = lowerSubdomain.includes("sport");
   const isClothing = lowerSubdomain.includes("cloth");
-  const configKey = isSports ? "sports" : isClothing ? "clothing" : "electronics";
+  const configKey = isBoutique ? "boutique" : isSports ? "sports" : isClothing ? "clothing" : "electronics";
 
   const steps = STORE_STEPS[configKey] || STORE_STEPS.electronics;
 
   return (
     <section
-      className={`relative py-20 md:py-28 overflow-hidden border-t ${
-        isSports
-          ? "bg-[#020d09] border-emerald-950/60"
+      className={`relative py-20 md:py-28 overflow-hidden border-t transition-colors duration-300 ${
+        isBoutique
+          ? "bg-background border-border text-foreground"
+          : isSports
+          ? "bg-[#020d09] border-emerald-950/60 text-slate-100"
           : isClothing
-          ? "bg-[#0b0314] border-purple-950/60"
-          : "bg-slate-950 border-slate-900"
-      } text-slate-100`}
+          ? "bg-[#0b0314] border-purple-950/60 text-slate-100"
+          : "bg-slate-950 border-slate-900 text-slate-100"
+      }`}
     >
-      {/* Background Ambient Glows */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className={`absolute top-20 left-10 w-96 h-96 rounded-full blur-3xl ${
-            isSports ? "bg-emerald-500/10" : isClothing ? "bg-purple-500/10" : "bg-cyan-500/10"
-          }`}
-        />
-        <div
-          className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl ${
-            isSports ? "bg-teal-500/10" : isClothing ? "bg-pink-500/10" : "bg-blue-500/10"
-          }`}
-        />
-      </div>
+      {/* Background Ambient Glows for dark themes */}
+      {!isBoutique && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className={`absolute top-20 left-10 w-96 h-96 rounded-full blur-3xl ${
+              isSports ? "bg-emerald-500/10" : isClothing ? "bg-purple-500/10" : "bg-cyan-500/10"
+            }`}
+          />
+          <div
+            className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl ${
+              isSports ? "bg-teal-500/10" : isClothing ? "bg-pink-500/10" : "bg-blue-500/10"
+            }`}
+          />
+        </div>
+      )}
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16 md:mb-20">
           <div
             className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 ${
-              isSports
+              isBoutique
+                ? "border-border bg-card text-foreground shadow-xs"
+                : isSports
                 ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                 : isClothing
                 ? "border-purple-500/30 bg-purple-500/10 text-purple-300"
@@ -249,24 +302,30 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
             }`}
           >
             <PlayCircle size={14} />
-            How It Works
+            The Couture Experience
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-white"}`}>
             Your Journey to{" "}
             <span
-              className={`bg-gradient-to-r ${
-                isSports
-                  ? "from-emerald-400 via-teal-400 to-green-300"
-                  : isClothing
-                  ? "from-purple-400 via-fuchsia-400 to-pink-300"
-                  : "from-cyan-400 via-blue-400 to-indigo-300"
-              } bg-clip-text text-transparent`}
+              className={
+                isBoutique
+                  ? "text-foreground/90 underline decoration-border underline-offset-8"
+                  : `bg-gradient-to-r ${
+                      isSports
+                        ? "from-emerald-400 via-teal-400 to-green-300"
+                        : isClothing
+                        ? "from-purple-400 via-fuchsia-400 to-pink-300"
+                        : "from-cyan-400 via-blue-400 to-indigo-300"
+                    } bg-clip-text text-transparent`
+              }
             >
-              Better Shopping
+              {isBoutique ? "Effortless Luxury" : "Better Shopping"}
             </span>
           </h2>
-          <p className="mt-3.5 text-sm sm:text-base text-slate-400 leading-relaxed">
-            Four simple steps from finding your favorite product to unboxing at your doorstep.
+          <p className={`mt-3.5 text-sm sm:text-base leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+            {isBoutique
+              ? "Four seamless steps from selecting your bespoke couture piece to unboxing hand-finished elegance."
+              : "Four simple steps from finding your favorite product to unboxing at your doorstep."}
           </p>
         </div>
 
@@ -294,7 +353,9 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
                   >
                     <div
                       className={`inline-block px-3 py-1 rounded-md border text-xs font-bold uppercase tracking-widest mb-3 ${
-                        isSports
+                        isBoutique
+                          ? "bg-accent border-border text-foreground"
+                          : isSports
                           ? "bg-slate-900/90 border-emerald-900/40 text-emerald-300"
                           : isClothing
                           ? "bg-slate-900/90 border-purple-900/40 text-purple-300"
@@ -303,10 +364,10 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
                     >
                       Step {step.id}
                     </div>
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
+                    <h3 className={`text-2xl sm:text-3xl font-extrabold mb-3 ${isBoutique ? "text-foreground" : "text-white"}`}>
                       {step.title}
                     </h3>
-                    <p className="text-sm sm:text-base text-slate-400 leading-relaxed mb-5 max-w-xl mx-auto lg:mx-0">
+                    <p className={`text-sm sm:text-base leading-relaxed mb-5 max-w-xl mx-auto lg:mx-0 ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
                       {step.description}
                     </p>
 
@@ -315,11 +376,15 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
                       {step.features.map((feat) => (
                         <span
                           key={feat}
-                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800 text-xs font-medium text-slate-300"
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-medium ${
+                            isBoutique
+                              ? "bg-card border-border text-foreground/90 shadow-xs"
+                              : "bg-slate-900/80 border-slate-800 text-slate-300"
+                          }`}
                         >
                           <span
                             className="w-1.5 h-1.5 rounded-full"
-                            style={{ backgroundColor: step.color }}
+                            style={{ backgroundColor: isBoutique ? "var(--foreground)" : step.color }}
                           />
                           {feat}
                         </span>
@@ -336,16 +401,26 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
                     <div className="relative">
                       {/* Outer Ring */}
                       <div
-                        className="w-36 h-36 sm:w-44 sm:h-44 rounded-full flex items-center justify-center border-4 border-slate-900/80 shadow-2xl relative transition-transform duration-500 hover:scale-105"
+                        className={`w-36 h-36 sm:w-44 sm:h-44 rounded-full flex items-center justify-center border-4 relative transition-transform duration-500 hover:scale-105 ${
+                          isBoutique
+                            ? "border-border shadow-md"
+                            : "border-slate-900/80 shadow-2xl"
+                        }`}
                         style={{
                           background: step.gradient,
-                          boxShadow: `0 0 45px ${step.color}40`,
+                          boxShadow: isBoutique ? "0 10px 25px rgba(0,0,0,0.08)" : `0 0 45px ${step.color}40`,
                         }}
                       >
                         <StepIcon name={step.iconName} />
 
                         {/* Step Number Badge */}
-                        <div className="absolute top-2 right-2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-950 border-2 border-white/20 flex items-center justify-center text-xs sm:text-sm font-black text-white shadow-lg">
+                        <div
+                          className={`absolute top-2 right-2 w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center text-xs sm:text-sm font-black shadow-lg ${
+                            isBoutique
+                              ? "bg-card border-border text-foreground"
+                              : "bg-slate-950 border-white/20 text-white"
+                          }`}
+                        >
                           {step.id}
                         </div>
 
@@ -358,11 +433,13 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
 
                 {/* Connecting Line between Steps */}
                 {step.nextColor && (
-                  <div className="w-1 h-12 sm:h-16 my-4 rounded-full relative overflow-hidden bg-slate-800">
+                  <div className={`w-1 h-12 sm:h-16 my-4 rounded-full relative overflow-hidden ${isBoutique ? "bg-border" : "bg-slate-800"}`}>
                     <div
                       className="absolute inset-0 w-full h-full"
                       style={{
-                        background: `linear-gradient(to bottom, ${step.color}, ${step.nextColor})`,
+                        background: isBoutique
+                          ? "linear-gradient(to bottom, var(--muted-foreground), var(--border))"
+                          : `linear-gradient(to bottom, ${step.color}, ${step.nextColor})`,
                       }}
                     />
                   </div>
@@ -372,7 +449,7 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
           })}
         </div>
 
-        {/* Ready to Shop Dynamic Gradient Box */}
+        {/* Ready to Shop Dynamic Box */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -381,65 +458,91 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
           className="mt-20 md:mt-24 max-w-4xl mx-auto"
         >
           <div
-            className="relative overflow-hidden rounded-3xl p-8 md:p-12 shadow-2xl text-center"
-            style={{
-              background: isSports
-                ? "linear-gradient(135deg, #059669 0%, #10B981 50%, #14B8A6 100%)"
-                : isClothing
-                ? "linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #EC4899 100%)"
-                : "linear-gradient(135deg, #0284C7 0%, #06B6D4 50%, #3B82F6 100%)",
-            }}
+            className={`relative overflow-hidden rounded-3xl p-8 md:p-12 text-center ${
+              isBoutique
+                ? "bg-card border border-border shadow-md"
+                : "shadow-2xl"
+            }`}
+            style={
+              isBoutique
+                ? {}
+                : {
+                    background: isSports
+                      ? "linear-gradient(135deg, #059669 0%, #10B981 50%, #14B8A6 100%)"
+                      : isClothing
+                      ? "linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #EC4899 100%)"
+                      : "linear-gradient(135deg, #0284C7 0%, #06B6D4 50%, #3B82F6 100%)",
+                  }
+            }
           >
-            {/* Sparkles */}
-            <div className="absolute inset-0 opacity-25 pointer-events-none">
-              {CTA_SPARKLES.map((sparkle, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-2 h-2 bg-white rounded-full"
-                  style={{ top: `${sparkle.top}%`, left: `${sparkle.left}%` }}
-                  animate={{
-                    opacity: [0.3, 1, 0.3],
-                    scale: [1, 1.5, 1],
-                  }}
-                  transition={{
-                    duration: sparkle.duration,
-                    repeat: Infinity,
-                    delay: (i * 0.1) % 2,
-                  }}
-                />
-              ))}
-            </div>
+            {/* Sparkles for dark mode */}
+            {!isBoutique && (
+              <div className="absolute inset-0 opacity-25 pointer-events-none">
+                {CTA_SPARKLES.map((sparkle, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-2 h-2 bg-white rounded-full"
+                    style={{ top: `${sparkle.top}%`, left: `${sparkle.left}%` }}
+                    animate={{
+                      opacity: [0.3, 1, 0.3],
+                      scale: [1, 1.5, 1],
+                    }}
+                    transition={{
+                      duration: sparkle.duration,
+                      repeat: Infinity,
+                      delay: (i * 0.1) % 2,
+                    }}
+                  />
+                ))}
+              </div>
+            )}
 
             <div className="relative z-10">
               <div className="inline-flex mb-5">
-                <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl">
-                  <Sparkles size={28} className="text-white" />
+                <div
+                  className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-xs ${
+                    isBoutique
+                      ? "bg-accent border border-border text-foreground"
+                      : "bg-white/20 backdrop-blur-md text-white shadow-xl"
+                  }`}
+                >
+                  <Sparkles size={28} />
                 </div>
               </div>
 
-              <h3 className="text-3xl sm:text-4xl font-black text-white mb-4">
-                Ready to Upgrade Your Lifestyle?
+              <h3 className={`text-3xl sm:text-4xl font-black mb-4 ${isBoutique ? "text-foreground" : "text-white"}`}>
+                {isBoutique ? "Ready to Wear Timeless Elegance?" : "Ready to Upgrade Your Lifestyle?"}
               </h3>
 
-              <p className="text-sm sm:text-base text-white/95 mb-8 max-w-xl mx-auto leading-relaxed">
-                Join thousands of satisfied customers enjoying premium quality, fast shipping, and dependable support across Pakistan.
+              <p className={`text-sm sm:text-base mb-8 max-w-xl mx-auto leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-white/95"}`}>
+                {isBoutique
+                  ? "Explore our curated couture drops, custom-made bridal wear, and premium luxury pret available across Pakistan."
+                  : "Join thousands of satisfied customers enjoying premium quality, fast shipping, and dependable support across Pakistan."}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3.5 justify-center">
                 <Link
                   href={`/store/${subdomain}/products`}
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-white text-slate-950 font-bold text-sm hover:bg-slate-100 transition-all shadow-lg"
+                  className={`inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm transition-all shadow-sm ${
+                    isBoutique
+                      ? "bg-primary text-primary-foreground hover:opacity-90"
+                      : "bg-white text-slate-950 hover:bg-slate-100 shadow-lg"
+                  }`}
                 >
-                  Browse Products
+                  <span>Browse Collection</span>
                   <ArrowRight size={16} />
                 </Link>
 
                 <Link
                   href={`/store/${subdomain}/cart`}
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-white/20 border border-white/30 text-white font-bold text-sm hover:bg-white/30 transition-all backdrop-blur-md"
+                  className={`inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm transition-all ${
+                    isBoutique
+                      ? "border border-border bg-card text-foreground hover:bg-accent shadow-xs"
+                      : "bg-white/20 border border-white/30 text-white hover:bg-white/30 backdrop-blur-md"
+                  }`}
                 >
                   <ShoppingBag size={16} />
-                  View Cart
+                  <span>View Bag</span>
                 </Link>
               </div>
             </div>

@@ -28,6 +28,9 @@ interface WishlistItem {
 
 function getProductVisual(productName: string) {
   const lower = productName.toLowerCase();
+  if (lower.includes('shawl') || lower.includes('velvet') || lower.includes('dupatta')) return '🧣';
+  if (lower.includes('pret') || lower.includes('suit') || lower.includes('dress') || lower.includes('kurti')) return '👗';
+  if (lower.includes('abaya') || lower.includes('pishwas') || lower.includes('couture') || lower.includes('silk')) return '✨';
   if (lower.includes('running') || lower.includes('shoe') || lower.includes('sneaker')) return '👟';
   if (lower.includes('gym') || lower.includes('fitness') || lower.includes('training')) return '🏋️';
   if (lower.includes('water') || lower.includes('bottle') || lower.includes('hydration')) return '💧';
@@ -40,10 +43,9 @@ function getProductVisual(productName: string) {
   if (lower.includes('speaker')) return '🔊';
   if (lower.includes('keyboard')) return '⌨️';
   if (lower.includes('shirt') || lower.includes('t-shirt')) return '👕';
-  if (lower.includes('dress')) return '👗';
   if (lower.includes('jacket') || lower.includes('coat')) return '🧥';
   if (lower.includes('jeans') || lower.includes('pants')) return '👖';
-  return '⚡';
+  return '✨';
 }
 
 export default function WishlistPage() {
@@ -59,6 +61,7 @@ export default function WishlistPage() {
   const [cartMessage, setCartMessage] = useState<string | null>(null);
 
   const lowerSub = (subdomain || '').toLowerCase();
+  const isBoutique = lowerSub.includes('boutique') || lowerSub.includes('luxury');
   const isSports = lowerSub.includes('sport') || lowerSub.includes('fitness');
   const isClothing = lowerSub.includes('cloth') || lowerSub.includes('fashion') || lowerSub.includes('apparel');
 
@@ -114,11 +117,11 @@ export default function WishlistPage() {
         token,
         body: JSON.stringify({ productId, quantity: 1 }),
       });
-      setCartMessage('Item added to cart successfully.');
+      setCartMessage('Item added to bag successfully.');
       window.dispatchEvent(new Event('cart-updated'));
       setTimeout(() => setCartMessage(null), 4000);
     } catch (err: any) {
-      setError(err.message || 'Failed to add item to cart');
+      setError(err.message || 'Failed to add item to bag');
     } finally {
       setAddingId(null);
     }
@@ -128,7 +131,9 @@ export default function WishlistPage() {
     return (
       <main
         className={`flex min-h-screen items-center justify-center ${
-          isSports
+          isBoutique
+            ? 'bg-background text-foreground'
+            : isSports
             ? 'bg-[#020d09] text-emerald-50'
             : isClothing
             ? 'bg-[#0b0314] text-purple-50'
@@ -136,8 +141,10 @@ export default function WishlistPage() {
         }`}
       >
         <div
-          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 backdrop-blur-md ${
-            isSports
+          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 ${
+            isBoutique
+              ? 'border-border bg-card text-foreground shadow-xs'
+              : isSports
               ? 'border-emerald-900/50 bg-slate-900/80 text-emerald-300'
               : isClothing
               ? 'border-purple-900/50 bg-slate-900/80 text-purple-300'
@@ -146,10 +153,16 @@ export default function WishlistPage() {
         >
           <div
             className={`h-4 w-4 animate-spin rounded-full border-2 border-t-transparent ${
-              isSports ? 'border-emerald-400' : isClothing ? 'border-purple-400' : 'border-cyan-400'
+              isBoutique
+                ? 'border-foreground'
+                : isSports
+                ? 'border-emerald-400'
+                : isClothing
+                ? 'border-purple-400'
+                : 'border-cyan-400'
             }`}
           />
-          <span>Loading your wishlist...</span>
+          <span className="text-sm font-medium">Loading your wishlist...</span>
         </div>
       </main>
     );
@@ -158,7 +171,9 @@ export default function WishlistPage() {
   return (
     <main
       className={`min-h-screen transition-colors duration-300 ${
-        isSports
+        isBoutique
+          ? 'bg-background text-foreground'
+          : isSports
           ? 'bg-[#020d09] text-emerald-50 selection:bg-emerald-500 selection:text-slate-950'
           : isClothing
           ? 'bg-[#0b0314] text-purple-50 selection:bg-purple-500 selection:text-white'
@@ -168,7 +183,9 @@ export default function WishlistPage() {
       {/* Top Header */}
       <header
         className={`sticky top-0 z-40 border-b backdrop-blur-md ${
-          isSports
+          isBoutique
+            ? 'border-border bg-background/90'
+            : isSports
             ? 'border-emerald-950/80 bg-[#020d09]/90'
             : isClothing
             ? 'border-purple-950/80 bg-[#0b0314]/90'
@@ -178,17 +195,21 @@ export default function WishlistPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 md:px-8">
           <Link
             href={`/store/${subdomain}`}
-            className="flex items-center gap-2 text-sm font-bold text-slate-300 hover:text-white transition-colors"
+            className={`flex items-center gap-2 text-sm font-bold transition-colors ${
+              isBoutique ? 'text-foreground hover:opacity-80' : 'text-slate-300 hover:text-white'
+            }`}
           >
             <ArrowLeft size={16} />
-            <span>Back to Store</span>
+            <span>Back to Atelier</span>
           </Link>
 
           <Link href={`/store/${subdomain}/products`}>
             <Button
               variant="outline"
               className={`rounded-xl border text-xs font-bold transition-all ${
-                isSports
+                isBoutique
+                  ? 'border-border bg-card text-foreground hover:bg-accent shadow-xs'
+                  : isSports
                   ? 'border-emerald-900/50 bg-slate-900/80 text-emerald-300 hover:bg-emerald-950/60 hover:border-emerald-500/40'
                   : isClothing
                   ? 'border-purple-900/50 bg-slate-900/80 text-purple-300 hover:bg-purple-950/60 hover:border-purple-500/40'
@@ -204,17 +225,21 @@ export default function WishlistPage() {
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 md:px-8 md:py-12">
         {/* Banner Section */}
         <div
-          className={`relative mb-8 overflow-hidden rounded-3xl border p-6 md:p-8 backdrop-blur-xl shadow-xl ${
-            isSports
-              ? 'border-emerald-900/40 bg-gradient-to-br from-emerald-950/30 via-slate-900/70 to-slate-950'
+          className={`relative mb-8 overflow-hidden rounded-3xl border p-6 md:p-8 ${
+            isBoutique
+              ? 'border-border bg-card shadow-xs'
+              : isSports
+              ? 'border-emerald-900/40 bg-gradient-to-br from-emerald-950/30 via-slate-900/70 to-slate-950 shadow-xl backdrop-blur-xl'
               : isClothing
-              ? 'border-purple-900/40 bg-gradient-to-br from-purple-950/30 via-slate-900/70 to-slate-950'
-              : 'border-cyan-900/40 bg-gradient-to-br from-cyan-950/20 via-slate-900/70 to-slate-950'
+              ? 'border-purple-900/40 bg-gradient-to-br from-purple-950/30 via-slate-900/70 to-slate-950 shadow-xl backdrop-blur-xl'
+              : 'border-cyan-900/40 bg-gradient-to-br from-cyan-950/20 via-slate-900/70 to-slate-950 shadow-xl backdrop-blur-xl'
           }`}
         >
           <div
             className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider mb-3 ${
-              isSports
+              isBoutique
+                ? 'border-border bg-accent text-foreground'
+                : isSports
                 ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
                 : isClothing
                 ? 'border-purple-500/30 bg-purple-500/10 text-purple-300'
@@ -222,25 +247,29 @@ export default function WishlistPage() {
             }`}
           >
             <Sparkles size={12} />
-            {isSports ? 'Saved Training Gear' : isClothing ? 'Saved Styles' : 'Saved Hardware'}
+            {isBoutique ? 'Saved Silhouettes' : isSports ? 'Saved Training Gear' : isClothing ? 'Saved Styles' : 'Saved Hardware'}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${isBoutique ? 'text-foreground' : 'text-white'}`}>
             My Wishlist ({items.length})
           </h1>
-          <p className="mt-2 text-xs sm:text-sm text-slate-400">
-            Keep track of items you love and move them to your cart whenever you are ready.
+          <p className={`mt-2 text-xs sm:text-sm ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+            Keep track of couture pieces you admire and move them to your bag whenever you are ready.
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs sm:text-sm font-semibold text-rose-400">
+          <div className="mb-6 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs sm:text-sm font-semibold text-rose-600 dark:text-rose-400">
             {error}
           </div>
         )}
 
         {cartMessage && (
-          <div className="mb-6 flex items-center justify-between rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-xs sm:text-sm font-semibold text-emerald-400 backdrop-blur-md">
+          <div className={`mb-6 flex items-center justify-between rounded-2xl border p-4 text-xs sm:text-sm font-semibold ${
+            isBoutique
+              ? 'border-border bg-card text-foreground shadow-xs'
+              : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+          }`}>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 size={16} /> {cartMessage}
             </span>
@@ -248,7 +277,7 @@ export default function WishlistPage() {
               href={`/store/${subdomain}/cart`}
               className="font-bold underline hover:opacity-80 flex items-center gap-1"
             >
-              View Cart <ArrowRight size={14} />
+              View Bag <ArrowRight size={14} />
             </Link>
           </div>
         )}
@@ -256,40 +285,46 @@ export default function WishlistPage() {
         {/* Empty Wishlist State */}
         {items.length === 0 ? (
           <div
-            className={`rounded-3xl border border-dashed p-12 text-center backdrop-blur-md ${
-              isSports
-                ? 'border-emerald-950 bg-slate-900/40'
+            className={`rounded-3xl border border-dashed p-12 text-center ${
+              isBoutique
+                ? 'border-border bg-card'
+                : isSports
+                ? 'border-emerald-950 bg-slate-900/40 backdrop-blur-md'
                 : isClothing
-                ? 'border-purple-950 bg-slate-900/40'
-                : 'border-slate-900 bg-slate-900/40'
+                ? 'border-purple-950 bg-slate-900/40 backdrop-blur-md'
+                : 'border-slate-900 bg-slate-900/40 backdrop-blur-md'
             }`}
           >
             <div
-              className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border shadow-lg ${
-                isSports
-                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-3xl'
+              className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border ${
+                isBoutique
+                  ? 'border-border bg-accent text-foreground text-3xl shadow-xs'
+                  : isSports
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-3xl shadow-lg'
                   : isClothing
-                  ? 'border-purple-500/30 bg-purple-500/10 text-purple-400 text-3xl'
-                  : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-3xl'
+                  ? 'border-purple-500/30 bg-purple-500/10 text-purple-400 text-3xl shadow-lg'
+                  : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-3xl shadow-lg'
               }`}
             >
               <Heart size={28} className="fill-current" />
             </div>
-            <h2 className="text-2xl font-bold text-white">Your wishlist is empty</h2>
-            <p className="mt-2 text-xs sm:text-sm text-slate-400 max-w-sm mx-auto">
-              Save your favorite items here while exploring the store to review them later.
+            <h2 className={`text-2xl font-bold ${isBoutique ? 'text-foreground' : 'text-white'}`}>Your wishlist is empty</h2>
+            <p className={`mt-2 text-xs sm:text-sm max-w-sm mx-auto ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+              Save your favorite luxury pret and bespoke couture items here while exploring the atelier.
             </p>
             <Link href={`/store/${subdomain}/products`} className="mt-6 inline-block">
               <span
-                className={`inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-lg ${
-                  isSports
-                    ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-emerald-500/20'
+                className={`inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-sm ${
+                  isBoutique
+                    ? 'bg-primary text-primary-foreground hover:opacity-90'
+                    : isSports
+                    ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
                     : isClothing
-                    ? 'bg-purple-600 text-white hover:bg-purple-500 shadow-purple-500/25'
-                    : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-cyan-500/20'
+                    ? 'bg-purple-600 text-white hover:bg-purple-500'
+                    : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
                 }`}
               >
-                Explore Products
+                <span>Explore Collection</span>
                 <ArrowRight size={14} />
               </span>
             </Link>
@@ -300,19 +335,23 @@ export default function WishlistPage() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className={`group flex flex-col justify-between overflow-hidden rounded-2xl border backdrop-blur-md transition-all duration-300 hover:-translate-y-1 shadow-xl ${
-                  isSports
-                    ? 'border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90'
+                className={`group flex flex-col justify-between overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1 ${
+                  isBoutique
+                    ? 'border-border bg-card shadow-xs hover:border-foreground/20 hover:shadow-md'
+                    : isSports
+                    ? 'border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md'
                     : isClothing
-                    ? 'border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90'
-                    : 'border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90'
+                    ? 'border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md'
+                    : 'border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md'
                 }`}
               >
                 <div>
                   {/* Visual Preview */}
                   <div
                     className={`relative flex h-48 items-center justify-center overflow-hidden border-b p-5 ${
-                      isSports
+                      isBoutique
+                        ? 'border-border bg-accent/30'
+                        : isSports
                         ? 'border-emerald-950/80 bg-emerald-950/20'
                         : isClothing
                         ? 'border-purple-950/80 bg-purple-950/20'
@@ -336,7 +375,11 @@ export default function WishlistPage() {
                       onClick={() => handleRemove(item.id)}
                       disabled={removingId === item.id}
                       aria-label="Remove item"
-                      className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border border-slate-700/60 bg-slate-900/80 text-slate-400 hover:border-rose-500/50 hover:bg-rose-500/20 hover:text-rose-400 transition-colors"
+                      className={`absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border transition-colors ${
+                        isBoutique
+                          ? 'border-border bg-card text-muted-foreground hover:text-destructive hover:bg-destructive/10 shadow-xs'
+                          : 'border-slate-700/60 bg-slate-900/80 text-slate-400 hover:border-rose-500/50 hover:bg-rose-500/20 hover:text-rose-400'
+                      }`}
                     >
                       <Trash2 size={14} />
                     </button>
@@ -344,24 +387,26 @@ export default function WishlistPage() {
 
                   {/* Info Details */}
                   <div className="p-5">
-                    <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold block mb-1">
-                      Saved Item
+                    <span className={`text-[10px] uppercase tracking-widest font-bold block mb-1 ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>
+                      Saved Creation
                     </span>
                     <Link href={`/store/${subdomain}/products/${item.productId}`}>
                       <h3
-                        className={`text-base font-bold text-white transition-colors truncate hover:underline ${
-                          isSports
-                            ? 'hover:text-emerald-400'
+                        className={`text-base font-bold transition-colors truncate hover:underline ${
+                          isBoutique
+                            ? 'text-foreground hover:opacity-80'
+                            : isSports
+                            ? 'text-white hover:text-emerald-400'
                             : isClothing
-                            ? 'hover:text-purple-300'
-                            : 'hover:text-cyan-300'
+                            ? 'text-white hover:text-purple-300'
+                            : 'text-white hover:text-cyan-300'
                         }`}
                       >
                         {item.productName}
                       </h3>
                     </Link>
-                    <p className="text-xs text-slate-400 mt-1">
-                      {item.variantName || 'Standard Edition'}
+                    <p className={`text-xs mt-1 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+                      {item.variantName || 'Stitched / Standard'}
                     </p>
                   </div>
                 </div>
@@ -369,7 +414,9 @@ export default function WishlistPage() {
                 {/* Price & Action Buttons */}
                 <div
                   className={`mt-2 border-t p-5 pt-4 flex flex-col gap-3 ${
-                    isSports
+                    isBoutique
+                      ? 'border-border'
+                      : isSports
                       ? 'border-emerald-950/80'
                       : isClothing
                       ? 'border-purple-950/80'
@@ -377,10 +424,12 @@ export default function WishlistPage() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-500 uppercase tracking-wider">Price</span>
+                    <span className={`text-xs uppercase tracking-wider ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Price</span>
                     <span
                       className={`text-lg font-black ${
-                        isSports
+                        isBoutique
+                          ? 'text-foreground'
+                          : isSports
                           ? 'text-emerald-400'
                           : isClothing
                           ? 'text-purple-300'
@@ -395,16 +444,18 @@ export default function WishlistPage() {
                     <Button
                       onClick={() => handleAddToCart(item.productId)}
                       disabled={addingId === item.productId}
-                      className={`h-10 flex-1 rounded-xl text-xs font-bold transition-all shadow-md ${
-                        isSports
-                          ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-emerald-500/20'
+                      className={`h-10 flex-1 rounded-xl text-xs font-bold transition-all shadow-sm ${
+                        isBoutique
+                          ? 'bg-primary text-primary-foreground hover:opacity-90'
+                          : isSports
+                          ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
                           : isClothing
-                          ? 'bg-purple-600 text-white hover:bg-purple-500 shadow-purple-500/25'
-                          : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-cyan-500/20'
+                          ? 'bg-purple-600 text-white hover:bg-purple-500'
+                          : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
                       }`}
                     >
                       <ShoppingBag size={14} className="mr-1.5" />
-                      {addingId === item.productId ? 'Adding...' : 'Move to Cart'}
+                      {addingId === item.productId ? 'Moving...' : isBoutique ? 'Move to Bag' : 'Move to Cart'}
                     </Button>
 
                     <Button
@@ -412,11 +463,11 @@ export default function WishlistPage() {
                       onClick={() => handleRemove(item.id)}
                       disabled={removingId === item.id}
                       className={`h-10 rounded-xl border px-3 text-xs font-bold transition-all ${
-                        isSports
-                          ? 'border-emerald-900/60 bg-slate-900/80 text-slate-300 hover:bg-rose-500/20 hover:text-rose-400 hover:border-rose-500/40'
-                          : isClothing
-                          ? 'border-purple-900/60 bg-slate-900/80 text-slate-300 hover:bg-rose-500/20 hover:text-rose-400 hover:border-rose-500/40'
-                          : 'border-slate-800 bg-slate-900/80 text-slate-300 hover:bg-rose-500/20 hover:text-rose-400 hover:border-rose-500/40'
+                        isBoutique
+                          ? 'border-border bg-card text-foreground hover:bg-destructive/10 hover:text-destructive shadow-xs'
+                          : isSports
+                          ? 'border-emerald-900/60 bg-slate-900/80 text-slate-300 hover:bg-rose-500/20 hover:text-rose-400'
+                          : 'border-slate-800 bg-slate-900/80 text-slate-300 hover:bg-rose-500/20 hover:text-rose-400'
                       }`}
                     >
                       {removingId === item.id ? '...' : 'Remove'}

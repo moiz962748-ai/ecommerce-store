@@ -19,6 +19,20 @@ const THEME_STYLES: Record<string, {
   missionBorder: string;
   missionText: string;
 }> = {
+  boutique: {
+    bg: 'bg-background text-foreground',
+    badgeBorder: 'border-border',
+    badgeBg: 'bg-card shadow-xs',
+    badgeText: 'text-foreground',
+    accentGradient: 'from-foreground via-foreground/90 to-foreground/75',
+    cardBorder: 'border-border shadow-xs hover:border-foreground/20 hover:shadow-md',
+    cardBg: 'bg-card',
+    iconBg: 'bg-accent border border-border',
+    iconColor: 'text-foreground',
+    missionBg: 'bg-accent/40',
+    missionBorder: 'border-border',
+    missionText: 'text-foreground/90',
+  },
   electronics: {
     bg: 'bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950',
     badgeBorder: 'border-cyan-500/30',
@@ -68,15 +82,18 @@ export default function StoreAboutPage() {
   const subdomain = (params?.subdomain as string) || '';
 
   const lowerSubdomain = subdomain.toLowerCase();
+  const isBoutique = lowerSubdomain.includes('boutique') || lowerSubdomain.includes('luxury');
   const [storeTheme, setStoreTheme] = useState<string>(
-    lowerSubdomain.includes('sport') ? 'sports' : lowerSubdomain.includes('cloth') ? 'clothing' : 'electronics'
+    isBoutique ? 'boutique' : lowerSubdomain.includes('sport') ? 'sports' : lowerSubdomain.includes('cloth') ? 'clothing' : 'electronics'
   );
 
   const [storeName, setStoreName] = useState<string>(
     subdomain ? subdomain.charAt(0).toUpperCase() + subdomain.slice(1) : 'Our Store'
   );
   const [aboutStory, setAboutStory] = useState<string>(
-    'Powering modern e-commerce experiences across Pakistan with verified authenticity, direct brand warranty, and seamless doorstep delivery.'
+    isBoutique
+      ? 'Crafting timeless luxury pret, hand-embellished couture, and bespoke festive silhouettes across Pakistan with pure fabrics and artisanal mastery.'
+      : 'Powering modern e-commerce experiences across Pakistan with verified authenticity, direct brand warranty, and seamless doorstep delivery.'
   );
   const [aboutMission, setAboutMission] = useState<string>('');
 
@@ -87,10 +104,12 @@ export default function StoreAboutPage() {
       try {
         const store = await apiClient(`/public/stores/${subdomain}`);
         if (store?.name) setStoreName(store.name);
-        
+
         const configuredTheme = store?.templateConfig?.theme;
         if (configuredTheme && THEME_STYLES[configuredTheme]) {
           setStoreTheme(configuredTheme);
+        } else if (isBoutique) {
+          setStoreTheme('boutique');
         }
 
         if (store?.templateConfig?.about?.story) {
@@ -100,14 +119,14 @@ export default function StoreAboutPage() {
           setAboutMission(store.templateConfig.about.mission);
         }
       } catch {
-        // Fallback to default values
+        // Fallback default
       }
     }
 
     fetchStoreDetails();
-  }, [subdomain]);
+  }, [subdomain, isBoutique]);
 
-  const currentTheme = THEME_STYLES[storeTheme] || THEME_STYLES.electronics;
+  const currentTheme = THEME_STYLES[storeTheme] || THEME_STYLES.boutique;
 
   return (
     <main className={`min-h-screen w-full transition-colors duration-500 ${currentTheme.bg}`}>
@@ -118,9 +137,12 @@ export default function StoreAboutPage() {
           <span>OUR STORY & PHILOSOPHY</span>
         </div>
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight">
-          About <span className={`bg-gradient-to-r ${currentTheme.accentGradient} bg-clip-text text-transparent`}>{storeName}</span>
+          About{' '}
+          <span className={isBoutique ? 'text-foreground underline decoration-border underline-offset-8' : `bg-gradient-to-r ${currentTheme.accentGradient} bg-clip-text text-transparent`}>
+            {storeName}
+          </span>
         </h1>
-        <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-slate-400 leading-relaxed whitespace-pre-line">
+        <p className={`mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed whitespace-pre-line ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
           {aboutStory}
         </p>
 
@@ -133,7 +155,7 @@ export default function StoreAboutPage() {
       </section>
 
       {/* 2. Pillars Grid */}
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-8 border-t border-slate-800/60">
+      <section className={`mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-8 border-t ${isBoutique ? 'border-border' : 'border-slate-800/60'}`}>
         <div className="mb-10 text-center md:text-left">
           <div className={`inline-flex items-center gap-2 rounded-full border ${currentTheme.badgeBorder} ${currentTheme.badgeBg} px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider ${currentTheme.badgeText} mb-2`}>
             <Target size={12} />
@@ -143,33 +165,39 @@ export default function StoreAboutPage() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <div className={`rounded-3xl border ${currentTheme.cardBorder} ${currentTheme.cardBg} p-8 backdrop-blur-md shadow-xl`}>
+          <div className={`rounded-3xl border ${currentTheme.cardBorder} ${currentTheme.cardBg} p-8 transition-all duration-300`}>
             <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${currentTheme.iconBg} ${currentTheme.iconColor}`}>
               <ShieldCheck size={24} />
             </div>
-            <h3 className="text-lg font-bold">100% Genuine Backed</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400">
-              Every device and item listed is strictly sourced from verified distributors and authorized local partners.
+            <h3 className="text-lg font-bold">{isBoutique ? '100% Pure Fabrics' : '100% Genuine Backed'}</h3>
+            <p className={`mt-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+              {isBoutique
+                ? 'Every ensemble utilizes verified raw silk, pure chiffon, and fine organza crafted to heirloom standards.'
+                : 'Every device and item listed is strictly sourced from verified distributors and authorized local partners.'}
             </p>
           </div>
 
-          <div className={`rounded-3xl border ${currentTheme.cardBorder} ${currentTheme.cardBg} p-8 backdrop-blur-md shadow-xl`}>
+          <div className={`rounded-3xl border ${currentTheme.cardBorder} ${currentTheme.cardBg} p-8 transition-all duration-300`}>
             <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${currentTheme.iconBg} ${currentTheme.iconColor}`}>
               <Zap size={24} />
             </div>
-            <h3 className="text-lg font-bold">Express Nationwide Logistics</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400">
-              Dispatched with high-grade packaging and express tracking to all major cities across Pakistan.
+            <h3 className="text-lg font-bold">{isBoutique ? 'Keepsake Express Packaging' : 'Express Nationwide Logistics'}</h3>
+            <p className={`mt-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+              {isBoutique
+                ? 'Carefully steam-finished, encased in luxury garment bags, and dispatched with real-time tracking.'
+                : 'Dispatched with high-grade packaging and express tracking to all major cities across Pakistan.'}
             </p>
           </div>
 
-          <div className={`rounded-3xl border ${currentTheme.cardBorder} ${currentTheme.cardBg} p-8 backdrop-blur-md shadow-xl sm:col-span-2 lg:col-span-1`}>
+          <div className={`rounded-3xl border ${currentTheme.cardBorder} ${currentTheme.cardBg} p-8 transition-all duration-300 sm:col-span-2 lg:col-span-1`}>
             <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${currentTheme.iconBg} ${currentTheme.iconColor}`}>
               <Users size={24} />
             </div>
-            <h3 className="text-lg font-bold">Customer First Support</h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400">
-              Dedicated after-sales support team ready to assist with doorstep exchanges, setups, and warranty claims.
+            <h3 className="text-lg font-bold">{isBoutique ? 'Stylist Concierge' : 'Customer First Support'}</h3>
+            <p className={`mt-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+              {isBoutique
+                ? 'Dedicated fashion consultants ready to assist with bespoke made-to-measure sizing and styling inquiries.'
+                : 'Dedicated after-sales support team ready to assist with doorstep exchanges, setups, and warranty claims.'}
             </p>
           </div>
         </div>

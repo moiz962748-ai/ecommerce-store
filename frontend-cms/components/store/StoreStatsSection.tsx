@@ -27,7 +27,6 @@ interface StatItem {
   gradient: string;
 }
 
-// Lightweight Counter Hook
 function useCounter(target: number, duration: number = 2000, trigger: boolean = false) {
   const [count, setCount] = useState(0);
 
@@ -58,12 +57,14 @@ function StatCard({
   stat,
   index,
   isInView,
+  isBoutique,
   isSports,
   isClothing,
 }: {
   stat: StatItem;
   index: number;
   isInView: boolean;
+  isBoutique: boolean;
   isSports: boolean;
   isClothing: boolean;
 }) {
@@ -76,18 +77,20 @@ function StatCard({
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.08, ease: "easeOut" }}
       whileHover={{ y: -6 }}
-      className={`relative overflow-hidden group p-5 md:p-6 rounded-2xl border backdrop-blur-md transition-all duration-300 text-center flex flex-col justify-between shadow-lg ${
-        isSports
-          ? "border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90 shadow-emerald-950/10"
+      className={`relative overflow-hidden group p-5 md:p-6 rounded-2xl border transition-all duration-300 text-center flex flex-col justify-between ${
+        isBoutique
+          ? "border-border bg-card shadow-xs hover:border-foreground/20 hover:shadow-md"
+          : isSports
+          ? "border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90 shadow-lg shadow-emerald-950/10 backdrop-blur-md"
           : isClothing
-          ? "border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90 shadow-purple-950/10"
-          : "border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90 shadow-cyan-950/10"
+          ? "border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90 shadow-lg shadow-purple-950/10 backdrop-blur-md"
+          : "border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90 shadow-lg shadow-cyan-950/10 backdrop-blur-md"
       }`}
     >
       {/* Background radial glow on hover */}
       <div
         className="absolute -top-8 -right-8 w-28 h-28 rounded-full opacity-10 blur-2xl group-hover:opacity-30 transition-opacity duration-300 pointer-events-none"
-        style={{ background: stat.gradient }}
+        style={{ background: isBoutique ? "var(--foreground)" : stat.gradient }}
       />
 
       {/* Sparkle Icon */}
@@ -99,7 +102,9 @@ function StatCard({
         <Sparkles
           size={14}
           className={
-            isSports
+            isBoutique
+              ? "text-foreground"
+              : isSports
               ? "text-emerald-400"
               : isClothing
               ? "text-purple-400"
@@ -122,20 +127,26 @@ function StatCard({
           className="inline-flex mb-4"
         >
           <div
-            className="w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300"
-            style={{ background: stat.gradient }}
+            className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 ${
+              isBoutique
+                ? "bg-accent border border-border text-foreground shadow-xs"
+                : "shadow-lg text-white"
+            }`}
+            style={isBoutique ? {} : { background: stat.gradient }}
           >
-            <Icon size={24} className="text-white" strokeWidth={2.2} />
+            <Icon size={24} className={isBoutique ? "text-foreground" : "text-white"} strokeWidth={2.2} />
           </div>
         </motion.div>
 
         {/* Counter Number */}
         <div className="mb-1.5">
-          <div className="text-3xl md:text-4xl font-black text-white leading-none tabular-nums">
+          <div className={`text-3xl md:text-4xl font-black leading-none tabular-nums ${isBoutique ? "text-foreground" : "text-white"}`}>
             {count.toLocaleString()}
             <span
               className={`ml-0.5 ${
-                isSports
+                isBoutique
+                  ? "text-muted-foreground"
+                  : isSports
                   ? "text-emerald-400"
                   : isClothing
                   ? "text-purple-400"
@@ -148,12 +159,12 @@ function StatCard({
         </div>
 
         {/* Label */}
-        <div className="text-xs md:text-sm font-bold text-slate-200 mb-1">
+        <div className={`text-xs md:text-sm font-bold mb-1 ${isBoutique ? "text-foreground" : "text-slate-200"}`}>
           {stat.label}
         </div>
 
         {/* Description */}
-        <div className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">
+        <div className={`text-[11px] line-clamp-2 leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
           {stat.description}
         </div>
       </div>
@@ -161,7 +172,7 @@ function StatCard({
       {/* Bottom Accent Line */}
       <div
         className="absolute bottom-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{ background: stat.gradient }}
+        style={{ background: isBoutique ? "var(--foreground)" : stat.gradient }}
       />
     </motion.div>
   );
@@ -173,6 +184,7 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
   const [productCount, setProductCount] = useState(12);
 
   const lowerSubdomain = (subdomain || "").toLowerCase();
+  const isBoutique = lowerSubdomain.includes("boutique") || lowerSubdomain.includes("luxury");
   const isSports = lowerSubdomain.includes("sport");
   const isClothing = lowerSubdomain.includes("cloth");
 
@@ -199,8 +211,8 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
       icon: ShoppingBag,
       value: productCount,
       suffix: "+",
-      label: "Products",
-      description: "Available in our catalog",
+      label: isBoutique ? "Couture Cuts" : "Products",
+      description: isBoutique ? "Handcrafted luxury edits" : "Available in our catalog",
       gradient: isSports
         ? "linear-gradient(135deg, #10B981 0%, #059669 100%)"
         : isClothing
@@ -211,8 +223,8 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
       icon: Building2,
       value: 12,
       suffix: "+",
-      label: "Trusted Brands",
-      description: "Verified direct partners",
+      label: isBoutique ? "Master Artisans" : "Trusted Brands",
+      description: isBoutique ? "Certified hand embroiders" : "Verified direct partners",
       gradient: isSports
         ? "linear-gradient(135deg, #14B8A6 0%, #0D9488 100%)"
         : isClothing
@@ -236,7 +248,7 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
       value: 1200,
       suffix: "+",
       label: "Happy Shoppers",
-      description: "Satisfied customers served",
+      description: "Satisfied clients served",
       gradient: isSports
         ? "linear-gradient(135deg, #10B981 0%, #047857 100%)"
         : isClothing
@@ -247,8 +259,8 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
       icon: ShieldCheck,
       value: 100,
       suffix: "%",
-      label: "Original Guarantee",
-      description: "Authentic warranty backing",
+      label: isBoutique ? "Pure Fabrics" : "Original Guarantee",
+      description: isBoutique ? "Silk & chiffon verification" : "Authentic warranty backing",
       gradient: isSports
         ? "linear-gradient(135deg, #0D9488 0%, #115E59 100%)"
         : isClothing
@@ -259,8 +271,8 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
       icon: Headphones,
       value: 24,
       suffix: "/7",
-      label: "Support Ready",
-      description: "Dedicated assistance anytime",
+      label: isBoutique ? "Stylist Concierge" : "Support Ready",
+      description: isBoutique ? "Wardrobe & fit consultations" : "Dedicated assistance anytime",
       gradient: isSports
         ? "linear-gradient(135deg, #10B981 0%, #0D9488 100%)"
         : isClothing
@@ -273,40 +285,36 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
     <section
       ref={sectionRef}
       className={`relative py-20 md:py-28 overflow-hidden border-t transition-colors duration-300 ${
-        isSports
+        isBoutique
+          ? "bg-background border-border text-foreground"
+          : isSports
           ? "bg-[#020d09] border-emerald-950/60 text-emerald-50"
           : isClothing
           ? "bg-[#0b0314] border-purple-950/60 text-purple-50"
           : "bg-slate-950 border-slate-900 text-slate-100"
       }`}
     >
-      {/* Ambient background glows */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className={`absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl ${
-            isSports
-              ? "bg-emerald-500/10"
-              : isClothing
-              ? "bg-purple-500/10"
-              : "bg-cyan-500/10"
-          }`}
-        />
-        <div
-          className={`absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl ${
-            isSports
-              ? "bg-teal-500/10"
-              : isClothing
-              ? "bg-pink-500/10"
-              : "bg-blue-500/10"
-          }`}
-        />
-      </div>
+      {/* Ambient background glows for dark themes */}
+      {!isBoutique && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className={`absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl ${
+              isSports ? "bg-emerald-500/10" : isClothing ? "bg-purple-500/10" : "bg-cyan-500/10"
+            }`}
+          />
+          <div
+            className={`absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl ${
+              isSports ? "bg-teal-500/10" : isClothing ? "bg-pink-500/10" : "bg-blue-500/10"
+            }`}
+          />
+        </div>
+      )}
 
       {/* Subtle Dot Pattern */}
       <div
         className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
-          backgroundImage: `radial-gradient(circle, #ffffff 1px, transparent 1px)`,
+          backgroundImage: `radial-gradient(circle, ${isBoutique ? "#000000" : "#ffffff"} 1px, transparent 1px)`,
           backgroundSize: "28px 28px",
         }}
       />
@@ -322,7 +330,9 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
         >
           <div
             className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 ${
-              isSports
+              isBoutique
+                ? "border-border bg-card text-foreground shadow-xs"
+                : isSports
                 ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                 : isClothing
                 ? "border-purple-500/30 bg-purple-500/10 text-purple-300"
@@ -333,23 +343,29 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
             Growing Together
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-white"}`}>
             Making an{" "}
             <span
-              className={`bg-gradient-to-r ${
-                isSports
-                  ? "from-emerald-400 via-teal-400 to-green-300"
-                  : isClothing
-                  ? "from-purple-400 via-fuchsia-400 to-pink-300"
-                  : "from-cyan-400 via-blue-400 to-indigo-300"
-              } bg-clip-text text-transparent`}
+              className={
+                isBoutique
+                  ? "text-foreground/90 underline decoration-border underline-offset-8"
+                  : `bg-gradient-to-r ${
+                      isSports
+                        ? "from-emerald-400 via-teal-400 to-green-300"
+                        : isClothing
+                        ? "from-purple-400 via-fuchsia-400 to-pink-300"
+                        : "from-cyan-400 via-blue-400 to-indigo-300"
+                    } bg-clip-text text-transparent`
+              }
             >
               Impact
             </span>
           </h2>
 
-          <p className="mt-3.5 text-sm sm:text-base text-slate-400 leading-relaxed">
-            Real numbers demonstrating our commitment to quality products, fast fulfillment, and trusted customer relationships.
+          <p className={`mt-3.5 text-sm sm:text-base leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+            {isBoutique
+              ? "Verified metrics reflecting our dedication to pure fabrics, handcrafted tailoring, and bespoke customer experiences."
+              : "Real numbers demonstrating our commitment to quality products, fast fulfillment, and trusted customer relationships."}
           </p>
         </motion.div>
 
@@ -361,6 +377,7 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
               stat={stat}
               index={index}
               isInView={isInView}
+              isBoutique={isBoutique}
               isSports={isSports}
               isClothing={isClothing}
             />

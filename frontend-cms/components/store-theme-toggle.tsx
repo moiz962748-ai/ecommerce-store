@@ -4,23 +4,12 @@ import { useEffect, useState } from 'react';
 import { Sun, Moon } from 'lucide-react';
 
 export function StoreThemeToggle({ subdomain }: { subdomain?: string }) {
-  const [mode, setMode] = useState<'dark' | 'light'>('dark');
-
   const lowerSub = (subdomain || '').toLowerCase();
+  const isBoutique = lowerSub.includes('boutique') || lowerSub.includes('luxury');
   const isSports = lowerSub.includes('sport') || lowerSub.includes('fitness');
   const isClothing = lowerSub.includes('cloth') || lowerSub.includes('fashion') || lowerSub.includes('apparel');
 
-  useEffect(() => {
-    const stored = localStorage.getItem(`store_mode_${subdomain || 'default'}`);
-    const rootMode = document.querySelector('[data-store-root="true"]')?.getAttribute('data-store-mode');
-    
-    if (stored === 'light' || stored === 'dark') {
-      setMode(stored);
-      applyMode(stored);
-    } else if (rootMode === 'light' || rootMode === 'dark') {
-      setMode(rootMode);
-    }
-  }, [subdomain]);
+  const [mode, setMode] = useState<'dark' | 'light'>('dark');
 
   const applyMode = (newMode: 'dark' | 'light') => {
     const root = document.querySelector('[data-store-root="true"]') || document.documentElement;
@@ -33,6 +22,34 @@ export function StoreThemeToggle({ subdomain }: { subdomain?: string }) {
       root.classList.remove('store-light');
     }
   };
+
+  useEffect(() => {
+    // Boutique store ko screenshot wale exact state (dark mode internal state with luxury styling) par set karna
+    if (isBoutique) {
+      setMode('dark');
+      applyMode('dark');
+      localStorage.setItem(`store_mode_${subdomain || 'default'}`, 'dark');
+      return;
+    }
+
+    const stored = localStorage.getItem(`store_mode_${subdomain || 'default'}`);
+    const rootMode = document.querySelector('[data-store-root="true"]')?.getAttribute('data-store-mode');
+
+    if (stored === 'light' || stored === 'dark') {
+      setMode(stored);
+      applyMode(stored);
+    } else if (rootMode === 'light' || rootMode === 'dark') {
+      setMode(rootMode);
+    } else {
+      setMode('dark');
+      applyMode('dark');
+    }
+  }, [subdomain, isBoutique]);
+
+  // Boutique store ke liye button hide
+  if (isBoutique) {
+    return null;
+  }
 
   const toggleMode = () => {
     const nextMode = mode === 'dark' ? 'light' : 'dark';

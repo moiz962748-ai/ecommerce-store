@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Star, CheckCircle } from 'lucide-react';
 
 interface Review {
   id: string;
@@ -14,10 +15,10 @@ interface Review {
 const DEFAULT_REVIEWS: Review[] = [
   {
     id: '1',
-    name: 'Hamza Khan',
+    name: 'Maham Tariq',
     rating: 5,
     date: '2 days ago',
-    comment: 'Exceptional build quality and very fast delivery. Exceeded my expectations!',
+    comment: 'Exceptional pure fabric quality and exact fit. The hand embroidery exceeded my expectations!',
     verified: true,
   },
   {
@@ -25,15 +26,15 @@ const DEFAULT_REVIEWS: Review[] = [
     name: 'Ayesha Malik',
     rating: 5,
     date: '1 week ago',
-    comment: 'Authentic item. Packaging was very neat and secure. Will definitely buy again.',
+    comment: 'Authentic raw silk ensemble. Packaging in the luxury garment bag was very neat and secure.',
     verified: true,
   },
   {
     id: '3',
     name: 'Bilal Ahmed',
-    rating: 4,
+    rating: 5,
     date: '2 weeks ago',
-    comment: 'Value for money product. Works perfectly as advertised.',
+    comment: 'Great craftsmanship and prompt delivery across Islamabad. Perfect drape and stitching.',
     verified: true,
   },
 ];
@@ -46,21 +47,25 @@ export function StoreReviews({ storeName }: { storeName?: string }) {
   ).toFixed(1);
 
   return (
-    <section className="mt-12 rounded-[28px] border border-store-border bg-store-card p-6 md:p-8">
-      <div className="flex flex-col gap-4 border-b border-store-border pb-6 sm:flex-row sm:items-center sm:justify-between">
+    <section className="mt-12 rounded-3xl border border-border bg-card p-6 md:p-8 shadow-xs">
+      <div className="flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-store-foreground store-heading">
+          <h2 className="text-2xl font-black text-foreground tracking-tight">
             Customer Reviews
           </h2>
-          <p className="mt-1 text-sm text-store-muted">
-            Verified ratings & feedback from {storeName || 'our'} shoppers
+          <p className="mt-1 text-sm text-muted-foreground">
+            Verified ratings & feedback from {storeName || 'our'} patrons
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center text-amber-400 text-lg">★★★★★</div>
-          <span className="text-2xl font-bold text-store-foreground">{averageRating}</span>
-          <span className="text-sm text-store-muted">({reviews.length} reviews)</span>
+          <div className="flex items-center text-foreground gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} size={18} className="fill-foreground text-foreground" />
+            ))}
+          </div>
+          <span className="text-2xl font-black text-foreground">{averageRating}</span>
+          <span className="text-sm text-muted-foreground">({reviews.length} reviews)</span>
         </div>
       </div>
 
@@ -68,26 +73,31 @@ export function StoreReviews({ storeName }: { storeName?: string }) {
         {reviews.map((review) => (
           <div
             key={review.id}
-            className="flex flex-col justify-between rounded-2xl border border-store-border bg-store-background p-5"
+            className="flex flex-col justify-between rounded-2xl border border-border bg-accent/30 p-5 transition-all duration-300 hover:border-foreground/20 hover:shadow-xs"
           >
             <div>
               <div className="flex items-center justify-between">
-                <div className="flex text-amber-400 text-sm">
-                  {'★'.repeat(review.rating)}
-                  {'☆'.repeat(5 - review.rating)}
+                <div className="flex text-foreground gap-0.5">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <Star key={i} size={14} className="fill-foreground text-foreground" />
+                  ))}
+                  {[...Array(5 - review.rating)].map((_, i) => (
+                    <Star key={i} size={14} className="text-border" />
+                  ))}
                 </div>
-                <span className="text-xs text-store-muted">{review.date}</span>
+                <span className="text-xs text-muted-foreground">{review.date}</span>
               </div>
-              <p className="mt-3 text-sm leading-relaxed text-store-foreground">
+              <p className="mt-3 text-sm leading-relaxed text-foreground/90 italic">
                 &ldquo;{review.comment}&rdquo;
               </p>
             </div>
 
-            <div className="mt-4 flex items-center justify-between border-t border-store-border/60 pt-3">
-              <span className="font-semibold text-sm text-store-foreground">{review.name}</span>
+            <div className="mt-5 flex items-center justify-between border-t border-border pt-3">
+              <span className="font-bold text-sm text-foreground">{review.name}</span>
               {review.verified && (
-                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-                  ✓ Verified Buyer
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
+                  <CheckCircle size={12} className="text-foreground" />
+                  Verified Patron
                 </span>
               )}
             </div>

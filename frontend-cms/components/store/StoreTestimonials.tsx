@@ -21,6 +21,41 @@ interface Testimonial {
 }
 
 const STORE_TESTIMONIALS: Record<string, Testimonial[]> = {
+  boutique: [
+    {
+      id: "t1",
+      name: "Maham Tariq",
+      role: "Bespoke Bride",
+      city: "Lahore",
+      avatarColor: "bg-stone-800 text-stone-100",
+      rating: 5,
+      comment:
+        "The hand-embroidered raw silk pishwas was breathtaking. The stitching fit exactly to my custom measurements with flawless finish and timely delivery.",
+      purchasedProduct: "Pure Raw Silk Pishwas",
+    },
+    {
+      id: "t2",
+      name: "Anum Siddiqui",
+      role: "Stylist",
+      city: "Karachi",
+      avatarColor: "bg-zinc-800 text-zinc-100",
+      rating: 5,
+      comment:
+        "Pure organza fabric with intricate zari detailing. The color vibrancy and drape look even richer in person than on screen. Truly luxury quality.",
+      purchasedProduct: "Organza Festive Suit",
+    },
+    {
+      id: "t3",
+      name: "Hira Usman",
+      role: "Fashion Editor",
+      city: "Islamabad",
+      avatarColor: "bg-neutral-800 text-neutral-100",
+      rating: 5,
+      comment:
+        "Ordered the velvet embroidered shawl for festive season. The micro-velvet touch and scalloped border finish are pure perfection.",
+      purchasedProduct: "Handcrafted Velvet Shawl",
+    },
+  ],
   electronics: [
     {
       id: "t1",
@@ -140,9 +175,10 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const lowerSubdomain = (subdomain || "").toLowerCase();
+  const isBoutique = lowerSubdomain.includes("boutique") || lowerSubdomain.includes("luxury");
   const isSports = lowerSubdomain.includes("sport");
   const isClothing = lowerSubdomain.includes("cloth");
-  const configKey = isSports ? "sports" : isClothing ? "clothing" : "electronics";
+  const configKey = isBoutique ? "boutique" : isSports ? "sports" : isClothing ? "clothing" : "electronics";
 
   const reviews = STORE_TESTIMONIALS[configKey] || STORE_TESTIMONIALS.electronics;
 
@@ -157,33 +193,39 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
   return (
     <section
       className={`relative py-20 md:py-28 overflow-hidden border-t transition-colors duration-300 ${
-        isSports
+        isBoutique
+          ? "bg-background border-border text-foreground"
+          : isSports
           ? "bg-[#020d09] border-emerald-950/60 text-emerald-50"
           : isClothing
           ? "bg-[#0b0314] border-purple-950/60 text-purple-50"
           : "bg-slate-950 border-slate-900 text-slate-100"
       }`}
     >
-      {/* Background Glows */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl ${
-            isSports ? "bg-emerald-500/10" : isClothing ? "bg-purple-500/10" : "bg-cyan-500/10"
-          }`}
-        />
-        <div
-          className={`absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl ${
-            isSports ? "bg-teal-500/10" : isClothing ? "bg-pink-500/10" : "bg-blue-500/10"
-          }`}
-        />
-      </div>
+      {/* Background Glows for dark themes */}
+      {!isBoutique && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className={`absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl ${
+              isSports ? "bg-emerald-500/10" : isClothing ? "bg-purple-500/10" : "bg-cyan-500/10"
+            }`}
+          />
+          <div
+            className={`absolute bottom-0 left-0 w-96 h-96 rounded-full blur-3xl ${
+              isSports ? "bg-teal-500/10" : isClothing ? "bg-pink-500/10" : "bg-blue-500/10"
+            }`}
+          />
+        </div>
+      )}
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-14 md:mb-16">
           <div
             className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 ${
-              isSports
+              isBoutique
+                ? "border-border bg-card text-foreground shadow-xs"
+                : isSports
                 ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                 : isClothing
                 ? "border-purple-500/30 bg-purple-500/10 text-purple-300"
@@ -191,24 +233,30 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
             }`}
           >
             <MessageSquare size={14} />
-            Testimonials
+            {isBoutique ? "Client Experiences" : "Testimonials"}
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-white"}`}>
             Loved by Verified{" "}
             <span
-              className={`bg-gradient-to-r ${
-                isSports
-                  ? "from-emerald-400 via-teal-400 to-green-300"
-                  : isClothing
-                  ? "from-purple-400 via-fuchsia-400 to-pink-300"
-                  : "from-cyan-400 via-blue-400 to-indigo-300"
-              } bg-clip-text text-transparent`}
+              className={
+                isBoutique
+                  ? "text-foreground/90 underline decoration-border underline-offset-8"
+                  : `bg-gradient-to-r ${
+                      isSports
+                        ? "from-emerald-400 via-teal-400 to-green-300"
+                        : isClothing
+                        ? "from-purple-400 via-fuchsia-400 to-pink-300"
+                        : "from-cyan-400 via-blue-400 to-indigo-300"
+                    } bg-clip-text text-transparent`
+              }
             >
-              Customers
+              Patrons
             </span>
           </h2>
-          <p className="mt-3.5 text-sm sm:text-base text-slate-400 leading-relaxed">
-            Real feedback from shoppers across Pakistan who trust our platform for quality, authenticity, and speed.
+          <p className={`mt-3.5 text-sm sm:text-base leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+            {isBoutique
+              ? "Read honest words from clients across Pakistan who trust our atelier for pure fabrics, bespoke craftsmanship, and timely delivery."
+              : "Real feedback from shoppers across Pakistan who trust our platform for quality, authenticity, and speed."}
           </p>
         </div>
 
@@ -221,36 +269,46 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: idx * 0.1 }}
-              className={`relative flex flex-col justify-between rounded-2xl border p-6 backdrop-blur-md transition-all duration-300 shadow-xl ${
-                isSports
-                  ? "border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90"
+              className={`relative flex flex-col justify-between rounded-2xl border p-6 transition-all duration-300 ${
+                isBoutique
+                  ? "border-border bg-card shadow-xs hover:border-foreground/20 hover:shadow-md"
+                  : isSports
+                  ? "border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md"
                   : isClothing
-                  ? "border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90"
-                  : "border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90"
+                  ? "border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md"
+                  : "border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md"
               }`}
             >
               <div>
                 {/* 5-Star Rating Row */}
                 <div
                   className={`flex items-center gap-1 mb-4 ${
-                    isSports ? "text-emerald-400" : isClothing ? "text-purple-400" : "text-cyan-400"
+                    isBoutique
+                      ? "text-foreground"
+                      : isSports
+                      ? "text-emerald-400"
+                      : isClothing
+                      ? "text-purple-400"
+                      : "text-cyan-400"
                   }`}
                 >
                   {[...Array(t.rating)].map((_, i) => (
                     <Star key={i} size={15} className="fill-current" />
                   ))}
-                  <span className="text-xs font-bold text-slate-400 ml-1.5">5.0</span>
+                  <span className={`text-xs font-bold ml-1.5 ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>5.0</span>
                 </div>
 
                 {/* Review Text */}
-                <p className="text-sm text-slate-300 leading-relaxed italic mb-5">
+                <p className={`text-sm leading-relaxed italic mb-5 ${isBoutique ? "text-foreground/90" : "text-slate-300"}`}>
                   "{t.comment}"
                 </p>
 
                 {/* Purchased Product Tag */}
                 <div
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-semibold border mb-6 ${
-                    isSports
+                    isBoutique
+                      ? "bg-accent border-border text-foreground"
+                      : isSports
                       ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-300"
                       : isClothing
                       ? "bg-purple-500/10 border-purple-500/20 text-purple-300"
@@ -258,14 +316,16 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                   }`}
                 >
                   <CheckCircle2 size={12} />
-                  <span>Bought: {t.purchasedProduct}</span>
+                  <span>Ordered: {t.purchasedProduct}</span>
                 </div>
               </div>
 
               {/* User Avatar + Details */}
               <div
                 className={`flex items-center gap-3 pt-4 border-t ${
-                  isSports
+                  isBoutique
+                    ? "border-border"
+                    : isSports
                     ? "border-emerald-950/80"
                     : isClothing
                     ? "border-purple-950/80"
@@ -273,7 +333,11 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                 }`}
               >
                 <div
-                  className={`w-10 h-10 rounded-xl ${t.avatarColor} flex items-center justify-center font-bold text-white text-xs shadow-md`}
+                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs shadow-xs ${
+                    isBoutique
+                      ? "bg-accent border border-border text-foreground"
+                      : `${t.avatarColor} text-white shadow-md`
+                  }`}
                 >
                   {t.name
                     .split(" ")
@@ -281,9 +345,9 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                     .join("")}
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white">{t.name}</h4>
-                  <p className="text-xs text-slate-400">
-                    {t.role} • <span className="text-slate-500">{t.city}</span>
+                  <h4 className={`text-sm font-bold ${isBoutique ? "text-foreground" : "text-white"}`}>{t.name}</h4>
+                  <p className={`text-xs ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+                    {t.role} • <span className={isBoutique ? "text-muted-foreground/80" : "text-slate-500"}>{t.city}</span>
                   </p>
                 </div>
               </div>
@@ -301,17 +365,25 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -50 }}
                 transition={{ duration: 0.3 }}
-                className={`rounded-2xl border p-6 backdrop-blur-md shadow-xl ${
-                  isSports
-                    ? "border-emerald-900/50 bg-slate-900/90"
+                className={`rounded-2xl border p-6 shadow-xs ${
+                  isBoutique
+                    ? "border-border bg-card"
+                    : isSports
+                    ? "border-emerald-900/50 bg-slate-900/90 backdrop-blur-md shadow-xl"
                     : isClothing
-                    ? "border-purple-900/50 bg-slate-900/90"
-                    : "border-slate-800 bg-slate-900/90"
+                    ? "border-purple-900/50 bg-slate-900/90 backdrop-blur-md shadow-xl"
+                    : "border-slate-800 bg-slate-900/90 backdrop-blur-md shadow-xl"
                 }`}
               >
                 <div
                   className={`flex items-center gap-1 mb-3 ${
-                    isSports ? "text-emerald-400" : isClothing ? "text-purple-400" : "text-cyan-400"
+                    isBoutique
+                      ? "text-foreground"
+                      : isSports
+                      ? "text-emerald-400"
+                      : isClothing
+                      ? "text-purple-400"
+                      : "text-cyan-400"
                   }`}
                 >
                   {[...Array(reviews[currentIndex].rating)].map((_, i) => (
@@ -319,13 +391,15 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                   ))}
                 </div>
 
-                <p className="text-sm text-slate-300 leading-relaxed italic mb-4">
+                <p className={`text-sm leading-relaxed italic mb-4 ${isBoutique ? "text-foreground/90" : "text-slate-300"}`}>
                   "{reviews[currentIndex].comment}"
                 </p>
 
                 <div
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-semibold border mb-6 ${
-                    isSports
+                    isBoutique
+                      ? "bg-accent border-border text-foreground"
+                      : isSports
                       ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-300"
                       : isClothing
                       ? "bg-purple-500/10 border-purple-500/20 text-purple-300"
@@ -333,12 +407,14 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                   }`}
                 >
                   <CheckCircle2 size={12} />
-                  <span>Bought: {reviews[currentIndex].purchasedProduct}</span>
+                  <span>Ordered: {reviews[currentIndex].purchasedProduct}</span>
                 </div>
 
                 <div
                   className={`flex items-center gap-3 pt-4 border-t ${
-                    isSports
+                    isBoutique
+                      ? "border-border"
+                      : isSports
                       ? "border-emerald-950"
                       : isClothing
                       ? "border-purple-950"
@@ -346,7 +422,11 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-xl ${reviews[currentIndex].avatarColor} flex items-center justify-center font-bold text-white text-xs`}
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs ${
+                      isBoutique
+                        ? "bg-accent border border-border text-foreground"
+                        : `${reviews[currentIndex].avatarColor} text-white`
+                    }`}
                   >
                     {reviews[currentIndex].name
                       .split(" ")
@@ -354,8 +434,8 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                       .join("")}
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-white">{reviews[currentIndex].name}</h4>
-                    <p className="text-xs text-slate-400">
+                    <h4 className={`text-sm font-bold ${isBoutique ? "text-foreground" : "text-white"}`}>{reviews[currentIndex].name}</h4>
+                    <p className={`text-xs ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
                       {reviews[currentIndex].role} • {reviews[currentIndex].city}
                     </p>
                   </div>
@@ -373,7 +453,11 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                 setIsAutoPlaying(false);
                 setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
               }}
-              className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-800 transition-colors"
+              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-colors ${
+                isBoutique
+                  ? "bg-card border-border text-foreground hover:bg-accent"
+                  : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
+              }`}
             >
               <ChevronLeft size={18} />
             </button>
@@ -390,11 +474,15 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                   }}
                   className={`h-2 rounded-full transition-all ${
                     currentIndex === i
-                      ? isSports
+                      ? isBoutique
+                        ? "w-7 bg-primary"
+                        : isSports
                         ? "w-7 bg-emerald-500"
                         : isClothing
                         ? "w-7 bg-purple-500"
                         : "w-7 bg-cyan-500"
+                      : isBoutique
+                      ? "w-2 bg-border"
                       : "w-2 bg-slate-800"
                   }`}
                 />
@@ -408,7 +496,11 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
                 setIsAutoPlaying(false);
                 setCurrentIndex((prev) => (prev + 1) % reviews.length);
               }}
-              className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 flex items-center justify-center hover:bg-slate-800 transition-colors"
+              className={`w-10 h-10 rounded-xl border flex items-center justify-center transition-colors ${
+                isBoutique
+                  ? "bg-card border-border text-foreground hover:bg-accent"
+                  : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
+              }`}
             >
               <ChevronRight size={18} />
             </button>
@@ -418,32 +510,36 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
         {/* Trust Stats Bar */}
         <div
           className={`pt-12 md:pt-16 border-t ${
-            isSports
+            isBoutique
+              ? "border-border"
+              : isSports
               ? "border-emerald-950/80"
               : isClothing
               ? "border-purple-950/80"
               : "border-slate-900"
           }`}
         >
-          <p className="text-center text-xs text-slate-400 font-bold uppercase tracking-widest mb-8">
-            Trusted by Shoppers Across Pakistan
+          <p className={`text-center text-xs font-bold uppercase tracking-widest mb-8 ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+            Trusted by Patrons Across Pakistan
           </p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {TRUST_STATS.map((item) => (
               <div
                 key={item.label}
-                className={`text-center p-4 rounded-xl border backdrop-blur-sm ${
-                  isSports
-                    ? "border-emerald-900/30 bg-slate-900/40"
+                className={`text-center p-4 rounded-xl border ${
+                  isBoutique
+                    ? "border-border bg-card shadow-xs"
+                    : isSports
+                    ? "border-emerald-900/30 bg-slate-900/40 backdrop-blur-sm"
                     : isClothing
-                    ? "border-purple-900/30 bg-slate-900/40"
-                    : "border-slate-900 bg-slate-900/40"
+                    ? "border-purple-900/30 bg-slate-900/40 backdrop-blur-sm"
+                    : "border-slate-900 bg-slate-900/40 backdrop-blur-sm"
                 }`}
               >
                 <div className="text-2xl mb-1">{item.icon}</div>
-                <div className="text-2xl font-black text-white">{item.value}</div>
-                <div className="text-xs text-slate-400 font-medium mt-0.5">{item.label}</div>
+                <div className={`text-2xl font-black ${isBoutique ? "text-foreground" : "text-white"}`}>{item.value}</div>
+                <div className={`text-xs font-medium mt-0.5 ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>{item.label}</div>
               </div>
             ))}
           </div>
@@ -452,12 +548,14 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
         {/* Bottom Review Share Prompt */}
         <div className="mt-14 text-center">
           <div
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full border text-xs text-slate-300 ${
-              isSports
-                ? "bg-slate-900/80 border-emerald-900/50"
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full border text-xs ${
+              isBoutique
+                ? "bg-card border-border text-foreground shadow-xs"
+                : isSports
+                ? "bg-slate-900/80 border-emerald-900/50 text-slate-300"
                 : isClothing
-                ? "bg-slate-900/80 border-purple-900/50"
-                : "bg-slate-900/80 border-slate-800"
+                ? "bg-slate-900/80 border-purple-900/50 text-slate-300"
+                : "bg-slate-900/80 border-slate-800 text-slate-300"
             }`}
           >
             <span>💬</span>
@@ -465,7 +563,9 @@ export function StoreTestimonials({ subdomain }: StoreTestimonialsProps) {
             <Link
               href={`/store/${subdomain}#contact`}
               className={`font-bold hover:underline ${
-                isSports
+                isBoutique
+                  ? "text-foreground"
+                  : isSports
                   ? "text-emerald-400"
                   : isClothing
                   ? "text-purple-400"

@@ -41,35 +41,35 @@ const STATUS_CONFIG: Record<
   PENDING: {
     label: 'Pending',
     bg: 'bg-amber-500/10',
-    text: 'text-amber-400',
+    text: 'text-amber-600 dark:text-amber-400',
     border: 'border-amber-500/30',
     icon: Clock,
   },
   CONFIRMED: {
     label: 'Confirmed',
     bg: 'bg-blue-500/10',
-    text: 'text-blue-400',
+    text: 'text-blue-600 dark:text-blue-400',
     border: 'border-blue-500/30',
     icon: CheckCircle2,
   },
   SHIPPED: {
     label: 'Dispatched',
     bg: 'bg-purple-500/10',
-    text: 'text-purple-300',
+    text: 'text-purple-600 dark:text-purple-300',
     border: 'border-purple-500/30',
     icon: Truck,
   },
   DELIVERED: {
     label: 'Delivered',
     bg: 'bg-emerald-500/10',
-    text: 'text-emerald-400',
+    text: 'text-emerald-600 dark:text-emerald-400',
     border: 'border-emerald-500/30',
     icon: CheckCircle2,
   },
   CANCELLED: {
     label: 'Cancelled',
     bg: 'bg-rose-500/10',
-    text: 'text-rose-400',
+    text: 'text-rose-600 dark:text-rose-400',
     border: 'border-rose-500/30',
     icon: XCircle,
   },
@@ -85,6 +85,7 @@ export default function OrdersPage() {
   const [error, setError] = useState<string | null>(null);
 
   const lowerSub = (subdomain || '').toLowerCase();
+  const isBoutique = lowerSub.includes('boutique') || lowerSub.includes('luxury');
   const isSports = lowerSub.includes('sport') || lowerSub.includes('fitness');
   const isClothing = lowerSub.includes('cloth') || lowerSub.includes('fashion') || lowerSub.includes('apparel');
 
@@ -113,7 +114,9 @@ export default function OrdersPage() {
     return (
       <main
         className={`flex min-h-screen items-center justify-center ${
-          isSports
+          isBoutique
+            ? 'bg-background text-foreground'
+            : isSports
             ? 'bg-[#020d09] text-emerald-50'
             : isClothing
             ? 'bg-[#0b0314] text-purple-50'
@@ -121,8 +124,10 @@ export default function OrdersPage() {
         }`}
       >
         <div
-          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 backdrop-blur-md ${
-            isSports
+          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 ${
+            isBoutique
+              ? 'border-border bg-card text-foreground shadow-xs'
+              : isSports
               ? 'border-emerald-900/50 bg-slate-900/80 text-emerald-300'
               : isClothing
               ? 'border-purple-900/50 bg-slate-900/80 text-purple-300'
@@ -131,10 +136,16 @@ export default function OrdersPage() {
         >
           <div
             className={`h-4 w-4 animate-spin rounded-full border-2 border-t-transparent ${
-              isSports ? 'border-emerald-400' : isClothing ? 'border-purple-400' : 'border-cyan-400'
+              isBoutique
+                ? 'border-foreground'
+                : isSports
+                ? 'border-emerald-400'
+                : isClothing
+                ? 'border-purple-400'
+                : 'border-cyan-400'
             }`}
           />
-          <span>Loading order history...</span>
+          <span className="text-sm font-medium">Loading order history...</span>
         </div>
       </main>
     );
@@ -143,7 +154,9 @@ export default function OrdersPage() {
   return (
     <main
       className={`min-h-screen transition-colors duration-300 ${
-        isSports
+        isBoutique
+          ? 'bg-background text-foreground'
+          : isSports
           ? 'bg-[#020d09] text-emerald-50 selection:bg-emerald-500 selection:text-slate-950'
           : isClothing
           ? 'bg-[#0b0314] text-purple-50 selection:bg-purple-500 selection:text-white'
@@ -153,7 +166,9 @@ export default function OrdersPage() {
       {/* Top Header */}
       <header
         className={`sticky top-0 z-40 border-b backdrop-blur-md ${
-          isSports
+          isBoutique
+            ? 'border-border bg-background/90'
+            : isSports
             ? 'border-emerald-950/80 bg-[#020d09]/90'
             : isClothing
             ? 'border-purple-950/80 bg-[#0b0314]/90'
@@ -163,23 +178,27 @@ export default function OrdersPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 md:px-8">
           <Link
             href={`/store/${subdomain}`}
-            className="flex items-center gap-2 text-sm font-bold text-slate-300 hover:text-white transition-colors"
+            className={`flex items-center gap-2 text-sm font-bold transition-colors ${
+              isBoutique ? 'text-foreground hover:opacity-80' : 'text-slate-300 hover:text-white'
+            }`}
           >
             <ArrowLeft size={16} />
-            <span>Back to Store</span>
+            <span>Back to Atelier</span>
           </Link>
 
           <Link
             href={`/store/${subdomain}/products`}
             className={`rounded-xl border px-4 py-2 text-xs font-bold transition-all ${
-              isSports
-                ? 'border-emerald-900/50 bg-slate-900/80 text-emerald-300 hover:bg-emerald-950/60 hover:border-emerald-500/40'
+              isBoutique
+                ? 'border-border bg-card text-foreground hover:bg-accent shadow-xs'
+                : isSports
+                ? 'border-emerald-900/50 bg-slate-900/80 text-emerald-300 hover:bg-emerald-950/60'
                 : isClothing
-                ? 'border-purple-900/50 bg-slate-900/80 text-purple-300 hover:bg-purple-950/60 hover:border-purple-500/40'
-                : 'border-slate-800 bg-slate-900/80 text-cyan-300 hover:bg-slate-800 hover:border-cyan-500/40'
+                ? 'border-purple-900/50 bg-slate-900/80 text-purple-300 hover:bg-purple-950/60'
+                : 'border-slate-800 bg-slate-900/80 text-cyan-300 hover:bg-slate-800'
             }`}
           >
-            Explore Catalog
+            Explore Collection
           </Link>
         </div>
       </header>
@@ -187,17 +206,21 @@ export default function OrdersPage() {
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 md:px-8 md:py-12">
         {/* Banner Section */}
         <div
-          className={`relative mb-8 overflow-hidden rounded-3xl border p-6 md:p-8 backdrop-blur-xl shadow-xl ${
-            isSports
-              ? 'border-emerald-900/40 bg-gradient-to-br from-emerald-950/30 via-slate-900/70 to-slate-950'
+          className={`relative mb-8 overflow-hidden rounded-3xl border p-6 md:p-8 ${
+            isBoutique
+              ? 'border-border bg-card shadow-xs'
+              : isSports
+              ? 'border-emerald-900/40 bg-gradient-to-br from-emerald-950/30 via-slate-900/70 to-slate-950 shadow-xl backdrop-blur-xl'
               : isClothing
-              ? 'border-purple-900/40 bg-gradient-to-br from-purple-950/30 via-slate-900/70 to-slate-950'
-              : 'border-cyan-900/40 bg-gradient-to-br from-cyan-950/20 via-slate-900/70 to-slate-950'
+              ? 'border-purple-900/40 bg-gradient-to-br from-purple-950/30 via-slate-900/70 to-slate-950 shadow-xl backdrop-blur-xl'
+              : 'border-cyan-900/40 bg-gradient-to-br from-cyan-950/20 via-slate-900/70 to-slate-950 shadow-xl backdrop-blur-xl'
           }`}
         >
           <div
             className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider mb-3 ${
-              isSports
+              isBoutique
+                ? 'border-border bg-accent text-foreground'
+                : isSports
                 ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
                 : isClothing
                 ? 'border-purple-500/30 bg-purple-500/10 text-purple-300'
@@ -205,19 +228,19 @@ export default function OrdersPage() {
             }`}
           >
             <Sparkles size={12} />
-            Order Tracking
+            {isBoutique ? 'Order Records' : 'Order Tracking'}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${isBoutique ? 'text-foreground' : 'text-white'}`}>
             My Order History
           </h1>
-          <p className="mt-2 text-xs sm:text-sm text-slate-400">
-            Real-time status updates and fulfillment details for your store purchases.
+          <p className={`mt-2 text-xs sm:text-sm ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+            Real-time status updates and fulfillment details for your bespoke and pret orders.
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs sm:text-sm font-semibold text-rose-400">
+          <div className="mb-6 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs sm:text-sm font-semibold text-rose-600 dark:text-rose-400">
             {error}
           </div>
         )}
@@ -225,8 +248,10 @@ export default function OrdersPage() {
         {/* Empty Orders State */}
         {orders.length === 0 ? (
           <div
-            className={`rounded-3xl border border-dashed p-12 text-center backdrop-blur-md ${
-              isSports
+            className={`rounded-3xl border border-dashed p-12 text-center ${
+              isBoutique
+                ? 'border-border bg-card'
+                : isSports
                 ? 'border-emerald-950 bg-slate-900/40'
                 : isClothing
                 ? 'border-purple-950 bg-slate-900/40'
@@ -234,31 +259,35 @@ export default function OrdersPage() {
             }`}
           >
             <div
-              className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border shadow-lg ${
-                isSports
-                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-3xl'
+              className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border ${
+                isBoutique
+                  ? 'border-border bg-accent text-foreground text-3xl shadow-xs'
+                  : isSports
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-3xl shadow-lg'
                   : isClothing
-                  ? 'border-purple-500/30 bg-purple-500/10 text-purple-400 text-3xl'
-                  : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-3xl'
+                  ? 'border-purple-500/30 bg-purple-500/10 text-purple-400 text-3xl shadow-lg'
+                  : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-3xl shadow-lg'
               }`}
             >
               <Package size={28} />
             </div>
-            <h2 className="text-2xl font-bold text-white">No orders placed yet</h2>
-            <p className="mt-2 text-xs sm:text-sm text-slate-400 max-w-sm mx-auto">
-              Once you checkout with items from our store, your order details and live tracking will appear here.
+            <h2 className={`text-2xl font-bold ${isBoutique ? 'text-foreground' : 'text-white'}`}>No orders placed yet</h2>
+            <p className={`mt-2 text-xs sm:text-sm max-w-sm mx-auto ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+              Once you confirm an order with our atelier, your delivery details and tracking will appear here.
             </p>
             <Link href={`/store/${subdomain}/products`} className="mt-6 inline-block">
               <span
-                className={`inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-lg ${
-                  isSports
-                    ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-emerald-500/20'
+                className={`inline-flex items-center gap-1.5 px-6 py-2.5 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-sm ${
+                  isBoutique
+                    ? 'bg-primary text-primary-foreground hover:opacity-90'
+                    : isSports
+                    ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
                     : isClothing
-                    ? 'bg-purple-600 text-white hover:bg-purple-500 shadow-purple-500/25'
-                    : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-cyan-500/20'
+                    ? 'bg-purple-600 text-white hover:bg-purple-500'
+                    : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
                 }`}
               >
-                Browse Catalog
+                <span>Browse Collection</span>
                 <ArrowRight size={14} />
               </span>
             </Link>
@@ -266,18 +295,22 @@ export default function OrdersPage() {
         ) : (
           /* Orders Table View */
           <div
-            className={`overflow-hidden rounded-3xl border backdrop-blur-xl shadow-2xl ${
-              isSports
-                ? 'border-emerald-900/30 bg-slate-900/60'
+            className={`overflow-hidden rounded-3xl border ${
+              isBoutique
+                ? 'border-border bg-card shadow-xs'
+                : isSports
+                ? 'border-emerald-900/30 bg-slate-900/60 shadow-2xl backdrop-blur-xl'
                 : isClothing
-                ? 'border-purple-900/30 bg-slate-900/60'
-                : 'border-slate-800/80 bg-slate-900/60'
+                ? 'border-purple-900/30 bg-slate-900/60 shadow-2xl backdrop-blur-xl'
+                : 'border-slate-800/80 bg-slate-900/60 shadow-2xl backdrop-blur-xl'
             }`}
           >
             <Table>
               <TableHeader
                 className={`border-b ${
-                  isSports
+                  isBoutique
+                    ? 'border-border bg-accent/40'
+                    : isSports
                     ? 'border-emerald-950 bg-emerald-950/20'
                     : isClothing
                     ? 'border-purple-950 bg-purple-950/20'
@@ -285,19 +318,19 @@ export default function OrdersPage() {
                 }`}
               >
                 <TableRow className="border-none hover:bg-transparent">
-                  <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-400 py-4 pl-6">
+                  <TableHead className={`text-xs font-bold uppercase tracking-wider py-4 pl-6 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
                     Order ID
                   </TableHead>
-                  <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-400 py-4">
+                  <TableHead className={`text-xs font-bold uppercase tracking-wider py-4 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
                     Date
                   </TableHead>
-                  <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-400 py-4">
+                  <TableHead className={`text-xs font-bold uppercase tracking-wider py-4 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
                     Delivery Address
                   </TableHead>
-                  <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-400 py-4">
+                  <TableHead className={`text-xs font-bold uppercase tracking-wider py-4 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
                     Total
                   </TableHead>
-                  <TableHead className="text-xs font-bold uppercase tracking-wider text-slate-400 py-4 pr-6 text-right">
+                  <TableHead className={`text-xs font-bold uppercase tracking-wider py-4 pr-6 text-right ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
                     Fulfillment Status
                   </TableHead>
                 </TableRow>
@@ -311,21 +344,19 @@ export default function OrdersPage() {
                   return (
                     <TableRow
                       key={order.id}
-                      className={`border-b transition-colors hover:bg-slate-800/40 ${
-                        isSports
-                          ? 'border-emerald-950/60'
-                          : isClothing
-                          ? 'border-purple-950/60'
-                          : 'border-slate-800/60'
+                      className={`border-b transition-colors ${
+                        isBoutique
+                          ? 'border-border hover:bg-accent/20'
+                          : 'border-slate-800/60 hover:bg-slate-800/40'
                       }`}
                     >
                       {/* ID */}
-                      <TableCell className="font-mono text-xs font-bold text-white py-4 pl-6">
+                      <TableCell className={`font-mono text-xs font-bold py-4 pl-6 ${isBoutique ? 'text-foreground' : 'text-white'}`}>
                         #{order.id.slice(0, 8).toUpperCase()}
                       </TableCell>
 
                       {/* Date */}
-                      <TableCell className="text-xs text-slate-300 py-4">
+                      <TableCell className={`text-xs py-4 ${isBoutique ? 'text-muted-foreground' : 'text-slate-300'}`}>
                         {new Date(order.createdAt).toLocaleDateString('en-GB', {
                           day: '2-digit',
                           month: 'short',
@@ -334,14 +365,20 @@ export default function OrdersPage() {
                       </TableCell>
 
                       {/* Address */}
-                      <TableCell className="text-xs text-slate-400 max-w-xs truncate py-4">
+                      <TableCell className={`text-xs max-w-xs truncate py-4 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
                         {order.address}
                       </TableCell>
 
                       {/* Price */}
                       <TableCell
                         className={`text-xs sm:text-sm font-black py-4 ${
-                          isSports ? 'text-emerald-400' : isClothing ? 'text-purple-300' : 'text-cyan-400'
+                          isBoutique
+                            ? 'text-foreground'
+                            : isSports
+                            ? 'text-emerald-400'
+                            : isClothing
+                            ? 'text-purple-300'
+                            : 'text-cyan-400'
                         }`}
                       >
                         Rs. {Number(order.price).toLocaleString()}

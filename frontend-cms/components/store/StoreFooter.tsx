@@ -27,6 +27,18 @@ const FOOTER_CONFIGS: Record<
     badgeText: string;
   }
 > = {
+  boutique: {
+    tagline: 'Handcrafted Luxury Pret & Bespoke Couture',
+    description:
+      'Your premier destination for pure fabrics, artisanal hand embellishments, luxury festive edits, and tailored silhouettes crafted for timeless elegance.',
+    badgeText: 'Official Boutique House',
+    categories: [
+      { name: 'Luxury Pret & Tunics', href: 'luxury-pret' },
+      { name: 'Formal & Couture Pishwas', href: 'couture' },
+      { name: 'Festive Raw Silk Ensembles', href: 'festive-edit' },
+      { name: 'Korean Chiffon Abayas', href: 'abayas' },
+    ],
+  },
   electronics: {
     tagline: 'Next-Gen Smart Technology & Hardware',
     description:
@@ -70,9 +82,10 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
   const [subscribed, setSubscribed] = useState(false);
 
   const lowerSub = (subdomain || '').toLowerCase();
+  const isBoutique = lowerSub.includes('boutique') || lowerSub.includes('luxury');
   const isSports = lowerSub.includes('sport') || lowerSub.includes('fitness');
   const isClothing = lowerSub.includes('cloth') || lowerSub.includes('fashion') || lowerSub.includes('apparel');
-  const configKey = isSports ? 'sports' : isClothing ? 'clothing' : 'electronics';
+  const configKey = isBoutique ? 'boutique' : isSports ? 'sports' : isClothing ? 'clothing' : 'electronics';
 
   const config = FOOTER_CONFIGS[configKey];
 
@@ -89,7 +102,9 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
   return (
     <footer
       className={`relative border-t transition-colors duration-300 ${
-        isSports
+        isBoutique
+          ? 'bg-background border-border text-foreground'
+          : isSports
           ? 'bg-[#020d09] border-emerald-950/80 text-emerald-50'
           : isClothing
           ? 'bg-[#0b0314] border-purple-950/80 text-purple-50'
@@ -99,7 +114,9 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
       {/* Top Value Badges Ribbon */}
       <div
         className={`border-b ${
-          isSports
+          isBoutique
+            ? 'border-border bg-card/60'
+            : isSports
             ? 'border-emerald-950/60 bg-emerald-950/20'
             : isClothing
             ? 'border-purple-950/60 bg-purple-950/20'
@@ -116,18 +133,18 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
               },
               {
                 icon: ShieldCheck,
-                title: '100% Authentic',
-                desc: 'Brand genuine guarantee backed',
+                title: isBoutique ? '100% Pure Fabric' : '100% Authentic',
+                desc: isBoutique ? 'Premium silk, organza & chiffon' : 'Brand genuine guarantee backed',
               },
               {
                 icon: RotateCcw,
-                title: '7-Day Easy Return',
-                desc: 'Doorstep exchange & refund policy',
+                title: isBoutique ? 'Custom Alterations' : '7-Day Easy Return',
+                desc: isBoutique ? 'Made to measure support' : 'Doorstep exchange & refund policy',
               },
               {
                 icon: Headphones,
-                title: 'Dedicated Support',
-                desc: 'Helpdesk ready for order assistance',
+                title: 'Styling Assistance',
+                desc: 'Consult our wardrobe specialists',
               },
             ].map((item) => {
               const Icon = item.icon;
@@ -135,7 +152,9 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
                 <div key={item.title} className="flex items-center gap-3">
                   <div
                     className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${
-                      isSports
+                      isBoutique
+                        ? 'border-border bg-accent text-foreground'
+                        : isSports
                         ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
                         : isClothing
                         ? 'border-purple-500/30 bg-purple-500/10 text-purple-300'
@@ -145,10 +164,10 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
                     <Icon size={20} />
                   </div>
                   <div>
-                    <h4 className="text-xs sm:text-sm font-bold text-white leading-tight">
+                    <h4 className={`text-xs sm:text-sm font-bold leading-tight ${isBoutique ? 'text-foreground' : 'text-white'}`}>
                       {item.title}
                     </h4>
-                    <p className="text-[11px] text-slate-400 mt-0.5">{item.desc}</p>
+                    <p className={`text-[11px] mt-0.5 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>{item.desc}</p>
                   </div>
                 </div>
               );
@@ -166,7 +185,9 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
             <div className="flex items-center gap-2">
               <span
                 className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider ${
-                  isSports
+                  isBoutique
+                    ? 'border-border bg-card text-foreground shadow-xs'
+                    : isSports
                     ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
                     : isClothing
                     ? 'border-purple-500/30 bg-purple-500/10 text-purple-300'
@@ -178,20 +199,20 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
               </span>
             </div>
 
-            <h3 className="text-2xl font-black text-white tracking-tight">{storeName}</h3>
-            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-sm">
+            <h3 className={`text-2xl font-black tracking-tight ${isBoutique ? 'text-foreground' : 'text-white'}`}>{storeName}</h3>
+            <p className={`text-xs sm:text-sm leading-relaxed max-w-sm ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
               {config.description}
             </p>
 
             <div className="pt-2">
-              <span className="text-xs font-semibold text-slate-500 block mb-2 uppercase tracking-wider">
+              <span className={`text-xs font-semibold block mb-2 uppercase tracking-wider ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>
                 Payment Options Supported
               </span>
-              <div className="flex flex-wrap gap-2 text-xs font-bold text-slate-300">
-                <span className="px-2.5 py-1 rounded-lg border border-slate-800 bg-slate-900/60">
+              <div className={`flex flex-wrap gap-2 text-xs font-bold ${isBoutique ? 'text-foreground' : 'text-slate-300'}`}>
+                <span className={`px-2.5 py-1 rounded-lg border ${isBoutique ? 'border-border bg-card shadow-xs' : 'border-slate-800 bg-slate-900/60'}`}>
                   💵 Cash on Delivery
                 </span>
-                <span className="px-2.5 py-1 rounded-lg border border-slate-800 bg-slate-900/60">
+                <span className={`px-2.5 py-1 rounded-lg border ${isBoutique ? 'border-border bg-card shadow-xs' : 'border-slate-800 bg-slate-900/60'}`}>
                   💳 Online Bank Transfer
                 </span>
               </div>
@@ -200,16 +221,18 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
 
           {/* Col 2: Categories */}
           <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-slate-200">
-              Categories
+            <h4 className={`text-xs font-bold uppercase tracking-widest ${isBoutique ? 'text-foreground' : 'text-slate-200'}`}>
+              Collections & Edits
             </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-slate-400">
+            <ul className={`space-y-2 text-xs sm:text-sm ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
               {config.categories.map((cat) => (
                 <li key={cat.name}>
                   <Link
                     href={`/store/${subdomain}/products?category=${encodeURIComponent(cat.href)}`}
                     className={`transition-colors ${
-                      isSports
+                      isBoutique
+                        ? 'hover:text-foreground'
+                        : isSports
                         ? 'hover:text-emerald-400'
                         : isClothing
                         ? 'hover:text-purple-300'
@@ -224,14 +247,16 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
                 <Link
                   href={`/store/${subdomain}/products`}
                   className={`font-semibold transition-colors ${
-                    isSports
+                    isBoutique
+                      ? 'text-foreground hover:underline'
+                      : isSports
                       ? 'text-emerald-400 hover:underline'
                       : isClothing
                       ? 'text-purple-300 hover:underline'
                       : 'text-cyan-300 hover:underline'
                   }`}
                 >
-                  View All Products →
+                  View All Collection →
                 </Link>
               </li>
             </ul>
@@ -239,35 +264,41 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
 
           {/* Col 3: Newsletter */}
           <div className="md:col-span-4 space-y-3.5">
-            <h4 className="text-xs font-bold uppercase tracking-widest text-slate-200">
-              Stay in the Loop
+            <h4 className={`text-xs font-bold uppercase tracking-widest ${isBoutique ? 'text-foreground' : 'text-slate-200'}`}>
+              Exclusive Privileges
             </h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Get notified when new seasonal drops, limited discounts, and member coupons arrive.
+            <p className={`text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+              {isBoutique
+                ? 'Subscribe to receive private previews of new festive drops, limited couture collections, and exclusive discounts.'
+                : 'Get notified when new seasonal drops, limited discounts, and member coupons arrive.'}
             </p>
 
             <form onSubmit={handleNewsletterSubmit} className="space-y-2">
               <div className="relative flex items-center">
-                <Mail size={16} className="absolute left-3.5 text-slate-500 pointer-events-none" />
+                <Mail size={16} className={`absolute left-3.5 pointer-events-none ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`} />
                 <input
                   type="email"
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
                   placeholder="Enter your email address"
                   suppressHydrationWarning
-                  className={`w-full rounded-xl border bg-slate-900/90 py-2.5 pl-10 pr-24 text-xs text-white placeholder:text-slate-500 focus:outline-none transition-all ${
-                    isSports
-                      ? 'border-emerald-950 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500'
+                  className={`w-full rounded-xl border py-2.5 pl-10 pr-24 text-xs transition-all shadow-xs ${
+                    isBoutique
+                      ? 'bg-card border-input text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring'
+                      : isSports
+                      ? 'bg-slate-900/90 text-white placeholder:text-slate-500 border-emerald-950 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500'
                       : isClothing
-                      ? 'border-purple-950 focus:border-purple-500 focus:ring-1 focus:ring-purple-500'
-                      : 'border-slate-800 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500'
+                      ? 'bg-slate-900/90 text-white placeholder:text-slate-500 border-purple-950 focus:border-purple-500 focus:ring-1 focus:ring-purple-500'
+                      : 'bg-slate-900/90 text-white placeholder:text-slate-500 border-slate-800 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500'
                   }`}
                 />
                 <button
                   type="submit"
                   suppressHydrationWarning
-                  className={`absolute right-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    isSports
+                  className={`absolute right-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs ${
+                    isBoutique
+                      ? 'bg-primary text-primary-foreground hover:opacity-90'
+                      : isSports
                       ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
                       : isClothing
                       ? 'bg-purple-600 text-white hover:bg-purple-500'
@@ -279,17 +310,17 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
               </div>
 
               {subscribed && (
-                <p className="text-xs font-semibold text-emerald-400 animate-fade-in">
+                <p className="text-xs font-semibold text-emerald-600 animate-fade-in">
                   ✓ Thanks for subscribing! Check your inbox soon.
                 </p>
               )}
             </form>
 
-            <div className="pt-2 flex items-center gap-4 text-xs text-slate-400">
+            <div className={`pt-2 flex items-center gap-4 text-xs ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
               <Link
                 href={`/store/${subdomain}/orders`}
                 className={`transition-colors ${
-                  isSports ? 'hover:text-emerald-400' : isClothing ? 'hover:text-purple-300' : 'hover:text-cyan-300'
+                  isBoutique ? 'hover:text-foreground' : isSports ? 'hover:text-emerald-400' : isClothing ? 'hover:text-purple-300' : 'hover:text-cyan-300'
                 }`}
               >
                 Track Orders
@@ -298,7 +329,7 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
               <Link
                 href={`/store/${subdomain}/wishlist`}
                 className={`transition-colors ${
-                  isSports ? 'hover:text-emerald-400' : isClothing ? 'hover:text-purple-300' : 'hover:text-cyan-300'
+                  isBoutique ? 'hover:text-foreground' : isSports ? 'hover:text-emerald-400' : isClothing ? 'hover:text-purple-300' : 'hover:text-cyan-300'
                 }`}
               >
                 My Wishlist
@@ -307,7 +338,7 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
               <Link
                 href={`/store/${subdomain}#contact`}
                 className={`transition-colors ${
-                  isSports ? 'hover:text-emerald-400' : isClothing ? 'hover:text-purple-300' : 'hover:text-cyan-300'
+                  isBoutique ? 'hover:text-foreground' : isSports ? 'hover:text-emerald-400' : isClothing ? 'hover:text-purple-300' : 'hover:text-cyan-300'
                 }`}
               >
                 Help & Contact
@@ -318,13 +349,15 @@ export function StoreFooter({ subdomain, storeName = 'Store' }: StoreFooterProps
         </div>
 
         {/* Bottom Copyright */}
-        <div className="mt-12 pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className={`mt-12 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4 text-xs ${isBoutique ? 'border-border text-muted-foreground' : 'border-slate-900 text-slate-500'}`}>
           <p>© {new Date().getFullYear()} {storeName}. All rights reserved.</p>
           <div className="flex items-center gap-1">
             <span>Powered by</span>
             <span
               className={`font-bold ${
-                isSports
+                isBoutique
+                  ? 'text-foreground'
+                  : isSports
                   ? 'text-emerald-400'
                   : isClothing
                   ? 'text-purple-400'
