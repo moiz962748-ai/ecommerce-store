@@ -16,14 +16,22 @@ export class StoresService {
   async createStore(body: any) {
     const { name, subDomain, theme, mode } = body;
 
+    // Default template fetch karein taake template_id null na ho
+    let templateId = body.templateId;
+    if (!templateId) {
+      const defaultTemplate = await this.db.query.templates?.findFirst();
+      templateId = defaultTemplate?.id;
+    }
+
     const [newStore] = await this.db
       .insert(schema.stores)
       .values({
         name,
         subDomain,
+        templateId,
         templateConfig: {
-          theme: theme || 'default',
-          mode: mode || 'dark',
+          theme: theme || 'boutique',
+          mode: mode || 'light',
         },
       })
       .returning();
