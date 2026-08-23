@@ -17,8 +17,6 @@ import {
   ShoppingBag,
   Sparkles,
   User,
-  Phone,
-  MapPin,
   CreditCard,
 } from 'lucide-react';
 
@@ -137,25 +135,19 @@ export default function CheckoutPage() {
   if (loading) {
     return (
       <main
-        className={`flex min-h-screen items-center justify-center ${
-          isBoutique
-            ? 'bg-background text-foreground'
-            : isSports
-            ? 'bg-[#020d09] text-emerald-50'
-            : isClothing
-            ? 'bg-[#0b0314] text-purple-50'
-            : 'bg-slate-950 text-slate-100'
+        className={`flex min-h-screen items-center justify-center p-8 ${
+          isBoutique ? 'bg-background text-foreground' : 'bg-[#f8fafc] text-slate-900'
         }`}
       >
         <div
-          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 ${
+          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 shadow-xs ${
             isBoutique
-              ? 'border-border bg-card text-foreground shadow-xs'
+              ? 'border-border bg-card text-foreground'
               : isSports
-              ? 'border-emerald-900/50 bg-slate-900/80 text-emerald-300'
+              ? 'border-emerald-200 bg-white text-emerald-800'
               : isClothing
-              ? 'border-purple-900/50 bg-slate-900/80 text-purple-300'
-              : 'border-slate-800 bg-slate-900/80 text-slate-300'
+              ? 'border-purple-200 bg-white text-purple-800'
+              : 'border-slate-200 bg-white text-sky-800'
           }`}
         >
           <div
@@ -163,10 +155,10 @@ export default function CheckoutPage() {
               isBoutique
                 ? 'border-foreground'
                 : isSports
-                ? 'border-emerald-400'
+                ? 'border-emerald-600'
                 : isClothing
-                ? 'border-purple-400'
-                : 'border-cyan-400'
+                ? 'border-purple-600'
+                : 'border-sky-600'
             }`}
           />
           <span className="text-sm font-medium">Loading secure checkout...</span>
@@ -180,43 +172,33 @@ export default function CheckoutPage() {
     return (
       <main
         className={`min-h-screen transition-colors duration-300 ${
-          isBoutique
-            ? 'bg-background text-foreground'
-            : isSports
-            ? 'bg-[#020d09] text-emerald-50 selection:bg-emerald-500 selection:text-slate-950'
-            : isClothing
-            ? 'bg-[#0b0314] text-purple-50 selection:bg-purple-500 selection:text-white'
-            : 'bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950'
+          isBoutique ? 'bg-background text-foreground' : 'bg-[#f8fafc] text-slate-900'
         }`}
       >
         <header
           className={`border-b backdrop-blur-md ${
             isBoutique
               ? 'border-border bg-background/90'
-              : isSports
-              ? 'border-emerald-950/80 bg-[#020d09]/90'
-              : isClothing
-              ? 'border-purple-950/80 bg-[#0b0314]/90'
-              : 'border-slate-900 bg-slate-950/90'
+              : 'border-slate-200/80 bg-white/95'
           }`}
         >
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 sm:px-6 md:px-8">
-            <h1 className={`text-xl font-bold flex items-center gap-2 ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+            <h1 className={`text-xl font-bold flex items-center gap-2 ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>
               <CheckCircle2
-                className={isBoutique ? 'text-foreground' : isSports ? 'text-emerald-400' : isClothing ? 'text-purple-400' : 'text-cyan-400'}
+                className={isBoutique ? 'text-foreground' : isSports ? 'text-emerald-600' : isClothing ? 'text-purple-600' : 'text-sky-600'}
                 size={22}
               />
               Order Confirmation
             </h1>
             <span
-              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider ${
+              className={`rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-xs ${
                 isBoutique
-                  ? 'border-border bg-accent text-foreground shadow-xs'
+                  ? 'border-border bg-accent text-foreground'
                   : isSports
-                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
                   : isClothing
-                  ? 'border-purple-500/30 bg-purple-500/10 text-purple-300'
-                  : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
+                  ? 'border-purple-200 bg-purple-50 text-purple-800'
+                  : 'border-sky-200 bg-sky-50 text-sky-800'
               }`}
             >
               Order Confirmed
@@ -226,35 +208,31 @@ export default function CheckoutPage() {
 
         <div className="mx-auto max-w-2xl px-4 py-12 sm:px-6 md:px-8">
           <div
-            className={`relative overflow-hidden rounded-3xl border p-8 md:p-10 text-center ${
+            className={`relative overflow-hidden rounded-3xl border p-8 md:p-10 text-center shadow-xs ${
               isBoutique
-                ? 'border-border bg-card shadow-md'
-                : isSports
-                ? 'border-emerald-900/40 bg-slate-900/70 shadow-emerald-950/20 shadow-2xl backdrop-blur-xl'
-                : isClothing
-                ? 'border-purple-900/40 bg-slate-900/70 shadow-purple-950/20 shadow-2xl backdrop-blur-xl'
-                : 'border-slate-800/80 bg-slate-900/70 shadow-cyan-950/20 shadow-2xl backdrop-blur-xl'
+                ? 'border-border bg-card'
+                : 'border-slate-200 bg-white'
             }`}
           >
             {/* Success Icon */}
             <div
-              className={`mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border ${
+              className={`mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl border shadow-xs ${
                 isBoutique
-                  ? 'border-border bg-accent text-foreground shadow-xs'
+                  ? 'border-border bg-accent text-foreground'
                   : isSports
-                  ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-400 shadow-xl'
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-600'
                   : isClothing
-                  ? 'border-purple-500/40 bg-purple-500/15 text-purple-400 shadow-xl'
-                  : 'border-cyan-500/40 bg-cyan-500/15 text-cyan-400 shadow-xl'
+                  ? 'border-purple-200 bg-purple-50 text-purple-600'
+                  : 'border-sky-200 bg-sky-50 text-sky-600'
               }`}
             >
               <CheckCircle2 size={40} />
             </div>
 
-            <h2 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+            <h2 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>
               Thank you for your order!
             </h2>
-            <p className={`mt-2.5 text-sm max-w-md mx-auto leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+            <p className={`mt-2.5 text-sm max-w-md mx-auto leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
               {isBoutique
                 ? 'Your bespoke atelier reservation is confirmed. Our couturiers will steam-pack and dispatch your luxury pieces promptly.'
                 : 'Your order has been recorded successfully. Our team will verify your details and dispatch your package shortly.'}
@@ -265,46 +243,42 @@ export default function CheckoutPage() {
               className={`mt-8 space-y-3.5 rounded-2xl border p-6 text-left text-xs sm:text-sm ${
                 isBoutique
                   ? 'border-border bg-accent/30 text-foreground'
-                  : isSports
-                  ? 'border-emerald-950 bg-emerald-950/20 text-slate-300 backdrop-blur-md'
-                  : isClothing
-                  ? 'border-purple-950 bg-purple-950/20 text-slate-300 backdrop-blur-md'
-                  : 'border-slate-800 bg-slate-950/60 text-slate-300 backdrop-blur-md'
+                  : 'border-slate-100 bg-slate-50 text-slate-800'
               }`}
             >
-              <div className={`flex justify-between border-b pb-2.5 ${isBoutique ? 'border-border' : 'border-slate-800/80'}`}>
-                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-400'}>Order Reference</span>
-                <span className={`font-mono font-bold uppercase ${isBoutique ? 'text-foreground' : 'text-white'}`}>{placedOrder.id || 'N/A'}</span>
+              <div className={`flex justify-between border-b pb-2.5 ${isBoutique ? 'border-border' : 'border-slate-200/80'}`}>
+                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-500'}>Order Reference</span>
+                <span className={`font-mono font-bold uppercase ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>{placedOrder.id || 'N/A'}</span>
               </div>
-              <div className={`flex justify-between border-b pb-2.5 ${isBoutique ? 'border-border' : 'border-slate-800/80'}`}>
-                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-400'}>Total Amount</span>
+              <div className={`flex justify-between border-b pb-2.5 ${isBoutique ? 'border-border' : 'border-slate-200/80'}`}>
+                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-500'}>Total Amount</span>
                 <span
                   className={`font-black text-base ${
                     isBoutique
                       ? 'text-foreground'
                       : isSports
-                      ? 'text-emerald-400'
+                      ? 'text-emerald-700'
                       : isClothing
-                      ? 'text-purple-300'
-                      : 'text-cyan-400'
+                      ? 'text-purple-700'
+                      : 'text-sky-700'
                   }`}
                 >
                   Rs. {Number(placedOrder.price || total).toLocaleString()}
                 </span>
               </div>
-              <div className={`flex justify-between border-b pb-2.5 ${isBoutique ? 'border-border' : 'border-slate-800/80'}`}>
-                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-400'}>Status</span>
-                <span className={`font-semibold uppercase tracking-wider text-xs ${isBoutique ? 'text-foreground' : 'text-emerald-400'}`}>
+              <div className={`flex justify-between border-b pb-2.5 ${isBoutique ? 'border-border' : 'border-slate-200/80'}`}>
+                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-500'}>Status</span>
+                <span className={`font-semibold uppercase tracking-wider text-xs ${isBoutique ? 'text-foreground' : 'text-emerald-700'}`}>
                   {placedOrder.orderStatus || 'PENDING'}
                 </span>
               </div>
-              <div className={`flex justify-between border-b pb-2.5 ${isBoutique ? 'border-border' : 'border-slate-800/80'}`}>
-                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-400'}>Payment Method</span>
-                <span className={`font-semibold ${isBoutique ? 'text-foreground' : 'text-white'}`}>Cash on Delivery</span>
+              <div className={`flex justify-between border-b pb-2.5 ${isBoutique ? 'border-border' : 'border-slate-200/80'}`}>
+                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-500'}>Payment Method</span>
+                <span className={`font-semibold ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>Cash on Delivery</span>
               </div>
               <div className="flex justify-between pt-0.5">
-                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-400'}>Delivery Destination</span>
-                <span className={`font-medium text-right max-w-xs truncate ${isBoutique ? 'text-foreground' : 'text-white'}`}>{address}</span>
+                <span className={isBoutique ? 'text-muted-foreground' : 'text-slate-500'}>Delivery Destination</span>
+                <span className={`font-medium text-right max-w-xs truncate ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>{address}</span>
               </div>
             </div>
 
@@ -313,14 +287,10 @@ export default function CheckoutPage() {
               <Link href={`/store/${subdomain}/orders`}>
                 <Button
                   variant="outline"
-                  className={`w-full sm:w-auto rounded-xl border text-xs font-bold transition-all ${
+                  className={`w-full sm:w-auto rounded-xl border text-xs font-bold transition-all shadow-xs ${
                     isBoutique
-                      ? 'border-border bg-card text-foreground hover:bg-accent shadow-xs'
-                      : isSports
-                      ? 'border-emerald-900/60 bg-slate-900/80 text-emerald-300 hover:bg-emerald-950/60'
-                      : isClothing
-                      ? 'border-purple-900/60 bg-slate-900/80 text-purple-300 hover:bg-purple-950/60'
-                      : 'border-slate-800 bg-slate-900/80 text-cyan-300 hover:bg-slate-800'
+                      ? 'border-border bg-card text-foreground hover:bg-accent'
+                      : 'border-slate-200 bg-white text-slate-800 hover:bg-slate-50'
                   }`}
                 >
                   View My Orders
@@ -333,10 +303,10 @@ export default function CheckoutPage() {
                     isBoutique
                       ? 'bg-primary text-primary-foreground hover:opacity-90'
                       : isSports
-                      ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
+                      ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                       : isClothing
-                      ? 'bg-purple-600 text-white hover:bg-purple-500'
-                      : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
+                      ? 'bg-purple-600 text-white hover:bg-purple-700'
+                      : 'bg-sky-600 text-white hover:bg-sky-700'
                   }`}
                 >
                   <span>Continue Shopping</span>
@@ -354,13 +324,7 @@ export default function CheckoutPage() {
   return (
     <main
       className={`min-h-screen transition-colors duration-300 ${
-        isBoutique
-          ? 'bg-background text-foreground'
-          : isSports
-          ? 'bg-[#020d09] text-emerald-50 selection:bg-emerald-500 selection:text-slate-950'
-          : isClothing
-          ? 'bg-[#0b0314] text-purple-50 selection:bg-purple-500 selection:text-white'
-          : 'bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950'
+        isBoutique ? 'bg-background text-foreground' : 'bg-[#f8fafc] text-slate-900'
       }`}
     >
       {/* Top Bar */}
@@ -368,33 +332,29 @@ export default function CheckoutPage() {
         className={`sticky top-0 z-40 border-b backdrop-blur-md ${
           isBoutique
             ? 'border-border bg-background/90'
-            : isSports
-            ? 'border-emerald-950/80 bg-[#020d09]/90'
-            : isClothing
-            ? 'border-purple-950/80 bg-[#0b0314]/90'
-            : 'border-slate-900 bg-slate-950/90'
+            : 'border-slate-200/80 bg-white/95'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 md:px-8">
           <Link
             href={`/store/${subdomain}/cart`}
             className={`flex items-center gap-2 text-sm font-bold transition-colors ${
-              isBoutique ? 'text-foreground hover:opacity-80' : 'text-slate-300 hover:text-white'
+              isBoutique ? 'text-foreground hover:opacity-80' : 'text-slate-700 hover:text-slate-950'
             }`}
           >
             <ArrowLeft size={16} />
-            <span>Return to Bag</span>
+            <span>{isBoutique ? 'Return to Bag' : 'Return to Cart'}</span>
           </Link>
 
           <div
-            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider ${
+            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold uppercase tracking-wider shadow-xs ${
               isBoutique
-                ? 'border-border bg-card text-foreground shadow-xs'
+                ? 'border-border bg-card text-foreground'
                 : isSports
-                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
                 : isClothing
-                ? 'border-purple-500/30 bg-purple-500/10 text-purple-300'
-                : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
+                ? 'border-purple-200 bg-purple-50 text-purple-800'
+                : 'border-sky-200 bg-sky-50 text-sky-800'
             }`}
           >
             <ShieldCheck size={14} />
@@ -406,41 +366,41 @@ export default function CheckoutPage() {
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 md:px-8 md:py-12">
         {/* Banner */}
         <div
-          className={`relative mb-8 overflow-hidden rounded-3xl border p-6 md:p-8 ${
+          className={`relative mb-8 overflow-hidden rounded-3xl border p-6 md:p-8 shadow-xs ${
             isBoutique
-              ? 'border-border bg-card shadow-xs'
+              ? 'border-border bg-card'
               : isSports
-              ? 'border-emerald-900/40 bg-gradient-to-br from-emerald-950/30 via-slate-900/70 to-slate-950 shadow-xl'
+              ? 'border-emerald-200/80 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40'
               : isClothing
-              ? 'border-purple-900/40 bg-gradient-to-br from-purple-950/30 via-slate-900/70 to-slate-950 shadow-xl'
-              : 'border-cyan-900/40 bg-gradient-to-br from-cyan-950/20 via-slate-900/70 to-slate-950 shadow-xl'
+              ? 'border-purple-200/80 bg-gradient-to-br from-purple-50 via-white to-purple-50/40'
+              : 'border-slate-200 bg-gradient-to-br from-sky-50 via-white to-slate-50'
           }`}
         >
           <div
-            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider mb-3 ${
+            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider mb-3 shadow-xs ${
               isBoutique
                 ? 'border-border bg-accent text-foreground'
                 : isSports
-                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                ? 'border-emerald-200 bg-emerald-100/70 text-emerald-800'
                 : isClothing
-                ? 'border-purple-500/30 bg-purple-500/10 text-purple-300'
-                : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
+                ? 'border-purple-200 bg-purple-100/70 text-purple-800'
+                : 'border-sky-200 bg-sky-100/70 text-sky-800'
             }`}
           >
             <Sparkles size={12} />
             {isBoutique ? 'Final Step to Couture' : isSports ? 'Final Step to Peak' : isClothing ? 'Confirm Your Wardrobe' : 'Final Step'}
           </div>
 
-          <h1 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+          <h1 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>
             Complete Your Order
           </h1>
-          <p className={`mt-2 text-xs sm:text-sm ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+          <p className={`mt-2 text-xs sm:text-sm ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
             Please confirm your delivery address and contact information below for Cash on Delivery dispatch.
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs sm:text-sm font-semibold text-rose-600 dark:text-rose-400">
+          <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-xs sm:text-sm font-semibold text-rose-800 shadow-xs">
             {error}
           </div>
         )}
@@ -450,32 +410,28 @@ export default function CheckoutPage() {
           
           {/* LEFT: Shipping Information Form */}
           <section
-            className={`space-y-6 rounded-3xl border p-6 md:p-8 ${
+            className={`space-y-6 rounded-3xl border p-6 md:p-8 shadow-xs ${
               isBoutique
-                ? 'border-border bg-card shadow-xs'
-                : isSports
-                ? 'border-emerald-900/30 bg-slate-900/60 shadow-xl backdrop-blur-xl'
-                : isClothing
-                ? 'border-purple-900/30 bg-slate-900/60 shadow-xl backdrop-blur-xl'
-                : 'border-slate-800/80 bg-slate-900/60 shadow-xl backdrop-blur-xl'
+                ? 'border-border bg-card'
+                : 'border-slate-200 bg-white'
             }`}
           >
             <div>
-              <h2 className={`text-xl font-bold flex items-center gap-2 ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+              <h2 className={`text-xl font-bold flex items-center gap-2 ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>
                 <User
                   size={18}
-                  className={isBoutique ? 'text-foreground' : isSports ? 'text-emerald-400' : isClothing ? 'text-purple-400' : 'text-cyan-400'}
+                  className={isBoutique ? 'text-foreground' : isSports ? 'text-emerald-600' : isClothing ? 'text-purple-600' : 'text-sky-600'}
                 />
                 Recipient Details
               </h2>
-              <p className={`text-xs mt-1 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+              <p className={`text-xs mt-1 ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>
                 Our delivery logistics team will contact you on this number before arrival.
               </p>
             </div>
 
             <div className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="fullName" className={`text-xs font-bold ${isBoutique ? 'text-foreground' : 'text-slate-300'}`}>
+                <Label htmlFor="fullName" className={`text-xs font-bold ${isBoutique ? 'text-foreground' : 'text-slate-700'}`}>
                   Full Name *
                 </Label>
                 <Input
@@ -486,13 +442,13 @@ export default function CheckoutPage() {
                   className={`rounded-xl border text-sm transition-all shadow-xs ${
                     isBoutique
                       ? 'border-input bg-card text-foreground placeholder:text-muted-foreground focus:ring-1 focus:ring-ring'
-                      : 'border-slate-800 bg-slate-950/80 text-white placeholder:text-slate-600'
+                      : 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:border-sky-500'
                   }`}
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="phone" className={`text-xs font-bold ${isBoutique ? 'text-foreground' : 'text-slate-300'}`}>
+                <Label htmlFor="phone" className={`text-xs font-bold ${isBoutique ? 'text-foreground' : 'text-slate-700'}`}>
                   Phone Number (Active for SMS/Calls) *
                 </Label>
                 <Input
@@ -503,13 +459,13 @@ export default function CheckoutPage() {
                   className={`rounded-xl border text-sm transition-all shadow-xs ${
                     isBoutique
                       ? 'border-input bg-card text-foreground placeholder:text-muted-foreground focus:ring-1 focus:ring-ring'
-                      : 'border-slate-800 bg-slate-950/80 text-white placeholder:text-slate-600'
+                      : 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:border-sky-500'
                   }`}
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="address" className={`text-xs font-bold ${isBoutique ? 'text-foreground' : 'text-slate-300'}`}>
+                <Label htmlFor="address" className={`text-xs font-bold ${isBoutique ? 'text-foreground' : 'text-slate-700'}`}>
                   Complete Delivery Address & City *
                 </Label>
                 <textarea
@@ -521,7 +477,7 @@ export default function CheckoutPage() {
                   className={`w-full rounded-xl border px-3.5 py-2.5 text-sm transition-all shadow-xs focus:outline-none ${
                     isBoutique
                       ? 'border-input bg-card text-foreground placeholder:text-muted-foreground focus:ring-1 focus:ring-ring'
-                      : 'border-slate-800 bg-slate-950/80 text-white placeholder:text-slate-600'
+                      : 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:border-sky-500'
                   }`}
                 />
               </div>
@@ -532,42 +488,38 @@ export default function CheckoutPage() {
               className={`rounded-2xl border p-4.5 ${
                 isBoutique
                   ? 'border-border bg-accent/40'
-                  : isSports
-                  ? 'border-emerald-900/40 bg-emerald-950/20'
-                  : isClothing
-                  ? 'border-purple-900/40 bg-purple-950/20'
-                  : 'border-slate-800 bg-slate-950/80'
+                  : 'border-slate-200 bg-slate-50'
               }`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-xs ${
                       isBoutique
-                        ? 'bg-card border border-border text-foreground shadow-xs'
+                        ? 'bg-card border border-border text-foreground'
                         : isSports
                         ? 'bg-emerald-600 text-white'
                         : isClothing
                         ? 'bg-purple-600 text-white'
-                        : 'bg-cyan-600 text-white'
+                        : 'bg-sky-600 text-white'
                     }`}
                   >
                     <CreditCard size={18} />
                   </div>
                   <div>
-                    <p className={`text-sm font-bold ${isBoutique ? 'text-foreground' : 'text-white'}`}>Payment Mode</p>
-                    <p className={`text-xs ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>Cash on Delivery (COD)</p>
+                    <p className={`text-sm font-bold ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>Payment Mode</p>
+                    <p className={`text-xs ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Cash on Delivery (COD)</p>
                   </div>
                 </div>
                 <span
-                  className={`text-[11px] font-bold px-2.5 py-1 rounded-full border ${
+                  className={`text-[11px] font-bold px-2.5 py-1 rounded-full border shadow-xs ${
                     isBoutique
-                      ? 'border-border bg-card text-foreground shadow-xs'
+                      ? 'border-border bg-card text-foreground'
                       : isSports
-                      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
+                      ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
                       : isClothing
-                      ? 'border-purple-500/40 bg-purple-500/10 text-purple-300'
-                      : 'border-cyan-500/40 bg-cyan-500/10 text-cyan-300'
+                      ? 'border-purple-200 bg-purple-50 text-purple-800'
+                      : 'border-sky-200 bg-sky-50 text-sky-800'
                   }`}
                 >
                   Pay upon delivery
@@ -578,20 +530,16 @@ export default function CheckoutPage() {
 
           {/* RIGHT: Order Summary */}
           <aside
-            className={`rounded-3xl border p-6 ${
+            className={`rounded-3xl border p-6 shadow-xs ${
               isBoutique
-                ? 'border-border bg-card shadow-xs'
-                : isSports
-                ? 'border-emerald-900/30 bg-slate-900/60 shadow-2xl backdrop-blur-xl'
-                : isClothing
-                ? 'border-purple-900/30 bg-slate-900/60 shadow-2xl backdrop-blur-xl'
-                : 'border-slate-800/80 bg-slate-900/60 shadow-2xl backdrop-blur-xl'
+                ? 'border-border bg-card'
+                : 'border-slate-200 bg-white'
             }`}
           >
-            <h2 className={`text-xl font-bold flex items-center gap-2 ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+            <h2 className={`text-xl font-bold flex items-center gap-2 ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>
               <ShoppingBag
                 size={18}
-                className={isBoutique ? 'text-foreground' : isSports ? 'text-emerald-400' : isClothing ? 'text-purple-400' : 'text-cyan-400'}
+                className={isBoutique ? 'text-foreground' : isSports ? 'text-emerald-600' : isClothing ? 'text-purple-600' : 'text-sky-600'}
               />
               Items in Order ({items.length})
             </h2>
@@ -604,14 +552,14 @@ export default function CheckoutPage() {
                   className={`flex items-center justify-between gap-3 rounded-2xl border p-3 ${
                     isBoutique
                       ? 'border-border bg-accent/30'
-                      : 'border-slate-800/80 bg-slate-950/60'
+                      : 'border-slate-100 bg-slate-50'
                   }`}
                 >
                   <div className="min-w-0 flex-1">
-                    <p className={`font-semibold text-xs sm:text-sm truncate ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+                    <p className={`font-semibold text-xs sm:text-sm truncate ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>
                       {item.productName}
                     </p>
-                    <p className={`text-[11px] mt-0.5 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+                    <p className={`text-[11px] mt-0.5 ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>
                       Qty: {item.quantity} • Rs. {Number(item.price).toLocaleString()} each
                     </p>
                   </div>
@@ -620,10 +568,10 @@ export default function CheckoutPage() {
                       isBoutique
                         ? 'text-foreground'
                         : isSports
-                        ? 'text-emerald-400'
+                        ? 'text-emerald-700'
                         : isClothing
-                        ? 'text-purple-300'
-                        : 'text-cyan-400'
+                        ? 'text-purple-700'
+                        : 'text-sky-700'
                     }`}
                   >
                     Rs. {Number(item.price * item.quantity).toLocaleString()}
@@ -633,29 +581,29 @@ export default function CheckoutPage() {
             </div>
 
             {/* Calculations Breakdown */}
-            <div className={`mt-6 space-y-2.5 border-t pt-4 text-xs sm:text-sm ${isBoutique ? 'border-border text-muted-foreground' : 'border-slate-800/80 text-slate-400'}`}>
+            <div className={`mt-6 space-y-2.5 border-t pt-4 text-xs sm:text-sm ${isBoutique ? 'border-border text-muted-foreground' : 'border-slate-100 text-slate-600'}`}>
               <div className="flex items-center justify-between">
                 <span>Subtotal</span>
-                <span className={`font-semibold ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+                <span className={`font-semibold ${isBoutique ? 'text-foreground' : 'text-slate-900'}`}>
                   Rs. {Number(subtotal).toLocaleString()}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span>Nationwide Shipping</span>
-                <span className={`font-semibold ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+                <span className={`font-semibold ${isBoutique ? 'text-foreground' : 'text-slate-900'}`}>
                   {shipping > 0 ? `Rs. ${shipping}` : 'Free'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span>GST / Tax</span>
-                <span className={`font-semibold ${isBoutique ? 'text-foreground' : 'text-white'}`}>Rs. 0</span>
+                <span className={`font-semibold ${isBoutique ? 'text-foreground' : 'text-slate-900'}`}>Rs. 0</span>
               </div>
             </div>
 
             {/* Total */}
-            <div className={`mt-5 border-t pt-4 flex items-center justify-between ${isBoutique ? 'border-border' : 'border-slate-800/80'}`}>
+            <div className={`mt-5 border-t pt-4 flex items-center justify-between ${isBoutique ? 'border-border' : 'border-slate-100'}`}>
               <div>
-                <span className={`text-sm font-bold block ${isBoutique ? 'text-foreground' : 'text-white'}`}>Grand Total</span>
+                <span className={`text-sm font-bold block ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>Grand Total</span>
                 <span className={`text-[10px] ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Payable to courier rider</span>
               </div>
               <span
@@ -663,10 +611,10 @@ export default function CheckoutPage() {
                   isBoutique
                     ? 'text-foreground'
                     : isSports
-                    ? 'text-emerald-400'
+                    ? 'text-emerald-700'
                     : isClothing
-                    ? 'text-purple-300'
-                    : 'text-cyan-400'
+                    ? 'text-purple-700'
+                    : 'text-sky-700'
                 }`}
               >
                 Rs. {Number(total).toLocaleString()}
@@ -682,15 +630,15 @@ export default function CheckoutPage() {
                 isBoutique
                   ? 'bg-primary text-primary-foreground hover:opacity-90'
                   : isSports
-                  ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
+                  ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                   : isClothing
-                  ? 'bg-purple-600 text-white hover:bg-purple-500'
-                  : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
+                  ? 'bg-purple-600 text-white hover:bg-purple-700'
+                  : 'bg-sky-600 text-white hover:bg-sky-700'
               }`}
             >
               {submitting ? (
                 <div className="flex items-center gap-2">
-                  <div className={`h-4 w-4 animate-spin rounded-full border-2 border-t-transparent ${isBoutique ? 'border-primary-foreground' : 'border-slate-950'}`} />
+                  <div className={`h-4 w-4 animate-spin rounded-full border-2 border-t-transparent ${isBoutique ? 'border-primary-foreground' : 'border-white'}`} />
                   <span>Placing order...</span>
                 </div>
               ) : (

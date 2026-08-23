@@ -1,90 +1,37 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Sun, Moon } from 'lucide-react';
+import React, { useEffect } from 'react';
 
 export function StoreThemeToggle({ subdomain }: { subdomain?: string }) {
-  const lowerSub = (subdomain || '').toLowerCase();
-  const isBoutique = lowerSub.includes('boutique') || lowerSub.includes('luxury');
-  const isSports = lowerSub.includes('sport') || lowerSub.includes('fitness');
-  const isClothing = lowerSub.includes('cloth') || lowerSub.includes('fashion') || lowerSub.includes('apparel');
-
-  const [mode, setMode] = useState<'dark' | 'light'>('dark');
-
-  const applyMode = (newMode: 'dark' | 'light') => {
-    const root = document.querySelector('[data-store-root="true"]') || document.documentElement;
-    root.setAttribute('data-store-mode', newMode);
-    if (newMode === 'light') {
-      root.classList.add('store-light');
-      root.classList.remove('store-dark');
-    } else {
-      root.classList.add('store-dark');
-      root.classList.remove('store-light');
-    }
-  };
-
   useEffect(() => {
-    // Boutique store ko screenshot wale exact state (dark mode internal state with luxury styling) par set karna
+    const rootStore = document.querySelector('[data-store-root="true"]');
+    const html = document.documentElement;
+
+    const lowerSub = (subdomain || '').toLowerCase();
+    const isBoutique = lowerSub.includes('boutique') || lowerSub.includes('luxury');
+
     if (isBoutique) {
-      setMode('dark');
-      applyMode('dark');
+      if (rootStore) {
+        rootStore.setAttribute('data-store-mode', 'dark');
+        rootStore.classList.add('store-dark');
+        rootStore.classList.remove('store-light');
+      }
+      html.setAttribute('data-theme', 'dark');
+      html.classList.remove('light');
+      html.classList.add('dark');
       localStorage.setItem(`store_mode_${subdomain || 'default'}`, 'dark');
-      return;
-    }
-
-    const stored = localStorage.getItem(`store_mode_${subdomain || 'default'}`);
-    const rootMode = document.querySelector('[data-store-root="true"]')?.getAttribute('data-store-mode');
-
-    if (stored === 'light' || stored === 'dark') {
-      setMode(stored);
-      applyMode(stored);
-    } else if (rootMode === 'light' || rootMode === 'dark') {
-      setMode(rootMode);
     } else {
-      setMode('dark');
-      applyMode('dark');
+      if (rootStore) {
+        rootStore.setAttribute('data-store-mode', 'light');
+        rootStore.classList.add('store-light');
+        rootStore.classList.remove('store-dark');
+      }
+      html.setAttribute('data-theme', 'light');
+      html.classList.remove('dark');
+      html.classList.add('light');
+      localStorage.setItem(`store_mode_${subdomain || 'default'}`, 'light');
     }
-  }, [subdomain, isBoutique]);
+  }, [subdomain]);
 
-  // Boutique store ke liye button hide
-  if (isBoutique) {
-    return null;
-  }
-
-  const toggleMode = () => {
-    const nextMode = mode === 'dark' ? 'light' : 'dark';
-    setMode(nextMode);
-    localStorage.setItem(`store_mode_${subdomain || 'default'}`, nextMode);
-    applyMode(nextMode);
-  };
-
-  const isLight = mode === 'light';
-
-  return (
-    <button
-      type="button"
-      onClick={toggleMode}
-      aria-label="Toggle Light / Dark Mode"
-      title={`Switch to ${isLight ? 'Dark' : 'Light'} Mode`}
-      className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-all duration-200 ${
-        isLight
-          ? isSports
-            ? 'border-slate-200 bg-slate-100/90 text-slate-700 hover:border-emerald-500/60 hover:bg-emerald-50 hover:text-emerald-600'
-            : isClothing
-            ? 'border-slate-200 bg-slate-100/90 text-slate-700 hover:border-purple-500/60 hover:bg-purple-50 hover:text-purple-600'
-            : 'border-slate-200 bg-slate-100/90 text-slate-700 hover:border-cyan-500/60 hover:bg-cyan-50 hover:text-cyan-600'
-          : isSports
-          ? 'border-emerald-950/80 bg-slate-900/80 text-emerald-300 hover:border-emerald-500/60 hover:bg-emerald-950/40 hover:text-emerald-200'
-          : isClothing
-          ? 'border-purple-950/80 bg-slate-900/80 text-purple-300 hover:border-purple-500/60 hover:bg-purple-950/40 hover:text-purple-200'
-          : 'border-slate-800 bg-slate-900/80 text-cyan-300 hover:border-cyan-500/60 hover:bg-cyan-950/40 hover:text-cyan-200'
-      }`}
-    >
-      {isLight ? (
-        <Moon size={16} className="transition-transform duration-300 hover:-rotate-12" />
-      ) : (
-        <Sun size={16} className="transition-transform duration-300 hover:rotate-45" />
-      )}
-    </button>
-  );
+  return null;
 }

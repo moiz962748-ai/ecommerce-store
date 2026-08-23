@@ -14,9 +14,14 @@ export default async function StoreLayout({
   const { subdomain } = await params;
 
   let storeTheme = getStoreTheme(subdomain);
-  let storeMode = 'dark';
   let storeName = subdomain;
   let logoUrl: string | undefined = undefined;
+
+  const lowerSub = (subdomain || '').toLowerCase();
+  const isBoutique = lowerSub.includes('boutique') || lowerSub.includes('luxury');
+
+  // Boutique ke ilawa baqi 3 stores default pure light mode par rahenge
+  let storeMode = isBoutique ? 'dark' : 'light';
 
   try {
     const store = await apiClient(`/public/stores/${subdomain}`);
@@ -36,7 +41,7 @@ export default async function StoreLayout({
     }
 
     if (configuredMode === 'light' || configuredMode === 'dark') {
-      storeMode = configuredMode;
+      storeMode = isBoutique ? configuredMode : 'light';
     }
   } catch {
     // Fall back to default subdomain theme if store not found
@@ -47,7 +52,11 @@ export default async function StoreLayout({
       data-store-root="true"
       data-store-theme={storeTheme}
       data-store-mode={storeMode}
-      className="flex min-h-screen flex-col bg-store-background text-store-foreground"
+      className={`flex min-h-screen flex-col transition-colors duration-300 ${
+        isBoutique
+          ? 'bg-store-background text-store-foreground'
+          : 'bg-[#f8fafc] text-slate-900'
+      }`}
     >
       <StoreHeader 
         storeName={storeName} 

@@ -117,11 +117,11 @@ export default function WishlistPage() {
         token,
         body: JSON.stringify({ productId, quantity: 1 }),
       });
-      setCartMessage('Item added to bag successfully.');
+      setCartMessage('Item added to cart successfully.');
       window.dispatchEvent(new Event('cart-updated'));
       setTimeout(() => setCartMessage(null), 4000);
     } catch (err: any) {
-      setError(err.message || 'Failed to add item to bag');
+      setError(err.message || 'Failed to add item to cart');
     } finally {
       setAddingId(null);
     }
@@ -130,25 +130,19 @@ export default function WishlistPage() {
   if (loading) {
     return (
       <main
-        className={`flex min-h-screen items-center justify-center ${
-          isBoutique
-            ? 'bg-background text-foreground'
-            : isSports
-            ? 'bg-[#020d09] text-emerald-50'
-            : isClothing
-            ? 'bg-[#0b0314] text-purple-50'
-            : 'bg-slate-950 text-slate-100'
+        className={`flex min-h-screen items-center justify-center p-8 ${
+          isBoutique ? 'bg-background text-foreground' : 'bg-[#f8fafc] text-slate-900'
         }`}
       >
         <div
-          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 ${
+          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 shadow-xs ${
             isBoutique
-              ? 'border-border bg-card text-foreground shadow-xs'
+              ? 'border-border bg-card text-foreground'
               : isSports
-              ? 'border-emerald-900/50 bg-slate-900/80 text-emerald-300'
+              ? 'border-emerald-200 bg-white text-emerald-800'
               : isClothing
-              ? 'border-purple-900/50 bg-slate-900/80 text-purple-300'
-              : 'border-slate-800 bg-slate-900/80 text-slate-300'
+              ? 'border-purple-200 bg-white text-purple-800'
+              : 'border-slate-200 bg-white text-sky-800'
           }`}
         >
           <div
@@ -156,10 +150,10 @@ export default function WishlistPage() {
               isBoutique
                 ? 'border-foreground'
                 : isSports
-                ? 'border-emerald-400'
+                ? 'border-emerald-600'
                 : isClothing
-                ? 'border-purple-400'
-                : 'border-cyan-400'
+                ? 'border-purple-600'
+                : 'border-sky-600'
             }`}
           />
           <span className="text-sm font-medium">Loading your wishlist...</span>
@@ -171,13 +165,7 @@ export default function WishlistPage() {
   return (
     <main
       className={`min-h-screen transition-colors duration-300 ${
-        isBoutique
-          ? 'bg-background text-foreground'
-          : isSports
-          ? 'bg-[#020d09] text-emerald-50 selection:bg-emerald-500 selection:text-slate-950'
-          : isClothing
-          ? 'bg-[#0b0314] text-purple-50 selection:bg-purple-500 selection:text-white'
-          : 'bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950'
+        isBoutique ? 'bg-background text-foreground' : 'bg-[#f8fafc] text-slate-900'
       }`}
     >
       {/* Top Header */}
@@ -185,35 +173,29 @@ export default function WishlistPage() {
         className={`sticky top-0 z-40 border-b backdrop-blur-md ${
           isBoutique
             ? 'border-border bg-background/90'
-            : isSports
-            ? 'border-emerald-950/80 bg-[#020d09]/90'
-            : isClothing
-            ? 'border-purple-950/80 bg-[#0b0314]/90'
-            : 'border-slate-900 bg-slate-950/90'
+            : 'border-slate-200/80 bg-white/95'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 md:px-8">
           <Link
             href={`/store/${subdomain}`}
             className={`flex items-center gap-2 text-sm font-bold transition-colors ${
-              isBoutique ? 'text-foreground hover:opacity-80' : 'text-slate-300 hover:text-white'
+              isBoutique
+                ? 'text-foreground hover:opacity-80'
+                : 'text-slate-700 hover:text-slate-950'
             }`}
           >
             <ArrowLeft size={16} />
-            <span>Back to Atelier</span>
+            <span>{isBoutique ? 'Back to Atelier' : 'Back to Store'}</span>
           </Link>
 
           <Link href={`/store/${subdomain}/products`}>
             <Button
               variant="outline"
-              className={`rounded-xl border text-xs font-bold transition-all ${
+              className={`rounded-xl border text-xs font-bold transition-all shadow-xs ${
                 isBoutique
-                  ? 'border-border bg-card text-foreground hover:bg-accent shadow-xs'
-                  : isSports
-                  ? 'border-emerald-900/50 bg-slate-900/80 text-emerald-300 hover:bg-emerald-950/60 hover:border-emerald-500/40'
-                  : isClothing
-                  ? 'border-purple-900/50 bg-slate-900/80 text-purple-300 hover:bg-purple-950/60 hover:border-purple-500/40'
-                  : 'border-slate-800 bg-slate-900/80 text-cyan-300 hover:bg-slate-800 hover:border-cyan-500/40'
+                  ? 'border-border bg-card text-foreground hover:bg-accent'
+                  : 'border-slate-200 bg-white text-slate-800 hover:bg-slate-50'
               }`}
             >
               Continue Shopping
@@ -225,50 +207,50 @@ export default function WishlistPage() {
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 md:px-8 md:py-12">
         {/* Banner Section */}
         <div
-          className={`relative mb-8 overflow-hidden rounded-3xl border p-6 md:p-8 ${
+          className={`relative mb-8 overflow-hidden rounded-3xl border p-6 md:p-8 shadow-xs ${
             isBoutique
-              ? 'border-border bg-card shadow-xs'
+              ? 'border-border bg-card'
               : isSports
-              ? 'border-emerald-900/40 bg-gradient-to-br from-emerald-950/30 via-slate-900/70 to-slate-950 shadow-xl backdrop-blur-xl'
+              ? 'border-emerald-200/80 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40'
               : isClothing
-              ? 'border-purple-900/40 bg-gradient-to-br from-purple-950/30 via-slate-900/70 to-slate-950 shadow-xl backdrop-blur-xl'
-              : 'border-cyan-900/40 bg-gradient-to-br from-cyan-950/20 via-slate-900/70 to-slate-950 shadow-xl backdrop-blur-xl'
+              ? 'border-purple-200/80 bg-gradient-to-br from-purple-50 via-white to-purple-50/40'
+              : 'border-slate-200 bg-gradient-to-br from-sky-50 via-white to-slate-50'
           }`}
         >
           <div
-            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider mb-3 ${
+            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-[11px] font-bold uppercase tracking-wider mb-3 shadow-xs ${
               isBoutique
                 ? 'border-border bg-accent text-foreground'
                 : isSports
-                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                ? 'border-emerald-200 bg-emerald-100/70 text-emerald-800'
                 : isClothing
-                ? 'border-purple-500/30 bg-purple-500/10 text-purple-300'
-                : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
+                ? 'border-purple-200 bg-purple-100/70 text-purple-800'
+                : 'border-sky-200 bg-sky-100/70 text-sky-800'
             }`}
           >
             <Sparkles size={12} />
             {isBoutique ? 'Saved Silhouettes' : isSports ? 'Saved Training Gear' : isClothing ? 'Saved Styles' : 'Saved Hardware'}
           </div>
 
-          <h1 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+          <h1 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>
             My Wishlist ({items.length})
           </h1>
-          <p className={`mt-2 text-xs sm:text-sm ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
-            Keep track of couture pieces you admire and move them to your bag whenever you are ready.
+          <p className={`mt-2 text-xs sm:text-sm ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
+            Keep track of items you admire and move them to your cart whenever you are ready.
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-xs sm:text-sm font-semibold text-rose-600 dark:text-rose-400">
+          <div className="mb-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-xs sm:text-sm font-semibold text-rose-800 shadow-xs">
             {error}
           </div>
         )}
 
         {cartMessage && (
-          <div className={`mb-6 flex items-center justify-between rounded-2xl border p-4 text-xs sm:text-sm font-semibold ${
+          <div className={`mb-6 flex items-center justify-between rounded-2xl border p-4 text-xs sm:text-sm font-semibold shadow-xs ${
             isBoutique
-              ? 'border-border bg-card text-foreground shadow-xs'
-              : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+              ? 'border-border bg-card text-foreground'
+              : 'border-emerald-200 bg-emerald-50 text-emerald-800'
           }`}>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 size={16} /> {cartMessage}
@@ -277,7 +259,7 @@ export default function WishlistPage() {
               href={`/store/${subdomain}/cart`}
               className="font-bold underline hover:opacity-80 flex items-center gap-1"
             >
-              View Bag <ArrowRight size={14} />
+              View Cart <ArrowRight size={14} />
             </Link>
           </div>
         )}
@@ -285,32 +267,28 @@ export default function WishlistPage() {
         {/* Empty Wishlist State */}
         {items.length === 0 ? (
           <div
-            className={`rounded-3xl border border-dashed p-12 text-center ${
+            className={`rounded-3xl border border-dashed p-12 text-center shadow-xs ${
               isBoutique
                 ? 'border-border bg-card'
-                : isSports
-                ? 'border-emerald-950 bg-slate-900/40 backdrop-blur-md'
-                : isClothing
-                ? 'border-purple-950 bg-slate-900/40 backdrop-blur-md'
-                : 'border-slate-900 bg-slate-900/40 backdrop-blur-md'
+                : 'border-slate-200 bg-white'
             }`}
           >
             <div
-              className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border ${
+              className={`mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border shadow-xs ${
                 isBoutique
-                  ? 'border-border bg-accent text-foreground text-3xl shadow-xs'
+                  ? 'border-border bg-accent text-foreground text-3xl'
                   : isSports
-                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-3xl shadow-lg'
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-700 text-3xl'
                   : isClothing
-                  ? 'border-purple-500/30 bg-purple-500/10 text-purple-400 text-3xl shadow-lg'
-                  : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-400 text-3xl shadow-lg'
+                  ? 'border-purple-200 bg-purple-50 text-purple-700 text-3xl'
+                  : 'border-sky-200 bg-sky-50 text-sky-700 text-3xl'
               }`}
             >
               <Heart size={28} className="fill-current" />
             </div>
-            <h2 className={`text-2xl font-bold ${isBoutique ? 'text-foreground' : 'text-white'}`}>Your wishlist is empty</h2>
-            <p className={`mt-2 text-xs sm:text-sm max-w-sm mx-auto ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
-              Save your favorite luxury pret and bespoke couture items here while exploring the atelier.
+            <h2 className={`text-2xl font-bold ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>Your wishlist is empty</h2>
+            <p className={`mt-2 text-xs sm:text-sm max-w-sm mx-auto ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
+              Save your favorite items here while exploring the catalog.
             </p>
             <Link href={`/store/${subdomain}/products`} className="mt-6 inline-block">
               <span
@@ -318,10 +296,10 @@ export default function WishlistPage() {
                   isBoutique
                     ? 'bg-primary text-primary-foreground hover:opacity-90'
                     : isSports
-                    ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
+                    ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                     : isClothing
-                    ? 'bg-purple-600 text-white hover:bg-purple-500'
-                    : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
+                    ? 'bg-purple-600 text-white hover:bg-purple-700'
+                    : 'bg-sky-600 text-white hover:bg-sky-700'
                 }`}
               >
                 <span>Explore Collection</span>
@@ -335,14 +313,14 @@ export default function WishlistPage() {
             {items.map((item) => (
               <div
                 key={item.id}
-                className={`group flex flex-col justify-between overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1 ${
+                className={`group flex flex-col justify-between overflow-hidden rounded-2xl border transition-all duration-300 hover:-translate-y-1 shadow-xs ${
                   isBoutique
-                    ? 'border-border bg-card shadow-xs hover:border-foreground/20 hover:shadow-md'
+                    ? 'border-border bg-card hover:border-foreground/20 hover:shadow-md'
                     : isSports
-                    ? 'border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md'
+                    ? 'border-emerald-100 bg-white hover:border-emerald-300 hover:shadow-md'
                     : isClothing
-                    ? 'border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md'
-                    : 'border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md'
+                    ? 'border-purple-100 bg-white hover:border-purple-300 hover:shadow-md'
+                    : 'border-slate-200 bg-white hover:border-sky-300 hover:shadow-md'
                 }`}
               >
                 <div>
@@ -352,10 +330,10 @@ export default function WishlistPage() {
                       isBoutique
                         ? 'border-border bg-accent/30'
                         : isSports
-                        ? 'border-emerald-950/80 bg-emerald-950/20'
+                        ? 'border-emerald-100 bg-emerald-50/50'
                         : isClothing
-                        ? 'border-purple-950/80 bg-purple-950/20'
-                        : 'border-slate-800/80 bg-slate-950/40'
+                        ? 'border-purple-100 bg-purple-50/50'
+                        : 'border-slate-100 bg-slate-50'
                     }`}
                   >
                     {item.imageUrl ? (
@@ -375,10 +353,10 @@ export default function WishlistPage() {
                       onClick={() => handleRemove(item.id)}
                       disabled={removingId === item.id}
                       aria-label="Remove item"
-                      className={`absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border transition-colors ${
+                      className={`absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border transition-colors shadow-xs ${
                         isBoutique
-                          ? 'border-border bg-card text-muted-foreground hover:text-destructive hover:bg-destructive/10 shadow-xs'
-                          : 'border-slate-700/60 bg-slate-900/80 text-slate-400 hover:border-rose-500/50 hover:bg-rose-500/20 hover:text-rose-400'
+                          ? 'border-border bg-card text-muted-foreground hover:text-destructive hover:bg-destructive/10'
+                          : 'border-slate-200 bg-white text-slate-400 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-600'
                       }`}
                     >
                       <Trash2 size={14} />
@@ -388,7 +366,7 @@ export default function WishlistPage() {
                   {/* Info Details */}
                   <div className="p-5">
                     <span className={`text-[10px] uppercase tracking-widest font-bold block mb-1 ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>
-                      Saved Creation
+                      Saved Item
                     </span>
                     <Link href={`/store/${subdomain}/products/${item.productId}`}>
                       <h3
@@ -396,17 +374,17 @@ export default function WishlistPage() {
                           isBoutique
                             ? 'text-foreground hover:opacity-80'
                             : isSports
-                            ? 'text-white hover:text-emerald-400'
+                            ? 'text-slate-950 hover:text-emerald-700'
                             : isClothing
-                            ? 'text-white hover:text-purple-300'
-                            : 'text-white hover:text-cyan-300'
+                            ? 'text-slate-950 hover:text-purple-700'
+                            : 'text-slate-950 hover:text-sky-700'
                         }`}
                       >
                         {item.productName}
                       </h3>
                     </Link>
-                    <p className={`text-xs mt-1 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
-                      {item.variantName || 'Stitched / Standard'}
+                    <p className={`text-xs mt-1 ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>
+                      {item.variantName || 'Standard Edition'}
                     </p>
                   </div>
                 </div>
@@ -417,10 +395,10 @@ export default function WishlistPage() {
                     isBoutique
                       ? 'border-border'
                       : isSports
-                      ? 'border-emerald-950/80'
+                      ? 'border-emerald-100'
                       : isClothing
-                      ? 'border-purple-950/80'
-                      : 'border-slate-800/80'
+                      ? 'border-purple-100'
+                      : 'border-slate-100'
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -430,10 +408,10 @@ export default function WishlistPage() {
                         isBoutique
                           ? 'text-foreground'
                           : isSports
-                          ? 'text-emerald-400'
+                          ? 'text-emerald-700'
                           : isClothing
-                          ? 'text-purple-300'
-                          : 'text-cyan-400'
+                          ? 'text-purple-700'
+                          : 'text-sky-700'
                       }`}
                     >
                       Rs. {Number(item.price).toLocaleString()}
@@ -448,10 +426,10 @@ export default function WishlistPage() {
                         isBoutique
                           ? 'bg-primary text-primary-foreground hover:opacity-90'
                           : isSports
-                          ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400'
+                          ? 'bg-emerald-600 text-white hover:bg-emerald-700'
                           : isClothing
-                          ? 'bg-purple-600 text-white hover:bg-purple-500'
-                          : 'bg-cyan-500 text-slate-950 hover:bg-cyan-400'
+                          ? 'bg-purple-600 text-white hover:bg-purple-700'
+                          : 'bg-sky-600 text-white hover:bg-sky-700'
                       }`}
                     >
                       <ShoppingBag size={14} className="mr-1.5" />
@@ -462,12 +440,10 @@ export default function WishlistPage() {
                       variant="outline"
                       onClick={() => handleRemove(item.id)}
                       disabled={removingId === item.id}
-                      className={`h-10 rounded-xl border px-3 text-xs font-bold transition-all ${
+                      className={`h-10 rounded-xl border px-3 text-xs font-bold transition-all shadow-xs ${
                         isBoutique
-                          ? 'border-border bg-card text-foreground hover:bg-destructive/10 hover:text-destructive shadow-xs'
-                          : isSports
-                          ? 'border-emerald-900/60 bg-slate-900/80 text-slate-300 hover:bg-rose-500/20 hover:text-rose-400'
-                          : 'border-slate-800 bg-slate-900/80 text-slate-300 hover:bg-rose-500/20 hover:text-rose-400'
+                          ? 'border-border bg-card text-foreground hover:bg-destructive/10 hover:text-destructive'
+                          : 'border-slate-200 bg-white text-slate-600 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600'
                       }`}
                     >
                       {removingId === item.id ? '...' : 'Remove'}

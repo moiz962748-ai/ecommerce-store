@@ -36,48 +36,48 @@ const THEME_STYLES: Record<string, {
     buttonText: 'text-primary-foreground',
   },
   electronics: {
-    bg: 'bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950',
-    badgeBorder: 'border-cyan-500/30',
-    badgeBg: 'bg-cyan-500/10',
-    badgeText: 'text-cyan-400',
-    accentGradient: 'from-cyan-400 via-blue-400 to-indigo-400',
-    cardBorder: 'border-slate-800/80',
-    cardBg: 'bg-slate-900/60',
-    iconBg: 'bg-cyan-500/10',
-    iconColor: 'text-cyan-400',
-    inputBorder: 'border-slate-800 bg-slate-950/80 text-white placeholder:text-slate-500',
-    inputFocus: 'focus:border-cyan-500',
-    buttonBg: 'bg-cyan-500 hover:bg-cyan-400',
-    buttonText: 'text-slate-950',
+    bg: 'bg-[#f8fafc] text-slate-900',
+    badgeBorder: 'border-sky-200',
+    badgeBg: 'bg-sky-50 shadow-xs',
+    badgeText: 'text-sky-800',
+    accentGradient: 'from-sky-700 via-blue-700 to-indigo-700',
+    cardBorder: 'border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md',
+    cardBg: 'bg-white',
+    iconBg: 'bg-sky-50 border border-sky-100',
+    iconColor: 'text-sky-700',
+    inputBorder: 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400',
+    inputFocus: 'focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus:outline-none',
+    buttonBg: 'bg-sky-600 hover:bg-sky-700',
+    buttonText: 'text-white',
   },
   sports: {
-    bg: 'bg-[#020d09] text-emerald-50 selection:bg-emerald-500 selection:text-slate-950',
-    badgeBorder: 'border-emerald-500/30',
-    badgeBg: 'bg-emerald-500/10',
-    badgeText: 'text-emerald-400',
-    accentGradient: 'from-emerald-400 via-teal-400 to-green-300',
-    cardBorder: 'border-emerald-950/80',
-    cardBg: 'bg-[#061a14]/60',
-    iconBg: 'bg-emerald-500/10',
-    iconColor: 'text-emerald-400',
-    inputBorder: 'border-emerald-950 bg-[#03120d]/90 text-white placeholder:text-slate-500',
-    inputFocus: 'focus:border-emerald-500',
-    buttonBg: 'bg-emerald-500 hover:bg-emerald-400',
-    buttonText: 'text-slate-950',
+    bg: 'bg-[#f8fafc] text-slate-900',
+    badgeBorder: 'border-emerald-200',
+    badgeBg: 'bg-emerald-50 shadow-xs',
+    badgeText: 'text-emerald-800',
+    accentGradient: 'from-emerald-700 via-teal-700 to-green-700',
+    cardBorder: 'border-emerald-100 shadow-xs hover:border-emerald-300 hover:shadow-md',
+    cardBg: 'bg-white',
+    iconBg: 'bg-emerald-50 border border-emerald-100',
+    iconColor: 'text-emerald-700',
+    inputBorder: 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400',
+    inputFocus: 'focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 focus:outline-none',
+    buttonBg: 'bg-emerald-600 hover:bg-emerald-700',
+    buttonText: 'text-white',
   },
   clothing: {
-    bg: 'bg-[#0b0314] text-purple-50 selection:bg-purple-500 selection:text-white',
-    badgeBorder: 'border-purple-500/30',
-    badgeBg: 'bg-purple-500/10',
-    badgeText: 'text-purple-400',
-    accentGradient: 'from-purple-400 via-fuchsia-400 to-pink-300',
-    cardBorder: 'border-purple-950/80',
-    cardBg: 'bg-[#1a0a26]/60',
-    iconBg: 'bg-purple-500/10',
-    iconColor: 'text-purple-400',
-    inputBorder: 'border-purple-950 bg-[#12051d]/90 text-white placeholder:text-slate-500',
-    inputFocus: 'focus:border-purple-500',
-    buttonBg: 'bg-purple-600 hover:bg-purple-500',
+    bg: 'bg-[#f8fafc] text-slate-900',
+    badgeBorder: 'border-purple-200',
+    badgeBg: 'bg-purple-50 shadow-xs',
+    badgeText: 'text-purple-800',
+    accentGradient: 'from-purple-700 via-fuchsia-700 to-pink-700',
+    cardBorder: 'border-purple-100 shadow-xs hover:border-purple-300 hover:shadow-md',
+    cardBg: 'bg-white',
+    iconBg: 'bg-purple-50 border border-purple-100',
+    iconColor: 'text-purple-700',
+    inputBorder: 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400',
+    inputFocus: 'focus:border-purple-500 focus:ring-2 focus:ring-purple-100 focus:outline-none',
+    buttonBg: 'bg-purple-600 hover:bg-purple-700',
     buttonText: 'text-white',
   },
 };
@@ -140,13 +140,13 @@ export default function StoreContactPage() {
           <MessageSquare size={13} />
           <span>{isBoutique ? 'ATELIER CONCIERGE' : "WE'RE HERE TO HELP"}</span>
         </div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight text-slate-950">
           Get in{' '}
           <span className={isBoutique ? 'text-foreground underline decoration-border underline-offset-8' : `bg-gradient-to-r ${currentTheme.accentGradient} bg-clip-text text-transparent`}>
             Touch
           </span>
         </h1>
-        <p className={`mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+        <p className={`mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
           {isBoutique
             ? 'Have an inquiry regarding bespoke custom stitching, bridal appointments, or private viewings? Connect directly with our stylist consultants.'
             : 'Have a question about an order, warranty, sizing, or bulk inquiries? Send us a message and our support team will respond promptly.'}
@@ -162,8 +162,8 @@ export default function StoreContactPage() {
             </div>
             <div>
               <p className={`text-[10px] uppercase font-bold tracking-widest ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Email Us</p>
-              <p className="text-sm font-bold">{contactData.email}</p>
-              <p className={`text-[11px] ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>Response within 24 hours</p>
+              <p className="text-sm font-bold text-slate-950">{contactData.email}</p>
+              <p className={`text-[11px] ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Response within 24 hours</p>
             </div>
           </div>
 
@@ -174,8 +174,8 @@ export default function StoreContactPage() {
               </div>
               <div>
                 <p className={`text-[10px] uppercase font-bold tracking-widest ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Call Us</p>
-                <p className="text-sm font-bold">{contactData.phone}</p>
-                <p className={`text-[11px] ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>Direct concierge line</p>
+                <p className="text-sm font-bold text-slate-950">{contactData.phone}</p>
+                <p className={`text-[11px] ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Direct helpline</p>
               </div>
             </div>
           )}
@@ -186,8 +186,8 @@ export default function StoreContactPage() {
             </div>
             <div>
               <p className={`text-[10px] uppercase font-bold tracking-widest ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Location</p>
-              <p className="text-sm font-bold">{contactData.address}</p>
-              <p className={`text-[11px] ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>Nationwide Express Delivery</p>
+              <p className="text-sm font-bold text-slate-950">{contactData.address}</p>
+              <p className={`text-[11px] ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Nationwide Express Delivery</p>
             </div>
           </div>
 
@@ -197,8 +197,8 @@ export default function StoreContactPage() {
             </div>
             <div>
               <p className={`text-[10px] uppercase font-bold tracking-widest ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Studio Hours</p>
-              <p className="text-sm font-bold">{contactData.officeHours}</p>
-              <p className={`text-[11px] ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>Consultation Availability</p>
+              <p className="text-sm font-bold text-slate-950">{contactData.officeHours}</p>
+              <p className={`text-[11px] ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>Customer Support Availability</p>
             </div>
           </div>
         </div>
@@ -207,18 +207,18 @@ export default function StoreContactPage() {
       {/* 3. Form */}
       <section className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 md:px-8">
         <div className={`rounded-3xl border ${currentTheme.cardBorder} ${currentTheme.cardBg} p-8 md:p-12`}>
-          <h2 className="text-2xl font-bold mb-6">{isBoutique ? 'Inquire with Stylist' : 'Send Us a Direct Message'}</h2>
+          <h2 className="text-2xl font-bold mb-6 text-slate-950">{isBoutique ? 'Inquire with Stylist' : 'Send Us a Direct Message'}</h2>
           <form className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isBoutique ? 'text-foreground/80' : 'text-slate-400'}`}>Your Name</label>
+              <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isBoutique ? 'text-foreground/80' : 'text-slate-700'}`}>Your Name</label>
               <input
                 type="text"
-                placeholder="Maham Tariq"
+                placeholder="Abdul Moiz"
                 className={`w-full rounded-xl border ${currentTheme.inputBorder} px-4 py-3 text-sm transition-all ${currentTheme.inputFocus}`}
               />
             </div>
             <div>
-              <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isBoutique ? 'text-foreground/80' : 'text-slate-400'}`}>Email Address</label>
+              <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isBoutique ? 'text-foreground/80' : 'text-slate-700'}`}>Email Address</label>
               <input
                 type="email"
                 placeholder="client@example.com"
@@ -226,10 +226,10 @@ export default function StoreContactPage() {
               />
             </div>
             <div className="sm:col-span-2">
-              <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isBoutique ? 'text-foreground/80' : 'text-slate-400'}`}>Your Inquiry / Measurements</label>
+              <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${isBoutique ? 'text-foreground/80' : 'text-slate-700'}`}>Your Message / Query</label>
               <textarea
                 rows={4}
-                placeholder="Share your custom sizing, color choice, or styling questions..."
+                placeholder="How can our support team assist you today?"
                 className={`w-full rounded-xl border ${currentTheme.inputBorder} px-4 py-3 text-sm transition-all ${currentTheme.inputFocus}`}
               />
             </div>

@@ -188,41 +188,25 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
         isBoutique
           ? "bg-background border-border text-foreground"
           : isSports
-          ? "bg-[#020d09] border-emerald-950/60 text-emerald-50"
+          ? "bg-[#f4fbf7] border-emerald-200/80 text-slate-900"
           : isClothing
-          ? "bg-[#0b0314] border-purple-950/60 text-purple-50"
-          : "bg-gradient-to-b from-[#0b132b] via-[#070d1e] to-[#050811] border-cyan-950/60 text-slate-100"
+          ? "bg-[#faf7fc] border-purple-200/80 text-slate-900"
+          : "bg-[#f8fafc] border-slate-200 text-slate-900"
       }`}
     >
-      {/* Ambient background glow for non-boutique */}
-      {!isBoutique && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div
-            className={`absolute top-20 right-10 w-96 h-96 rounded-full blur-[140px] opacity-35 ${
-              isSports ? "bg-emerald-500" : isClothing ? "bg-purple-500" : "bg-cyan-500"
-            }`}
-          />
-          <div
-            className={`absolute bottom-20 left-10 w-96 h-96 rounded-full blur-[140px] opacity-30 ${
-              isSports ? "bg-teal-500" : isClothing ? "bg-pink-500" : "bg-blue-600"
-            }`}
-          />
-        </div>
-      )}
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
         {/* Header row */}
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14 md:mb-16">
           <div>
             <div
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 ${
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs ${
                 isBoutique
-                  ? "border-border bg-card text-foreground shadow-xs"
+                  ? "border-border bg-card text-foreground"
                   : isSports
-                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                  ? "border-emerald-200 bg-emerald-50 text-emerald-800"
                   : isClothing
-                  ? "border-purple-500/30 bg-purple-500/10 text-purple-300"
-                  : "border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
+                  ? "border-purple-200 bg-purple-50 text-purple-800"
+                  : "border-sky-200 bg-sky-50 text-sky-800"
               }`}
             >
               <Star
@@ -231,33 +215,31 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
                   isBoutique
                     ? "fill-foreground/80 text-foreground/80"
                     : isSports
-                    ? "fill-emerald-400 text-emerald-400"
+                    ? "fill-emerald-600 text-emerald-600"
                     : isClothing
-                    ? "fill-purple-400 text-purple-400"
-                    : "fill-cyan-400 text-cyan-400"
+                    ? "fill-purple-600 text-purple-600"
+                    : "fill-sky-600 text-sky-600"
                 }
               />
               {isBoutique ? "Curated Collection" : "Featured Collection"}
             </div>
-            <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-white"}`}>
+            <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-slate-950"}`}>
               Hand-Picked{" "}
               <span
                 className={
                   isBoutique
                     ? "text-foreground/90 underline decoration-border underline-offset-8"
-                    : `bg-gradient-to-r ${
-                        isSports
-                          ? "from-emerald-400 via-teal-400 to-green-300"
-                          : isClothing
-                          ? "from-purple-400 via-fuchsia-400 to-pink-300"
-                          : "from-cyan-400 via-sky-300 to-blue-400"
-                      } bg-clip-text text-transparent`
+                    : isSports
+                    ? "text-emerald-700 underline decoration-emerald-300 underline-offset-8"
+                    : isClothing
+                    ? "text-purple-700 underline decoration-purple-300 underline-offset-8"
+                    : "text-sky-700 underline decoration-sky-300 underline-offset-8"
                 }
               >
                 {isBoutique ? "Signature Creations" : "Products for You"}
               </span>
             </h2>
-            <p className={`mt-3 text-sm sm:text-base max-w-xl leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-300"}`}>
+            <p className={`mt-3 text-sm sm:text-base max-w-xl leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
               {isBoutique
                 ? "Explore meticulously crafted ensembles featuring pure fabrics, artisanal embroideries, and couture finishes."
                 : "Discover top-rated selections curated specifically for quality, performance, and style."}
@@ -267,14 +249,14 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
           <div className="hidden md:block flex-shrink-0">
             <Link
               href={`/store/${subdomain}/products`}
-              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-semibold transition-all shadow-xs ${
                 isBoutique
-                  ? "border-border bg-card text-foreground hover:bg-accent shadow-xs"
+                  ? "border-border bg-card text-foreground hover:bg-accent"
                   : isSports
-                  ? "border-emerald-900/40 bg-slate-900/80 text-emerald-300 hover:bg-emerald-950/60"
+                  ? "border-emerald-200 bg-white text-slate-800 hover:border-emerald-400 hover:text-emerald-700"
                   : isClothing
-                  ? "border-purple-900/40 bg-slate-900/80 text-purple-300 hover:bg-purple-950/60"
-                  : "border-cyan-500/30 bg-slate-900/60 text-cyan-300 hover:bg-slate-900/90"
+                  ? "border-purple-200 bg-white text-slate-800 hover:border-purple-400 hover:text-purple-700"
+                  : "border-slate-200 bg-white text-slate-800 hover:border-sky-400 hover:text-sky-700"
               }`}
             >
               <span>View All Collection</span>
@@ -289,14 +271,12 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
             {[...Array(3)].map((_, i) => (
               <div
                 key={i}
-                className={`rounded-2xl border p-6 animate-pulse space-y-4 ${
-                  isBoutique ? "border-border bg-card" : "border-slate-800/80 bg-slate-900/50"
-                }`}
+                className="rounded-2xl border border-slate-200/80 bg-white p-6 animate-pulse space-y-4 shadow-xs"
               >
-                <div className={`h-44 rounded-xl ${isBoutique ? "bg-muted" : "bg-slate-800/60"}`} />
-                <div className={`h-5 w-2/3 rounded ${isBoutique ? "bg-muted" : "bg-slate-800"}`} />
-                <div className={`h-4 w-full rounded ${isBoutique ? "bg-muted/80" : "bg-slate-800/50"}`} />
-                <div className={`h-10 rounded-xl ${isBoutique ? "bg-muted" : "bg-slate-800"}`} />
+                <div className="h-44 rounded-xl bg-slate-100" />
+                <div className="h-5 w-2/3 rounded bg-slate-100" />
+                <div className="h-4 w-full rounded bg-slate-100" />
+                <div className="h-10 rounded-xl bg-slate-100" />
               </div>
             ))}
           </div>
@@ -313,24 +293,24 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
                   isBoutique
                     ? "border-border bg-card hover:border-foreground/20 hover:shadow-md"
                     : isSports
-                    ? "border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90"
+                    ? "border-emerald-200/80 bg-white hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-500/5"
                     : isClothing
-                    ? "border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90"
-                    : "border-cyan-500/20 bg-slate-900/40 hover:border-cyan-400/60 hover:bg-slate-900/70"
+                    ? "border-purple-200/80 bg-white hover:border-purple-300 hover:shadow-lg hover:shadow-purple-500/5"
+                    : "border-slate-200/80 bg-white hover:border-sky-300 hover:shadow-lg hover:shadow-sky-500/5"
                 }`}
               >
                 <div>
                   {/* Top badges row */}
                   <div className="flex items-center justify-between gap-2 mb-4">
                     <span
-                      className={`text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${
+                      className={`text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border shadow-xs ${
                         isBoutique
                           ? "bg-accent border-border text-foreground/80"
                           : isSports
-                          ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400"
+                          ? "bg-emerald-50 border-emerald-200 text-emerald-800"
                           : isClothing
-                          ? "bg-purple-500/10 border-purple-500/30 text-purple-300"
-                          : "bg-cyan-500/15 border-cyan-500/30 text-cyan-300"
+                          ? "bg-purple-50 border-purple-200 text-purple-800"
+                          : "bg-sky-50 border-sky-200 text-sky-800"
                       }`}
                     >
                       {prod.badge || prod.category || "Authentic"}
@@ -338,10 +318,10 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
                     <button
                       type="button"
                       aria-label="Wishlist"
-                      className={`w-8 h-8 rounded-full border flex items-center justify-center transition-colors ${
+                      className={`w-8 h-8 rounded-full border flex items-center justify-center transition-colors shadow-xs ${
                         isBoutique
                           ? "bg-card border-border text-muted-foreground hover:text-rose-500 hover:border-rose-300"
-                          : "bg-slate-800/80 border-slate-700/50 text-slate-400 hover:text-rose-400"
+                          : "bg-white border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-200"
                       }`}
                     >
                       <Heart size={15} />
@@ -354,17 +334,17 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
                       isBoutique
                         ? "text-foreground group-hover:text-foreground/80"
                         : isSports
-                        ? "text-white group-hover:text-emerald-400"
+                        ? "text-slate-900 group-hover:text-emerald-700"
                         : isClothing
-                        ? "text-white group-hover:text-purple-300"
-                        : "text-white group-hover:text-cyan-300"
+                        ? "text-slate-900 group-hover:text-purple-700"
+                        : "text-slate-900 group-hover:text-sky-700"
                     }`}
                   >
                     {prod.name}
                   </h3>
 
                   {/* Product Description */}
-                  <p className={`mt-2 text-xs leading-relaxed line-clamp-2 ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+                  <p className={`mt-2 text-xs leading-relaxed line-clamp-2 ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
                     {prod.description}
                   </p>
                 </div>
@@ -374,18 +354,14 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
                   className={`mt-6 pt-5 border-t flex items-center justify-between ${
                     isBoutique
                       ? "border-border"
-                      : isSports
-                      ? "border-emerald-950/80"
-                      : isClothing
-                      ? "border-purple-950/80"
-                      : "border-slate-800/80"
+                      : "border-slate-100"
                   }`}
                 >
                   <div>
-                    <span className={`text-[10px] uppercase tracking-widest block font-medium ${isBoutique ? "text-muted-foreground" : "text-slate-500"}`}>
+                    <span className={`text-[10px] uppercase tracking-widest block font-semibold ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
                       Price
                     </span>
-                    <span className={`text-lg font-black ${isBoutique ? "text-foreground" : "text-white"}`}>
+                    <span className={`text-lg font-black ${isBoutique ? "text-foreground" : "text-slate-950"}`}>
                       Rs. {Number(prod.price).toLocaleString()}
                     </span>
                   </div>
@@ -393,10 +369,10 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
                   <div className="flex items-center gap-2">
                     <Link
                       href={`/store/${subdomain}/products/${prod.id}`}
-                      className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-colors ${
+                      className={`w-9 h-9 rounded-xl border flex items-center justify-center transition-colors shadow-xs ${
                         isBoutique
                           ? "bg-card border-border text-foreground hover:bg-accent"
-                          : "bg-slate-800/90 border-slate-700/80 text-slate-300 hover:bg-slate-700"
+                          : "bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900"
                       }`}
                     >
                       <Eye size={16} />
@@ -405,16 +381,16 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
                     <button
                       type="button"
                       onClick={() => handleAddToCart(prod.id)}
-                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
+                      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-xs ${
                         addedIds[prod.id]
                           ? "bg-emerald-600 text-white"
                           : isBoutique
                           ? "bg-primary text-primary-foreground hover:opacity-90"
                           : isSports
-                          ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950"
+                          ? "bg-emerald-600 hover:bg-emerald-700 text-white"
                           : isClothing
-                          ? "bg-purple-600 hover:bg-purple-500 text-white"
-                          : "bg-cyan-500 hover:bg-cyan-400 text-slate-950"
+                          ? "bg-purple-600 hover:bg-purple-700 text-white"
+                          : "bg-sky-600 hover:bg-sky-700 text-white"
                       }`}
                     >
                       {addedIds[prod.id] ? (
@@ -434,8 +410,8 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
           </div>
         ) : (
           <div className="text-center py-16">
-            <Sparkles size={40} className="mx-auto text-muted-foreground mb-3" />
-            <p className="text-muted-foreground text-sm">No products found in this boutique catalog.</p>
+            <Sparkles size={40} className="mx-auto text-slate-400 mb-3" />
+            <p className="text-slate-500 text-sm">No products found in this catalog.</p>
           </div>
         )}
 
@@ -447,10 +423,10 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
               isBoutique
                 ? "bg-primary text-primary-foreground hover:opacity-90"
                 : isSports
-                ? "bg-emerald-500 hover:bg-emerald-400 text-slate-950"
+                ? "bg-emerald-600 hover:bg-emerald-700 text-white"
                 : isClothing
-                ? "bg-purple-600 hover:bg-purple-500 text-white"
-                : "bg-cyan-500 hover:bg-cyan-400 text-slate-950"
+                ? "bg-purple-600 hover:bg-purple-700 text-white"
+                : "bg-sky-600 hover:bg-sky-700 text-white"
             }`}
           >
             <span>Browse All Collection</span>
@@ -464,35 +440,35 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className={`mt-16 md:mt-20 p-6 md:p-8 rounded-2xl border flex flex-col md:flex-row items-center justify-between gap-6 ${
+          className={`mt-16 md:mt-20 p-6 md:p-8 rounded-2xl border flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm ${
             isBoutique
-              ? "border-border bg-card shadow-xs"
+              ? "border-border bg-card"
               : isSports
-              ? "border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-green-500/10"
+              ? "border-emerald-200 bg-white"
               : isClothing
-              ? "border-purple-500/20 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-rose-500/10"
-              : "border-cyan-500/30 bg-gradient-to-r from-cyan-500/15 via-blue-600/10 to-slate-900/40"
+              ? "border-purple-200 bg-white"
+              : "border-slate-200 bg-white"
           }`}
         >
           <div className="flex items-center gap-4 text-center md:text-left">
             <div
-              className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm flex-shrink-0 ${
+              className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-xs flex-shrink-0 ${
                 isBoutique
                   ? "bg-accent border border-border text-foreground"
                   : isSports
-                  ? "bg-gradient-to-br from-emerald-500 to-teal-600 text-white"
+                  ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
                   : isClothing
-                  ? "bg-gradient-to-br from-purple-500 to-pink-600 text-white"
-                  : "bg-gradient-to-br from-cyan-500 to-blue-600 text-white"
+                  ? "bg-purple-50 border border-purple-200 text-purple-700"
+                  : "bg-sky-50 border border-sky-200 text-sky-700"
               }`}
             >
               <Sparkles size={26} />
             </div>
             <div>
-              <h3 className={`text-lg font-bold ${isBoutique ? "text-foreground" : "text-white"}`}>
+              <h3 className={`text-lg font-bold ${isBoutique ? "text-foreground" : "text-slate-950"}`}>
                 {isBoutique ? "Looking for Custom Bridal or Bespoke Stitching?" : "Need a customized or corporate bulk order?"}
               </h3>
-              <p className={`text-xs mt-0.5 ${isBoutique ? "text-muted-foreground" : "text-slate-300"}`}>
+              <p className={`text-xs mt-0.5 ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
                 {isBoutique
                   ? "Get made-to-measure tailoring consultations and nationwide doorstep delivery."
                   : "Get exclusive wholesale pricing and verified delivery across Pakistan."}
@@ -502,10 +478,14 @@ export function StoreFeaturedProducts({ subdomain }: StoreFeaturedProps) {
 
           <Link
             href={`/store/${subdomain}/contact`}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-bold transition-all flex-shrink-0 ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-bold transition-all flex-shrink-0 shadow-xs ${
               isBoutique
-                ? "bg-primary text-primary-foreground hover:opacity-90 shadow-xs"
-                : "bg-slate-900 border-slate-800 text-white hover:bg-slate-800 hover:border-slate-700"
+                ? "bg-primary text-primary-foreground hover:opacity-90 border-transparent"
+                : isSports
+                ? "bg-emerald-600 text-white hover:bg-emerald-700 border-transparent"
+                : isClothing
+                ? "bg-purple-600 text-white hover:bg-purple-700 border-transparent"
+                : "bg-sky-600 text-white hover:bg-sky-700 border-transparent"
             }`}
           >
             <span>Inquire Now</span>

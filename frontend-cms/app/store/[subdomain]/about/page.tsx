@@ -34,46 +34,46 @@ const THEME_STYLES: Record<string, {
     missionText: 'text-foreground/90',
   },
   electronics: {
-    bg: 'bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950',
-    badgeBorder: 'border-cyan-500/30',
-    badgeBg: 'bg-cyan-500/10',
-    badgeText: 'text-cyan-400',
-    accentGradient: 'from-cyan-400 via-blue-500 to-indigo-500',
-    cardBorder: 'border-slate-800/80',
-    cardBg: 'bg-slate-900/60',
-    iconBg: 'bg-cyan-500/10',
-    iconColor: 'text-cyan-400',
-    missionBg: 'bg-cyan-950/30',
-    missionBorder: 'border-cyan-800/40',
-    missionText: 'text-cyan-200',
+    bg: 'bg-[#f8fafc] text-slate-900',
+    badgeBorder: 'border-sky-200',
+    badgeBg: 'bg-sky-50 shadow-xs',
+    badgeText: 'text-sky-800',
+    accentGradient: 'from-sky-700 via-blue-700 to-indigo-700',
+    cardBorder: 'border-slate-200 shadow-xs hover:border-sky-300 hover:shadow-md',
+    cardBg: 'bg-white',
+    iconBg: 'bg-sky-50 border border-sky-100',
+    iconColor: 'text-sky-700',
+    missionBg: 'bg-sky-50/60',
+    missionBorder: 'border-sky-200',
+    missionText: 'text-slate-700',
   },
   sports: {
-    bg: 'bg-[#020d09] text-emerald-50 selection:bg-emerald-500 selection:text-slate-950',
-    badgeBorder: 'border-emerald-500/30',
-    badgeBg: 'bg-emerald-500/10',
-    badgeText: 'text-emerald-400',
-    accentGradient: 'from-emerald-400 via-teal-400 to-green-300',
-    cardBorder: 'border-emerald-950/80',
-    cardBg: 'bg-[#061a14]/60',
-    iconBg: 'bg-emerald-500/10',
-    iconColor: 'text-emerald-400',
-    missionBg: 'bg-emerald-950/30',
-    missionBorder: 'border-emerald-800/40',
-    missionText: 'text-emerald-200',
+    bg: 'bg-[#f8fafc] text-slate-900',
+    badgeBorder: 'border-emerald-200',
+    badgeBg: 'bg-emerald-50 shadow-xs',
+    badgeText: 'text-emerald-800',
+    accentGradient: 'from-emerald-700 via-teal-700 to-green-700',
+    cardBorder: 'border-emerald-100 shadow-xs hover:border-emerald-300 hover:shadow-md',
+    cardBg: 'bg-white',
+    iconBg: 'bg-emerald-50 border border-emerald-100',
+    iconColor: 'text-emerald-700',
+    missionBg: 'bg-emerald-50/60',
+    missionBorder: 'border-emerald-200',
+    missionText: 'text-slate-700',
   },
   clothing: {
-    bg: 'bg-[#0b0314] text-purple-50 selection:bg-purple-500 selection:text-white',
-    badgeBorder: 'border-purple-500/30',
-    badgeBg: 'bg-purple-500/10',
-    badgeText: 'text-purple-400',
-    accentGradient: 'from-purple-400 via-fuchsia-400 to-pink-300',
-    cardBorder: 'border-purple-950/80',
-    cardBg: 'bg-[#1a0a26]/60',
-    iconBg: 'bg-purple-500/10',
-    iconColor: 'text-purple-400',
-    missionBg: 'bg-purple-950/30',
-    missionBorder: 'border-purple-800/40',
-    missionText: 'text-purple-200',
+    bg: 'bg-[#f8fafc] text-slate-900',
+    badgeBorder: 'border-purple-200',
+    badgeBg: 'bg-purple-50 shadow-xs',
+    badgeText: 'text-purple-800',
+    accentGradient: 'from-purple-700 via-fuchsia-700 to-pink-700',
+    cardBorder: 'border-purple-100 shadow-xs hover:border-purple-300 hover:shadow-md',
+    cardBg: 'bg-white',
+    iconBg: 'bg-purple-50 border border-purple-100',
+    iconColor: 'text-purple-700',
+    missionBg: 'bg-purple-50/60',
+    missionBorder: 'border-purple-200',
+    missionText: 'text-slate-700',
   },
 };
 
@@ -136,13 +136,13 @@ export default function StoreAboutPage() {
           <Sparkles size={13} />
           <span>OUR STORY & PHILOSOPHY</span>
         </div>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight text-slate-950">
           About{' '}
           <span className={isBoutique ? 'text-foreground underline decoration-border underline-offset-8' : `bg-gradient-to-r ${currentTheme.accentGradient} bg-clip-text text-transparent`}>
             {storeName}
           </span>
         </h1>
-        <p className={`mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed whitespace-pre-line ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+        <p className={`mx-auto mt-4 max-w-2xl text-sm sm:text-base leading-relaxed whitespace-pre-line ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
           {aboutStory}
         </p>
 
@@ -155,13 +155,13 @@ export default function StoreAboutPage() {
       </section>
 
       {/* 2. Pillars Grid */}
-      <section className={`mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-8 border-t ${isBoutique ? 'border-border' : 'border-slate-800/60'}`}>
+      <section className={`mx-auto max-w-7xl px-4 py-12 sm:px-6 md:px-8 border-t ${isBoutique ? 'border-border' : 'border-slate-200'}`}>
         <div className="mb-10 text-center md:text-left">
           <div className={`inline-flex items-center gap-2 rounded-full border ${currentTheme.badgeBorder} ${currentTheme.badgeBg} px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider ${currentTheme.badgeText} mb-2`}>
             <Target size={12} />
             <span>OUR VALUES</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black tracking-tight">Built on Transparency & Trust</h2>
+          <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950">Built on Transparency & Trust</h2>
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -169,8 +169,8 @@ export default function StoreAboutPage() {
             <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${currentTheme.iconBg} ${currentTheme.iconColor}`}>
               <ShieldCheck size={24} />
             </div>
-            <h3 className="text-lg font-bold">{isBoutique ? '100% Pure Fabrics' : '100% Genuine Backed'}</h3>
-            <p className={`mt-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+            <h3 className="text-lg font-bold text-slate-950">{isBoutique ? '100% Pure Fabrics' : '100% Genuine Backed'}</h3>
+            <p className={`mt-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
               {isBoutique
                 ? 'Every ensemble utilizes verified raw silk, pure chiffon, and fine organza crafted to heirloom standards.'
                 : 'Every device and item listed is strictly sourced from verified distributors and authorized local partners.'}
@@ -181,8 +181,8 @@ export default function StoreAboutPage() {
             <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${currentTheme.iconBg} ${currentTheme.iconColor}`}>
               <Zap size={24} />
             </div>
-            <h3 className="text-lg font-bold">{isBoutique ? 'Keepsake Express Packaging' : 'Express Nationwide Logistics'}</h3>
-            <p className={`mt-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+            <h3 className="text-lg font-bold text-slate-950">{isBoutique ? 'Keepsake Express Packaging' : 'Express Nationwide Logistics'}</h3>
+            <p className={`mt-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
               {isBoutique
                 ? 'Carefully steam-finished, encased in luxury garment bags, and dispatched with real-time tracking.'
                 : 'Dispatched with high-grade packaging and express tracking to all major cities across Pakistan.'}
@@ -193,8 +193,8 @@ export default function StoreAboutPage() {
             <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${currentTheme.iconBg} ${currentTheme.iconColor}`}>
               <Users size={24} />
             </div>
-            <h3 className="text-lg font-bold">{isBoutique ? 'Stylist Concierge' : 'Customer First Support'}</h3>
-            <p className={`mt-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+            <h3 className="text-lg font-bold text-slate-950">{isBoutique ? 'Stylist Concierge' : 'Customer First Support'}</h3>
+            <p className={`mt-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
               {isBoutique
                 ? 'Dedicated fashion consultants ready to assist with bespoke made-to-measure sizing and styling inquiries.'
                 : 'Dedicated after-sales support team ready to assist with doorstep exchanges, setups, and warranty claims.'}

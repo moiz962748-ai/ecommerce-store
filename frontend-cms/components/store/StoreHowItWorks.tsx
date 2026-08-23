@@ -84,9 +84,9 @@ const STORE_STEPS: Record<
       description:
         "Explore hundreds of verified electronic devices, premium laptops, noise-canceling audio gear, and workplace essentials.",
       features: ["100% Genuine products", "Detailed specs", "Brand warranty"],
-      color: "#06B6D4",
-      gradient: "linear-gradient(135deg, #06B6D4 0%, #0891B2 100%)",
-      nextColor: "#3B82F6",
+      color: "#0284C7",
+      gradient: "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)",
+      nextColor: "#0284C7",
     },
     {
       id: 2,
@@ -95,9 +95,9 @@ const STORE_STEPS: Record<
       description:
         "Filter by technical specs, storage, processor generation, or price to find the exact setup for your daily workflow.",
       features: ["Smart specs filter", "Live stock check", "Price match"],
-      color: "#3B82F6",
-      gradient: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
-      nextColor: "#6366F1",
+      color: "#0284C7",
+      gradient: "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)",
+      nextColor: "#0284C7",
     },
     {
       id: 3,
@@ -106,8 +106,8 @@ const STORE_STEPS: Record<
       description:
         "Add to cart and checkout smoothly with encrypted payment channels or Cash on Delivery across Pakistan.",
       features: ["Encrypted checkout", "Cash on delivery", "Instant confirmation"],
-      color: "#6366F1",
-      gradient: "linear-gradient(135deg, #6366F1 0%, #4338CA 100%)",
+      color: "#0284C7",
+      gradient: "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)",
       nextColor: "#0284C7",
     },
     {
@@ -130,9 +130,9 @@ const STORE_STEPS: Record<
       description:
         "Discover heavy-duty gym weights, performance running footwear, hydration flasks, and athletic sportswear.",
       features: ["Athlete tested", "All sport types", "Size guides"],
-      color: "#10B981",
-      gradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
-      nextColor: "#14B8A6",
+      color: "#059669",
+      gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
+      nextColor: "#059669",
     },
     {
       id: 2,
@@ -141,8 +141,8 @@ const STORE_STEPS: Record<
       description:
         "Filter gear by workout type, endurance level, weight classes, or preferred colorways with quick sorting.",
       features: ["Fitness filters", "Weight variants", "Quick sort"],
-      color: "#14B8A6",
-      gradient: "linear-gradient(135deg, #14B8A6 0%, #0D9488 100%)",
+      color: "#059669",
+      gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
       nextColor: "#059669",
     },
     {
@@ -154,7 +154,7 @@ const STORE_STEPS: Record<
       features: ["Wishlist saves", "Seasonal promos", "Fast checkout"],
       color: "#059669",
       gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
-      nextColor: "#10B981",
+      nextColor: "#059669",
     },
     {
       id: 4,
@@ -163,8 +163,8 @@ const STORE_STEPS: Record<
       description:
         "Quick dispatch so you never miss a workout session. Free express delivery on orders over Rs. 3,000.",
       features: ["48-hour delivery", "Verified courier", "Hassle-free exchange"],
-      color: "#10B981",
-      gradient: "linear-gradient(135deg, #10B981 0%, #047857 100%)",
+      color: "#059669",
+      gradient: "linear-gradient(135deg, #059669 0%, #047857 100%)",
       nextColor: null,
     },
   ],
@@ -176,9 +176,9 @@ const STORE_STEPS: Record<
       description:
         "Discover seasonal collections, oversized streetwear, formal silhouettes, and premium casual daily wear.",
       features: ["Trend alerts", "100% Cotton fabric", "Full size range"],
-      color: "#A855F7",
-      gradient: "linear-gradient(135deg, #A855F7 0%, #9333EA 100%)",
-      nextColor: "#D946EF",
+      color: "#7C3AED",
+      gradient: "linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)",
+      nextColor: "#7C3AED",
     },
     {
       id: 2,
@@ -187,9 +187,9 @@ const STORE_STEPS: Record<
       description:
         "Use size charts and fit selectors to choose the perfect silhouette tailored to your look and comfort.",
       features: ["Accurate size chart", "Color swatches", "Fabric details"],
-      color: "#D946EF",
-      gradient: "linear-gradient(135deg, #D946EF 0%, #C026D3 100%)",
-      nextColor: "#EC4899",
+      color: "#7C3AED",
+      gradient: "linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)",
+      nextColor: "#7C3AED",
     },
     {
       id: 3,
@@ -198,9 +198,9 @@ const STORE_STEPS: Record<
       description:
         "Checkout seamlessly with direct cards or Cash on Delivery with zero hidden convenience charges.",
       features: ["No hidden fees", "Secure payment", "Instant tracking code"],
-      color: "#EC4899",
-      gradient: "linear-gradient(135deg, #EC4899 0%, #DB2777 100%)",
-      nextColor: "#8B5CF6",
+      color: "#7C3AED",
+      gradient: "linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)",
+      nextColor: "#7C3AED",
     },
     {
       id: 4,
@@ -209,31 +209,12 @@ const STORE_STEPS: Record<
       description:
         "Custom packaged deliveries with flexible 7-day doorstep size exchanges and return guarantee.",
       features: ["Eco-friendly packaging", "Size exchange", "7-day return policy"],
-      color: "#8B5CF6",
-      gradient: "linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)",
+      color: "#7C3AED",
+      gradient: "linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%)",
       nextColor: null,
     },
   ],
 };
-
-const CTA_SPARKLES = [
-  { top: 10, left: 15, duration: 2 },
-  { top: 20, left: 45, duration: 2.5 },
-  { top: 30, left: 75, duration: 3 },
-  { top: 40, left: 85, duration: 2.2 },
-  { top: 50, left: 25, duration: 2.8 },
-  { top: 60, left: 55, duration: 3.2 },
-  { top: 70, left: 15, duration: 2.4 },
-  { top: 80, left: 65, duration: 2.6 },
-  { top: 15, left: 90, duration: 3.1 },
-  { top: 25, left: 5, duration: 2.9 },
-  { top: 35, left: 40, duration: 2.3 },
-  { top: 45, left: 70, duration: 2.7 },
-  { top: 55, left: 10, duration: 3.3 },
-  { top: 65, left: 80, duration: 2.1 },
-  { top: 75, left: 30, duration: 2.5 },
-  { top: 85, left: 50, duration: 2.8 },
-];
 
 function StepIcon({ name }: { name: string }) {
   switch (name) {
@@ -265,71 +246,53 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
         isBoutique
           ? "bg-background border-border text-foreground"
           : isSports
-          ? "bg-[#020d09] border-emerald-950/60 text-slate-100"
+          ? "bg-[#f4fbf7] border-emerald-200/80 text-slate-900"
           : isClothing
-          ? "bg-[#0b0314] border-purple-950/60 text-slate-100"
-          : "bg-slate-950 border-slate-900 text-slate-100"
+          ? "bg-[#faf7fc] border-purple-200/80 text-slate-900"
+          : "bg-[#f8fafc] border-slate-200 text-slate-900"
       }`}
     >
-      {/* Background Ambient Glows for dark themes */}
-      {!isBoutique && (
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className={`absolute top-20 left-10 w-96 h-96 rounded-full blur-3xl ${
-              isSports ? "bg-emerald-500/10" : isClothing ? "bg-purple-500/10" : "bg-cyan-500/10"
-            }`}
-          />
-          <div
-            className={`absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl ${
-              isSports ? "bg-teal-500/10" : isClothing ? "bg-pink-500/10" : "bg-blue-500/10"
-            }`}
-          />
-        </div>
-      )}
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16 md:mb-20">
           <div
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 ${
+            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs ${
               isBoutique
-                ? "border-border bg-card text-foreground shadow-xs"
+                ? "border-border bg-card text-foreground"
                 : isSports
-                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                ? "border-emerald-200 bg-emerald-50 text-emerald-800"
                 : isClothing
-                ? "border-purple-500/30 bg-purple-500/10 text-purple-300"
-                : "border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
+                ? "border-purple-200 bg-purple-50 text-purple-800"
+                : "border-sky-200 bg-sky-50 text-sky-800"
             }`}
           >
             <PlayCircle size={14} />
-            The Couture Experience
+            {isBoutique ? "The Couture Experience" : "Simple Process"}
           </div>
-          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-white"}`}>
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-slate-950"}`}>
             Your Journey to{" "}
             <span
               className={
                 isBoutique
                   ? "text-foreground/90 underline decoration-border underline-offset-8"
-                  : `bg-gradient-to-r ${
-                      isSports
-                        ? "from-emerald-400 via-teal-400 to-green-300"
-                        : isClothing
-                        ? "from-purple-400 via-fuchsia-400 to-pink-300"
-                        : "from-cyan-400 via-blue-400 to-indigo-300"
-                    } bg-clip-text text-transparent`
+                  : isSports
+                  ? "text-emerald-700 underline decoration-emerald-300 underline-offset-8"
+                  : isClothing
+                  ? "text-purple-700 underline decoration-purple-300 underline-offset-8"
+                  : "text-sky-700 underline decoration-sky-300 underline-offset-8"
               }
             >
               {isBoutique ? "Effortless Luxury" : "Better Shopping"}
             </span>
           </h2>
-          <p className={`mt-3.5 text-sm sm:text-base leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+          <p className={`mt-3.5 text-sm sm:text-base leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
             {isBoutique
               ? "Four seamless steps from selecting your bespoke couture piece to unboxing hand-finished elegance."
               : "Four simple steps from finding your favorite product to unboxing at your doorstep."}
           </p>
         </div>
 
-        {/* Step Cards with Vertical Connecting Lines */}
+        {/* Step Cards */}
         <div className="max-w-5xl mx-auto space-y-12 md:space-y-16">
           {steps.map((step, index) => {
             const isEven = index % 2 === 1;
@@ -345,29 +308,29 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
                     isEven ? "lg:flex-row-reverse" : ""
                   }`}
                 >
-                  {/* Left Column: Details (7 cols) */}
+                  {/* Left Column: Details */}
                   <div
                     className={`lg:col-span-7 ${
                       isEven ? "lg:order-2 text-center lg:text-left" : "text-center lg:text-left"
                     }`}
                   >
                     <div
-                      className={`inline-block px-3 py-1 rounded-md border text-xs font-bold uppercase tracking-widest mb-3 ${
+                      className={`inline-block px-3 py-1 rounded-md border text-xs font-bold uppercase tracking-widest mb-3 shadow-xs ${
                         isBoutique
                           ? "bg-accent border-border text-foreground"
                           : isSports
-                          ? "bg-slate-900/90 border-emerald-900/40 text-emerald-300"
+                          ? "bg-emerald-50 border-emerald-200 text-emerald-800"
                           : isClothing
-                          ? "bg-slate-900/90 border-purple-900/40 text-purple-300"
-                          : "bg-slate-900/90 border-cyan-900/40 text-cyan-300"
+                          ? "bg-purple-50 border-purple-200 text-purple-800"
+                          : "bg-sky-50 border-sky-200 text-sky-800"
                       }`}
                     >
                       Step {step.id}
                     </div>
-                    <h3 className={`text-2xl sm:text-3xl font-extrabold mb-3 ${isBoutique ? "text-foreground" : "text-white"}`}>
+                    <h3 className={`text-2xl sm:text-3xl font-extrabold mb-3 ${isBoutique ? "text-foreground" : "text-slate-950"}`}>
                       {step.title}
                     </h3>
-                    <p className={`text-sm sm:text-base leading-relaxed mb-5 max-w-xl mx-auto lg:mx-0 ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+                    <p className={`text-sm sm:text-base leading-relaxed mb-5 max-w-xl mx-auto lg:mx-0 ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
                       {step.description}
                     </p>
 
@@ -376,10 +339,10 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
                       {step.features.map((feat) => (
                         <span
                           key={feat}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-medium ${
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border text-xs font-medium shadow-xs ${
                             isBoutique
-                              ? "bg-card border-border text-foreground/90 shadow-xs"
-                              : "bg-slate-900/80 border-slate-800 text-slate-300"
+                              ? "bg-card border-border text-foreground/90"
+                              : "bg-white border-slate-200 text-slate-700"
                           }`}
                         >
                           <span
@@ -392,33 +355,34 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
                     </div>
                   </div>
 
-                  {/* Right Column: Node Visual Icon (5 cols) */}
+                  {/* Right Column: Node Visual Icon */}
                   <div
                     className={`lg:col-span-5 flex justify-center ${
                       isEven ? "lg:order-1" : ""
                     }`}
                   >
                     <div className="relative">
-                      {/* Outer Ring */}
                       <div
                         className={`w-36 h-36 sm:w-44 sm:h-44 rounded-full flex items-center justify-center border-4 relative transition-transform duration-500 hover:scale-105 ${
                           isBoutique
                             ? "border-border shadow-md"
-                            : "border-slate-900/80 shadow-2xl"
+                            : "border-white shadow-xl"
                         }`}
                         style={{
                           background: step.gradient,
-                          boxShadow: isBoutique ? "0 10px 25px rgba(0,0,0,0.08)" : `0 0 45px ${step.color}40`,
+                          boxShadow: isBoutique
+                            ? "0 10px 25px rgba(0,0,0,0.08)"
+                            : `0 10px 30px ${step.color}35`,
                         }}
                       >
                         <StepIcon name={step.iconName} />
 
                         {/* Step Number Badge */}
                         <div
-                          className={`absolute top-2 right-2 w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center text-xs sm:text-sm font-black shadow-lg ${
+                          className={`absolute top-2 right-2 w-8 h-8 sm:w-9 sm:h-9 rounded-full border flex items-center justify-center text-xs sm:text-sm font-black shadow-md ${
                             isBoutique
                               ? "bg-card border-border text-foreground"
-                              : "bg-slate-950 border-white/20 text-white"
+                              : "bg-white border-slate-200 text-slate-900"
                           }`}
                         >
                           {step.id}
@@ -433,7 +397,7 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
 
                 {/* Connecting Line between Steps */}
                 {step.nextColor && (
-                  <div className={`w-1 h-12 sm:h-16 my-4 rounded-full relative overflow-hidden ${isBoutique ? "bg-border" : "bg-slate-800"}`}>
+                  <div className={`w-1 h-12 sm:h-16 my-4 rounded-full relative overflow-hidden ${isBoutique ? "bg-border" : "bg-slate-200"}`}>
                     <div
                       className="absolute inset-0 w-full h-full"
                       style={{
@@ -449,7 +413,7 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
           })}
         </div>
 
-        {/* Ready to Shop Dynamic Box */}
+        {/* Ready to Shop Box */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -458,63 +422,38 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
           className="mt-20 md:mt-24 max-w-4xl mx-auto"
         >
           <div
-            className={`relative overflow-hidden rounded-3xl p-8 md:p-12 text-center ${
+            className={`relative overflow-hidden rounded-3xl p-8 md:p-12 text-center border shadow-sm ${
               isBoutique
-                ? "bg-card border border-border shadow-md"
-                : "shadow-2xl"
+                ? "bg-card border-border"
+                : isSports
+                ? "bg-white border-emerald-200"
+                : isClothing
+                ? "bg-white border-purple-200"
+                : "bg-white border-slate-200"
             }`}
-            style={
-              isBoutique
-                ? {}
-                : {
-                    background: isSports
-                      ? "linear-gradient(135deg, #059669 0%, #10B981 50%, #14B8A6 100%)"
-                      : isClothing
-                      ? "linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #EC4899 100%)"
-                      : "linear-gradient(135deg, #0284C7 0%, #06B6D4 50%, #3B82F6 100%)",
-                  }
-            }
           >
-            {/* Sparkles for dark mode */}
-            {!isBoutique && (
-              <div className="absolute inset-0 opacity-25 pointer-events-none">
-                {CTA_SPARKLES.map((sparkle, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-2 h-2 bg-white rounded-full"
-                    style={{ top: `${sparkle.top}%`, left: `${sparkle.left}%` }}
-                    animate={{
-                      opacity: [0.3, 1, 0.3],
-                      scale: [1, 1.5, 1],
-                    }}
-                    transition={{
-                      duration: sparkle.duration,
-                      repeat: Infinity,
-                      delay: (i * 0.1) % 2,
-                    }}
-                  />
-                ))}
-              </div>
-            )}
-
             <div className="relative z-10">
               <div className="inline-flex mb-5">
                 <div
-                  className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-xs ${
+                  className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-xs border ${
                     isBoutique
-                      ? "bg-accent border border-border text-foreground"
-                      : "bg-white/20 backdrop-blur-md text-white shadow-xl"
+                      ? "bg-accent border-border text-foreground"
+                      : isSports
+                      ? "bg-emerald-50 border-emerald-200 text-emerald-700"
+                      : isClothing
+                      ? "bg-purple-50 border-purple-200 text-purple-700"
+                      : "bg-sky-50 border-sky-200 text-sky-700"
                   }`}
                 >
                   <Sparkles size={28} />
                 </div>
               </div>
 
-              <h3 className={`text-3xl sm:text-4xl font-black mb-4 ${isBoutique ? "text-foreground" : "text-white"}`}>
-                {isBoutique ? "Ready to Wear Timeless Elegance?" : "Ready to Upgrade Your Lifestyle?"}
+              <h3 className={`text-3xl sm:text-4xl font-black mb-4 ${isBoutique ? "text-foreground" : "text-slate-950"}`}>
+                {isBoutique ? "Ready to Wear Timeless Elegance?" : "Ready to Upgrade Your Experience?"}
               </h3>
 
-              <p className={`text-sm sm:text-base mb-8 max-w-xl mx-auto leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-white/95"}`}>
+              <p className={`text-sm sm:text-base mb-8 max-w-xl mx-auto leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
                 {isBoutique
                   ? "Explore our curated couture drops, custom-made bridal wear, and premium luxury pret available across Pakistan."
                   : "Join thousands of satisfied customers enjoying premium quality, fast shipping, and dependable support across Pakistan."}
@@ -526,7 +465,11 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
                   className={`inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm transition-all shadow-sm ${
                     isBoutique
                       ? "bg-primary text-primary-foreground hover:opacity-90"
-                      : "bg-white text-slate-950 hover:bg-slate-100 shadow-lg"
+                      : isSports
+                      ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                      : isClothing
+                      ? "bg-purple-600 text-white hover:bg-purple-700"
+                      : "bg-sky-600 text-white hover:bg-sky-700"
                   }`}
                 >
                   <span>Browse Collection</span>
@@ -535,14 +478,14 @@ export function StoreHowItWorks({ subdomain }: StoreHowItWorksProps) {
 
                 <Link
                   href={`/store/${subdomain}/cart`}
-                  className={`inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm transition-all ${
+                  className={`inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl font-bold text-sm transition-all border shadow-xs ${
                     isBoutique
-                      ? "border border-border bg-card text-foreground hover:bg-accent shadow-xs"
-                      : "bg-white/20 border border-white/30 text-white hover:bg-white/30 backdrop-blur-md"
+                      ? "border-border bg-card text-foreground hover:bg-accent"
+                      : "border-slate-200 bg-white text-slate-800 hover:bg-slate-50"
                   }`}
                 >
-                  <ShoppingBag size={16} />
-                  <span>View Bag</span>
+                  <ShoppingBag size={16} className={isBoutique ? "text-muted-foreground" : "text-slate-500"} />
+                  <span>{isBoutique ? "View Bag" : "View Cart"}</span>
                 </Link>
               </div>
             </div>

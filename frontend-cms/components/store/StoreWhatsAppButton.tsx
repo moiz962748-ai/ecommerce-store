@@ -34,7 +34,6 @@ export function StoreWhatsAppButton({ subdomain }: { subdomain: string }) {
     return null;
   }
 
-  // Clean phone number (remove spaces, plus, hyphens for wa.me URL)
   const cleanPhone = whatsappConfig.phone.replace(/[^0-9]/g, '');
   const fallbackMsg = isBoutique
     ? 'Hello! I would like to inquire about bespoke tailoring and couture collections.'
@@ -57,7 +56,7 @@ export function StoreWhatsAppButton({ subdomain }: { subdomain: string }) {
         className={`absolute right-16 top-1/2 -translate-y-1/2 text-xs font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 shadow-md ${
           isBoutique
             ? 'bg-card text-foreground border border-border'
-            : 'bg-slate-900 text-white'
+            : 'bg-white text-slate-900 border border-slate-200'
         }`}
       >
         {isBoutique ? 'Chat with Stylist on WhatsApp' : 'Chat with us on WhatsApp'}

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { apiClient } from '@/lib/api-client';
-import { ArrowLeft, Sparkles, ShoppingBag, Laptop, Shirt, Trophy, Sparkle } from 'lucide-react';
+import { ArrowLeft, Sparkles, ShoppingBag, Laptop, Shirt, Trophy } from 'lucide-react';
 
 interface Store {
   id: string;
@@ -137,7 +137,6 @@ export default function StoreProductsPage() {
     );
   }, [products, selectedCategory, isBoutique]);
 
-  // Dynamic Content according to Store Type
   const heroEyebrow = isBoutique
     ? 'Handcrafted Pret & Couture'
     : isSports
@@ -160,18 +159,18 @@ export default function StoreProductsPage() {
     return (
       <main
         className={`flex min-h-screen items-center justify-center p-8 ${
-          isBoutique ? 'bg-background text-foreground' : ''
+          isBoutique ? 'bg-background text-foreground' : 'bg-[#f8fafc] text-slate-900'
         }`}
       >
         <div
-          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 ${
+          className={`flex items-center gap-3 rounded-2xl border px-6 py-4 shadow-xs ${
             isBoutique
-              ? 'border-border bg-card text-foreground shadow-xs'
+              ? 'border-border bg-card text-foreground'
               : isSports
-              ? 'border-emerald-900/50 bg-slate-900/80 text-emerald-300 backdrop-blur-md'
+              ? 'border-emerald-200 bg-white text-emerald-800'
               : isClothing
-              ? 'border-purple-900/50 bg-slate-900/80 text-purple-300 backdrop-blur-md'
-              : 'border-cyan-900/50 bg-slate-900/80 text-cyan-300 backdrop-blur-md'
+              ? 'border-purple-200 bg-white text-purple-800'
+              : 'border-slate-200 bg-white text-sky-800'
           }`}
         >
           <div
@@ -179,10 +178,10 @@ export default function StoreProductsPage() {
               isBoutique
                 ? 'border-foreground'
                 : isSports
-                ? 'border-emerald-400'
+                ? 'border-emerald-600'
                 : isClothing
-                ? 'border-purple-400'
-                : 'border-cyan-400'
+                ? 'border-purple-600'
+                : 'border-sky-600'
             }`}
           />
           <span className="text-sm font-medium">Loading collection...</span>
@@ -195,18 +194,18 @@ export default function StoreProductsPage() {
     return (
       <main
         className={`flex min-h-screen flex-col items-center justify-center gap-4 p-8 ${
-          isBoutique ? 'bg-background text-foreground' : ''
+          isBoutique ? 'bg-background text-foreground' : 'bg-[#f8fafc] text-slate-900'
         }`}
       >
-        <p className={`text-sm font-semibold ${isBoutique ? 'text-destructive' : 'text-rose-400'}`}>
+        <p className={`text-sm font-semibold ${isBoutique ? 'text-destructive' : 'text-rose-600'}`}>
           {error || 'Store not found'}
         </p>
         <Link
           href={`/store/${subdomain}`}
-          className={`rounded-xl border px-5 py-2.5 text-xs font-bold transition-all ${
+          className={`rounded-xl border px-5 py-2.5 text-xs font-bold transition-all shadow-xs ${
             isBoutique
-              ? 'border-border bg-card text-foreground hover:bg-accent shadow-xs'
-              : 'border-slate-800 bg-slate-900 text-white hover:bg-slate-800'
+              ? 'border-border bg-card text-foreground hover:bg-accent'
+              : 'border-slate-200 bg-white text-slate-900 hover:bg-slate-50'
           }`}
         >
           Return to Store Home
@@ -218,49 +217,40 @@ export default function StoreProductsPage() {
   return (
     <main
       className={`min-h-screen w-full transition-colors duration-300 ${
-        isBoutique ? 'bg-background text-foreground' : ''
+        isBoutique ? 'bg-background text-foreground' : 'bg-[#f8fafc] text-slate-900'
       }`}
     >
       {/* 1. Top Hero Banner */}
       <section className="mx-auto max-w-7xl px-4 pt-8 pb-6 sm:px-6 md:px-8 md:pt-12 md:pb-8">
         <div
-          className={`relative overflow-hidden rounded-3xl border p-8 md:p-12 transition-all duration-300 ${
+          className={`relative overflow-hidden rounded-3xl border p-8 md:p-12 transition-all duration-300 shadow-xs ${
             isBoutique
-              ? 'border-border bg-card shadow-xs'
+              ? 'border-border bg-card'
               : isSports
-              ? 'border-emerald-900/40 bg-gradient-to-br from-emerald-950/40 via-slate-900/70 to-slate-950 shadow-2xl shadow-emerald-950/20 backdrop-blur-xl'
+              ? 'border-emerald-200/80 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/40'
               : isClothing
-              ? 'border-purple-900/40 bg-gradient-to-br from-purple-950/40 via-slate-900/70 to-slate-950 shadow-2xl shadow-purple-950/20 backdrop-blur-xl'
-              : 'border-cyan-900/40 bg-gradient-to-br from-cyan-950/30 via-slate-900/70 to-slate-950 shadow-2xl shadow-cyan-950/20 backdrop-blur-xl'
+              ? 'border-purple-200/80 bg-gradient-to-br from-purple-50 via-white to-purple-50/40'
+              : 'border-slate-200 bg-gradient-to-br from-sky-50 via-white to-slate-50'
           }`}
         >
-          {/* Ambient Glow for dark modes */}
-          {!isBoutique && (
-            <div
-              className={`pointer-events-none absolute -right-10 -top-10 h-72 w-72 rounded-full blur-[100px] ${
-                isSports ? 'bg-emerald-500/15' : isClothing ? 'bg-purple-500/15' : 'bg-cyan-500/15'
-              }`}
-            />
-          )}
-
           <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl">
               <div
-                className={`mb-4 inline-flex items-center gap-2 rounded-full border px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider ${
+                className={`mb-4 inline-flex items-center gap-2 rounded-full border px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider shadow-xs ${
                   isBoutique
                     ? 'border-border bg-accent text-foreground'
                     : isSports
-                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                    ? 'border-emerald-200 bg-emerald-100/70 text-emerald-800'
                     : isClothing
-                    ? 'border-purple-500/30 bg-purple-500/10 text-purple-300'
-                    : 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300'
+                    ? 'border-purple-200 bg-purple-100/70 text-purple-800'
+                    : 'border-sky-200 bg-sky-100/70 text-sky-800'
                 }`}
               >
                 <HeroIcon size={13} />
                 <span>{heroEyebrow}</span>
               </div>
 
-              <h1 className={`text-3xl font-black tracking-tight sm:text-4xl md:text-5xl leading-tight ${isBoutique ? 'text-foreground' : 'text-white'}`}>
+              <h1 className={`text-3xl font-black tracking-tight sm:text-4xl md:text-5xl leading-tight ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>
                 {heroHeadline}
               </h1>
             </div>
@@ -268,10 +258,10 @@ export default function StoreProductsPage() {
             <div className="shrink-0">
               <Link
                 href={`/store/${subdomain}`}
-                className={`inline-flex items-center gap-2 rounded-xl border px-5 py-3 text-xs font-bold transition-all ${
+                className={`inline-flex items-center gap-2 rounded-xl border px-5 py-3 text-xs font-bold transition-all shadow-xs ${
                   isBoutique
-                    ? 'border-border bg-card text-foreground hover:bg-accent shadow-xs'
-                    : 'border-slate-800 bg-slate-900/90 text-slate-200 hover:border-slate-700 hover:text-white shadow-sm'
+                    ? 'border-border bg-card text-foreground hover:bg-accent'
+                    : 'border-slate-200 bg-white text-slate-800 hover:bg-slate-50'
                 }`}
               >
                 <ArrowLeft size={14} />
@@ -294,22 +284,18 @@ export default function StoreProductsPage() {
                 key={category}
                 type="button"
                 onClick={() => setSelectedCategory(category)}
-                className={`rounded-xl px-5 py-2.5 text-xs font-bold transition-all ${
+                className={`rounded-xl px-5 py-2.5 text-xs font-bold transition-all shadow-xs ${
                   isSelected
                     ? isBoutique
-                      ? 'bg-primary text-primary-foreground shadow-xs'
+                      ? 'bg-primary text-primary-foreground'
                       : isSports
-                      ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/25'
+                      ? 'bg-emerald-600 text-white shadow-emerald-600/20'
                       : isClothing
-                      ? 'bg-purple-600 text-white shadow-lg shadow-purple-500/25'
-                      : 'bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/25'
+                      ? 'bg-purple-600 text-white shadow-purple-600/20'
+                      : 'bg-sky-600 text-white shadow-sky-600/20'
                     : isBoutique
-                    ? 'border border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/30 shadow-xs'
-                    : isSports
-                    ? 'border border-emerald-950/60 bg-slate-900/60 text-slate-300 hover:border-emerald-500/40 hover:text-white'
-                    : isClothing
-                    ? 'border border-purple-950/60 bg-slate-900/60 text-slate-300 hover:border-purple-500/40 hover:text-white'
-                    : 'border border-slate-800 bg-slate-900/60 text-slate-300 hover:border-cyan-500/40 hover:text-white'
+                    ? 'border border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/30'
+                    : 'border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:text-slate-950'
                 }`}
               >
                 {category}
@@ -321,19 +307,15 @@ export default function StoreProductsPage() {
         {/* Empty Catalog State */}
         {visibleProducts.length === 0 ? (
           <div
-            className={`rounded-3xl border p-16 text-center ${
+            className={`rounded-3xl border p-16 text-center shadow-xs ${
               isBoutique
-                ? 'border-border bg-card shadow-xs'
-                : isSports
-                ? 'border-emerald-950 bg-slate-900/40 backdrop-blur-md'
-                : isClothing
-                ? 'border-purple-950 bg-slate-900/40 backdrop-blur-md'
-                : 'border-slate-800 bg-slate-900/40 backdrop-blur-md'
+                ? 'border-border bg-card'
+                : 'border-slate-200 bg-white'
             }`}
           >
-            <ShoppingBag size={40} className={`mx-auto mb-3 ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`} />
-            <h3 className={`text-base font-bold ${isBoutique ? 'text-foreground' : 'text-white'}`}>No products found</h3>
-            <p className={`mt-1 text-xs ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+            <ShoppingBag size={40} className={`mx-auto mb-3 ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`} />
+            <h3 className={`text-base font-bold ${isBoutique ? 'text-foreground' : 'text-slate-950'}`}>No products found</h3>
+            <p className={`mt-1 text-xs ${isBoutique ? 'text-muted-foreground' : 'text-slate-500'}`}>
               There are no items listed in this specific category yet.
             </p>
           </div>
@@ -348,14 +330,14 @@ export default function StoreProductsPage() {
                 <Link
                   key={product.id}
                   href={`/store/${subdomain}/products/${product.id}`}
-                  className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border transition-all duration-300 hover:-translate-y-1.5 ${
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border transition-all duration-300 hover:-translate-y-1.5 shadow-xs ${
                     isBoutique
-                      ? 'border-border bg-card shadow-xs hover:border-foreground/20 hover:shadow-md'
+                      ? 'border-border bg-card hover:border-foreground/20 hover:shadow-md'
                       : isSports
-                      ? 'border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md'
+                      ? 'border-emerald-100 bg-white hover:border-emerald-300 hover:shadow-md'
                       : isClothing
-                      ? 'border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md'
-                      : 'border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90 shadow-xl backdrop-blur-md'
+                      ? 'border-purple-100 bg-white hover:border-purple-300 hover:shadow-md'
+                      : 'border-slate-200 bg-white hover:border-sky-300 hover:shadow-md'
                   }`}
                 >
                   <div>
@@ -365,21 +347,21 @@ export default function StoreProductsPage() {
                         isBoutique
                           ? 'border-border bg-accent/40'
                           : isSports
-                          ? 'border-emerald-950/80 bg-emerald-950/20'
+                          ? 'border-emerald-100 bg-emerald-50/50'
                           : isClothing
-                          ? 'border-purple-950/80 bg-purple-950/20'
-                          : 'border-slate-800/80 bg-slate-950/40'
+                          ? 'border-purple-100 bg-purple-50/50'
+                          : 'border-slate-100 bg-slate-50'
                       }`}
                     >
                       <div
-                        className={`absolute right-3 top-3 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                        className={`absolute right-3 top-3 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-xs ${
                           isBoutique
-                            ? 'border-border bg-card text-foreground shadow-xs'
+                            ? 'border-border bg-card text-foreground'
                             : isSports
-                            ? 'border-emerald-500/30 bg-slate-950/80 text-emerald-400 backdrop-blur-md'
+                            ? 'border-emerald-200 bg-white text-emerald-800'
                             : isClothing
-                            ? 'border-purple-500/30 bg-slate-950/80 text-purple-300 backdrop-blur-md'
-                            : 'border-cyan-500/30 bg-slate-950/80 text-cyan-300 backdrop-blur-md'
+                            ? 'border-purple-200 bg-white text-purple-800'
+                            : 'border-sky-200 bg-white text-sky-800'
                         }`}
                       >
                         {displayCat}
@@ -405,15 +387,15 @@ export default function StoreProductsPage() {
                           isBoutique
                             ? 'text-foreground group-hover:opacity-80'
                             : isSports
-                            ? 'text-white group-hover:text-emerald-400'
+                            ? 'text-slate-950 group-hover:text-emerald-700'
                             : isClothing
-                            ? 'text-white group-hover:text-purple-300'
-                            : 'text-white group-hover:text-cyan-300'
+                            ? 'text-slate-950 group-hover:text-purple-700'
+                            : 'text-slate-950 group-hover:text-sky-700'
                         }`}
                       >
                         {product.name}
                       </h2>
-                      <p className={`mt-1.5 line-clamp-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-400'}`}>
+                      <p className={`mt-1.5 line-clamp-2 text-xs leading-relaxed ${isBoutique ? 'text-muted-foreground' : 'text-slate-600'}`}>
                         {product.description}
                       </p>
                     </div>
@@ -425,10 +407,10 @@ export default function StoreProductsPage() {
                       isBoutique
                         ? 'border-border'
                         : isSports
-                        ? 'border-emerald-950/80'
+                        ? 'border-emerald-100'
                         : isClothing
-                        ? 'border-purple-950/80'
-                        : 'border-slate-800/80'
+                        ? 'border-purple-100'
+                        : 'border-slate-100'
                     }`}
                   >
                     <div>
@@ -438,10 +420,10 @@ export default function StoreProductsPage() {
                           isBoutique
                             ? 'text-foreground'
                             : isSports
-                            ? 'text-emerald-400'
+                            ? 'text-emerald-700'
                             : isClothing
-                            ? 'text-purple-300'
-                            : 'text-cyan-300'
+                            ? 'text-purple-700'
+                            : 'text-sky-700'
                         }`}
                       >
                         Rs. {Number(displayPrice).toLocaleString()}
@@ -449,14 +431,14 @@ export default function StoreProductsPage() {
                     </div>
 
                     <span
-                      className={`rounded-xl border px-3.5 py-1.5 text-xs font-bold transition-all ${
+                      className={`rounded-xl border px-3.5 py-1.5 text-xs font-bold transition-all shadow-xs ${
                         isBoutique
-                          ? 'border-border bg-card text-foreground group-hover:bg-accent shadow-xs'
+                          ? 'border-border bg-card text-foreground group-hover:bg-accent'
                           : isSports
-                          ? 'border-emerald-900/60 bg-slate-800/80 text-emerald-300 group-hover:bg-emerald-500 group-hover:text-slate-950'
+                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white'
                           : isClothing
-                          ? 'border-purple-900/60 bg-slate-800/80 text-purple-300 group-hover:bg-purple-600 group-hover:text-white'
-                          : 'border-slate-700 bg-slate-800/80 text-cyan-300 group-hover:bg-cyan-500 group-hover:text-slate-950'
+                          ? 'border-purple-200 bg-purple-50 text-purple-700 group-hover:bg-purple-600 group-hover:text-white'
+                          : 'border-sky-200 bg-sky-50 text-sky-700 group-hover:bg-sky-600 group-hover:text-white'
                       }`}
                     >
                       View

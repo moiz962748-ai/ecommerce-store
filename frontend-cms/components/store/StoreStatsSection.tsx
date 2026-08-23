@@ -81,15 +81,15 @@ function StatCard({
         isBoutique
           ? "border-border bg-card shadow-xs hover:border-foreground/20 hover:shadow-md"
           : isSports
-          ? "border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90 shadow-lg shadow-emerald-950/10 backdrop-blur-md"
+          ? "border-emerald-200/80 bg-white hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-500/5 shadow-xs"
           : isClothing
-          ? "border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90 shadow-lg shadow-purple-950/10 backdrop-blur-md"
-          : "border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90 shadow-lg shadow-cyan-950/10 backdrop-blur-md"
+          ? "border-purple-200/80 bg-white hover:border-purple-300 hover:shadow-lg hover:shadow-purple-500/5 shadow-xs"
+          : "border-slate-200/80 bg-white hover:border-sky-300 hover:shadow-lg hover:shadow-sky-500/5 shadow-xs"
       }`}
     >
-      {/* Background radial glow on hover */}
+      {/* Background subtle radial glow on hover */}
       <div
-        className="absolute -top-8 -right-8 w-28 h-28 rounded-full opacity-10 blur-2xl group-hover:opacity-30 transition-opacity duration-300 pointer-events-none"
+        className="absolute -top-8 -right-8 w-28 h-28 rounded-full opacity-10 blur-2xl group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"
         style={{ background: isBoutique ? "var(--foreground)" : stat.gradient }}
       />
 
@@ -97,7 +97,7 @@ function StatCard({
       <motion.div
         animate={{ scale: [1, 1.25, 1], rotate: [0, 15, -15, 0] }}
         transition={{ duration: 3, repeat: Infinity, delay: index * 0.4 }}
-        className="absolute top-3 right-3 opacity-20 group-hover:opacity-60 transition-opacity pointer-events-none"
+        className="absolute top-3 right-3 opacity-20 group-hover:opacity-50 transition-opacity pointer-events-none"
       >
         <Sparkles
           size={14}
@@ -105,10 +105,10 @@ function StatCard({
             isBoutique
               ? "text-foreground"
               : isSports
-              ? "text-emerald-400"
+              ? "text-emerald-600"
               : isClothing
-              ? "text-purple-400"
-              : "text-cyan-400"
+              ? "text-purple-600"
+              : "text-sky-600"
           }
         />
       </motion.div>
@@ -130,27 +130,30 @@ function StatCard({
             className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6 ${
               isBoutique
                 ? "bg-accent border border-border text-foreground shadow-xs"
-                : "shadow-lg text-white"
+                : isSports
+                ? "bg-emerald-50 border border-emerald-200 text-emerald-700 shadow-xs"
+                : isClothing
+                ? "bg-purple-50 border border-purple-200 text-purple-700 shadow-xs"
+                : "bg-sky-50 border border-sky-200 text-sky-700 shadow-xs"
             }`}
-            style={isBoutique ? {} : { background: stat.gradient }}
           >
-            <Icon size={24} className={isBoutique ? "text-foreground" : "text-white"} strokeWidth={2.2} />
+            <Icon size={24} strokeWidth={2.2} />
           </div>
         </motion.div>
 
         {/* Counter Number */}
         <div className="mb-1.5">
-          <div className={`text-3xl md:text-4xl font-black leading-none tabular-nums ${isBoutique ? "text-foreground" : "text-white"}`}>
+          <div className={`text-3xl md:text-4xl font-black leading-none tabular-nums ${isBoutique ? "text-foreground" : "text-slate-950"}`}>
             {count.toLocaleString()}
             <span
               className={`ml-0.5 ${
                 isBoutique
                   ? "text-muted-foreground"
                   : isSports
-                  ? "text-emerald-400"
+                  ? "text-emerald-600"
                   : isClothing
-                  ? "text-purple-400"
-                  : "text-cyan-400"
+                  ? "text-purple-600"
+                  : "text-sky-600"
               }`}
             >
               {stat.suffix}
@@ -159,12 +162,12 @@ function StatCard({
         </div>
 
         {/* Label */}
-        <div className={`text-xs md:text-sm font-bold mb-1 ${isBoutique ? "text-foreground" : "text-slate-200"}`}>
+        <div className={`text-xs md:text-sm font-bold mb-1 ${isBoutique ? "text-foreground" : "text-slate-900"}`}>
           {stat.label}
         </div>
 
         {/* Description */}
-        <div className={`text-[11px] line-clamp-2 leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+        <div className={`text-[11px] line-clamp-2 leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-500"}`}>
           {stat.description}
         </div>
       </div>
@@ -217,7 +220,7 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
         ? "linear-gradient(135deg, #10B981 0%, #059669 100%)"
         : isClothing
         ? "linear-gradient(135deg, #A855F7 0%, #7C3AED 100%)"
-        : "linear-gradient(135deg, #06B6D4 0%, #0891B2 100%)",
+        : "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)",
     },
     {
       icon: Building2,
@@ -229,7 +232,7 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
         ? "linear-gradient(135deg, #14B8A6 0%, #0D9488 100%)"
         : isClothing
         ? "linear-gradient(135deg, #D946EF 0%, #C026D3 100%)"
-        : "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
+        : "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)",
     },
     {
       icon: MapPin,
@@ -241,7 +244,7 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
         ? "linear-gradient(135deg, #059669 0%, #047857 100%)"
         : isClothing
         ? "linear-gradient(135deg, #EC4899 0%, #DB2777 100%)"
-        : "linear-gradient(135deg, #6366F1 0%, #4338CA 100%)",
+        : "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)",
     },
     {
       icon: Users,
@@ -265,7 +268,7 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
         ? "linear-gradient(135deg, #0D9488 0%, #115E59 100%)"
         : isClothing
         ? "linear-gradient(135deg, #F43F5E 0%, #BE123C 100%)"
-        : "linear-gradient(135deg, #38BDF8 0%, #0284C7 100%)",
+        : "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)",
     },
     {
       icon: Headphones,
@@ -277,7 +280,7 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
         ? "linear-gradient(135deg, #10B981 0%, #0D9488 100%)"
         : isClothing
         ? "linear-gradient(135deg, #A855F7 0%, #EC4899 100%)"
-        : "linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%)",
+        : "linear-gradient(135deg, #0284C7 0%, #0369A1 100%)",
     },
   ];
 
@@ -288,37 +291,12 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
         isBoutique
           ? "bg-background border-border text-foreground"
           : isSports
-          ? "bg-[#020d09] border-emerald-950/60 text-emerald-50"
+          ? "bg-[#f4fbf7] border-emerald-200/80 text-slate-900"
           : isClothing
-          ? "bg-[#0b0314] border-purple-950/60 text-purple-50"
-          : "bg-slate-950 border-slate-900 text-slate-100"
+          ? "bg-[#faf7fc] border-purple-200/80 text-slate-900"
+          : "bg-[#f8fafc] border-slate-200 text-slate-900"
       }`}
     >
-      {/* Ambient background glows for dark themes */}
-      {!isBoutique && (
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className={`absolute top-0 left-1/4 w-96 h-96 rounded-full blur-3xl ${
-              isSports ? "bg-emerald-500/10" : isClothing ? "bg-purple-500/10" : "bg-cyan-500/10"
-            }`}
-          />
-          <div
-            className={`absolute bottom-0 right-1/4 w-96 h-96 rounded-full blur-3xl ${
-              isSports ? "bg-teal-500/10" : isClothing ? "bg-pink-500/10" : "bg-blue-500/10"
-            }`}
-          />
-        </div>
-      )}
-
-      {/* Subtle Dot Pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(circle, ${isBoutique ? "#000000" : "#ffffff"} 1px, transparent 1px)`,
-          backgroundSize: "28px 28px",
-        }}
-      />
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
         {/* Section Header */}
         <motion.div
@@ -329,40 +307,38 @@ export function StoreStatsSection({ subdomain }: StoreStatsProps) {
           className="text-center max-w-2xl mx-auto mb-14 md:mb-16"
         >
           <div
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 ${
+            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs ${
               isBoutique
-                ? "border-border bg-card text-foreground shadow-xs"
+                ? "border-border bg-card text-foreground"
                 : isSports
-                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                ? "border-emerald-200 bg-emerald-50 text-emerald-800"
                 : isClothing
-                ? "border-purple-500/30 bg-purple-500/10 text-purple-300"
-                : "border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
+                ? "border-purple-200 bg-purple-50 text-purple-800"
+                : "border-sky-200 bg-sky-50 text-sky-800"
             }`}
           >
             <TrendingUp size={14} />
             Growing Together
           </div>
 
-          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-white"}`}>
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-slate-950"}`}>
             Making an{" "}
             <span
               className={
                 isBoutique
                   ? "text-foreground/90 underline decoration-border underline-offset-8"
-                  : `bg-gradient-to-r ${
-                      isSports
-                        ? "from-emerald-400 via-teal-400 to-green-300"
-                        : isClothing
-                        ? "from-purple-400 via-fuchsia-400 to-pink-300"
-                        : "from-cyan-400 via-blue-400 to-indigo-300"
-                    } bg-clip-text text-transparent`
+                  : isSports
+                  ? "text-emerald-700 underline decoration-emerald-300 underline-offset-8"
+                  : isClothing
+                  ? "text-purple-700 underline decoration-purple-300 underline-offset-8"
+                  : "text-sky-700 underline decoration-sky-300 underline-offset-8"
               }
             >
               Impact
             </span>
           </h2>
 
-          <p className={`mt-3.5 text-sm sm:text-base leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+          <p className={`mt-3.5 text-sm sm:text-base leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
             {isBoutique
               ? "Verified metrics reflecting our dedication to pure fabrics, handcrafted tailoring, and bespoke customer experiences."
               : "Real numbers demonstrating our commitment to quality products, fast fulfillment, and trusted customer relationships."}

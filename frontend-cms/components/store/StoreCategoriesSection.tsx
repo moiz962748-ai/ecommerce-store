@@ -84,56 +84,56 @@ const STORE_CATEGORIES: Record<string, CategoryItem[]> = {
       name: "Laptops & PCs",
       description: "Workstations, ultrabooks, and gaming rigs",
       icon: "💻",
-      bgColor: "bg-blue-500/10 border-blue-500/30",
-      textColor: "text-blue-400",
+      bgColor: "bg-sky-50 border-sky-100",
+      textColor: "text-sky-700",
     },
     {
       id: "audio",
       name: "Audio & Sound",
       description: "Noise cancelling headphones and earbuds",
       icon: "🎧",
-      bgColor: "bg-cyan-500/10 border-cyan-500/30",
-      textColor: "text-cyan-400",
+      bgColor: "bg-cyan-50 border-cyan-100",
+      textColor: "text-cyan-700",
     },
     {
       id: "wearables",
       name: "Smart Wearables",
       description: "Smartwatches, fitness bands, and trackers",
       icon: "⌚",
-      bgColor: "bg-purple-500/10 border-purple-500/30",
-      textColor: "text-purple-400",
+      bgColor: "bg-blue-50 border-blue-100",
+      textColor: "text-blue-700",
     },
     {
       id: "accessories",
       name: "Keyboards & Mice",
       description: "Mechanical keyboards, ergonomic mice",
       icon: "⌨️",
-      bgColor: "bg-amber-500/10 border-amber-500/30",
-      textColor: "text-amber-400",
+      bgColor: "bg-slate-100 border-slate-200",
+      textColor: "text-slate-700",
     },
     {
       id: "phones",
       name: "Smartphones",
       description: "Flagship devices and mobile accessories",
       icon: "📱",
-      bgColor: "bg-emerald-500/10 border-emerald-500/30",
-      textColor: "text-emerald-400",
+      bgColor: "bg-sky-50 border-sky-100",
+      textColor: "text-sky-700",
     },
     {
       id: "cameras",
       name: "Cameras & Vision",
       description: "Mirrorless gear, webcams, and lenses",
       icon: "📷",
-      bgColor: "bg-rose-500/10 border-rose-500/30",
-      textColor: "text-rose-400",
+      bgColor: "bg-indigo-50 border-indigo-100",
+      textColor: "text-indigo-700",
     },
     {
       id: "speakers",
       name: "Smart Audio & Speakers",
       description: "Bluetooth speakers and home sound systems",
       icon: "🔊",
-      bgColor: "bg-indigo-500/10 border-indigo-500/30",
-      textColor: "text-indigo-400",
+      bgColor: "bg-cyan-50 border-cyan-100",
+      textColor: "text-cyan-700",
     },
   ],
   sports: [
@@ -142,56 +142,56 @@ const STORE_CATEGORIES: Record<string, CategoryItem[]> = {
       name: "Footwear & Shoes",
       description: "Running sneakers, trail shoes, training cleats",
       icon: "👟",
-      bgColor: "bg-emerald-500/10 border-emerald-500/30",
-      textColor: "text-emerald-400",
+      bgColor: "bg-emerald-50 border-emerald-100",
+      textColor: "text-emerald-700",
     },
     {
       id: "gym-gear",
       name: "Gym & Weights",
       description: "Dumbbells, kettlebells, resistance bands",
       icon: "🏋️",
-      bgColor: "bg-amber-500/10 border-amber-500/30",
-      textColor: "text-amber-400",
+      bgColor: "bg-teal-50 border-teal-100",
+      textColor: "text-teal-700",
     },
     {
       id: "apparel",
       name: "Activewear & Tops",
       description: "Breathable shirts, shorts, compression wear",
       icon: "🎽",
-      bgColor: "bg-blue-500/10 border-blue-500/30",
-      textColor: "text-blue-400",
+      bgColor: "bg-emerald-50 border-emerald-100",
+      textColor: "text-emerald-700",
     },
     {
       id: "hydration",
       name: "Hydration & Bottles",
       description: "Insulated flasks, shakers, hydration packs",
       icon: "💧",
-      bgColor: "bg-cyan-500/10 border-cyan-500/30",
-      textColor: "text-cyan-400",
+      bgColor: "bg-cyan-50 border-cyan-100",
+      textColor: "text-cyan-700",
     },
     {
       id: "recovery",
       name: "Yoga & Recovery",
       description: "Mats, foam rollers, massage guns",
       icon: "🧘",
-      bgColor: "bg-purple-500/10 border-purple-500/30",
-      textColor: "text-purple-400",
+      bgColor: "bg-teal-50 border-teal-100",
+      textColor: "text-teal-700",
     },
     {
       id: "outdoor",
       name: "Outdoor & Trekking",
       description: "Backpacks, trail accessories, camping essentials",
       icon: "🏕️",
-      bgColor: "bg-lime-500/10 border-lime-500/30",
-      textColor: "text-lime-400",
+      bgColor: "bg-emerald-50 border-emerald-100",
+      textColor: "text-emerald-700",
     },
     {
       id: "sports-accessories",
       name: "Gloves & Straps",
       description: "Lifting straps, wrist wraps, support belts",
       icon: "🥊",
-      bgColor: "bg-rose-500/10 border-rose-500/30",
-      textColor: "text-rose-400",
+      bgColor: "bg-teal-50 border-teal-100",
+      textColor: "text-teal-700",
     },
   ],
   clothing: [
@@ -200,68 +200,59 @@ const STORE_CATEGORIES: Record<string, CategoryItem[]> = {
       name: "T-Shirts & Tops",
       description: "Oversized tees, graphic prints, basics",
       icon: "👕",
-      bgColor: "bg-purple-500/10 border-purple-500/30",
-      textColor: "text-purple-400",
+      bgColor: "bg-purple-50 border-purple-100",
+      textColor: "text-purple-700",
     },
     {
       id: "bottoms",
       name: "Jeans & Trousers",
       description: "Relaxed denim, cargos, tailored pants",
       icon: "👖",
-      bgColor: "bg-blue-500/10 border-blue-500/30",
-      textColor: "text-blue-400",
+      bgColor: "bg-indigo-50 border-indigo-100",
+      textColor: "text-indigo-700",
     },
     {
       id: "outerwear",
       name: "Jackets & Hoodies",
       description: "Bomber jackets, fleece hoodies, overcoats",
       icon: "🧥",
-      bgColor: "bg-rose-500/10 border-rose-500/30",
-      textColor: "text-rose-400",
+      bgColor: "bg-purple-50 border-purple-100",
+      textColor: "text-purple-700",
     },
     {
       id: "dresses",
       name: "Dresses & Co-ords",
       description: "Casual wear, formal silhouettes, sets",
       icon: "👗",
-      bgColor: "bg-pink-500/10 border-pink-500/30",
-      textColor: "text-pink-400",
+      bgColor: "bg-pink-50 border-pink-100",
+      textColor: "text-pink-700",
     },
     {
       id: "accessories",
       name: "Bags & Belts",
       description: "Crossbody bags, leather accessories, hats",
       icon: "👜",
-      bgColor: "bg-amber-500/10 border-amber-500/30",
-      textColor: "text-amber-400",
+      bgColor: "bg-purple-50 border-purple-100",
+      textColor: "text-purple-700",
     },
     {
       id: "footwear",
       name: "Shoes & Boots",
       description: "Casual sneakers, loafers, leather boots",
       icon: "👞",
-      bgColor: "bg-cyan-500/10 border-cyan-500/30",
-      textColor: "text-cyan-400",
+      bgColor: "bg-indigo-50 border-indigo-100",
+      textColor: "text-indigo-700",
     },
     {
       id: "knitwear",
       name: "Sweaters & Cardigans",
       description: "Wool knitwear, winter essentials",
       icon: "🧶",
-      bgColor: "bg-emerald-500/10 border-emerald-500/30",
-      textColor: "text-emerald-400",
+      bgColor: "bg-purple-50 border-purple-100",
+      textColor: "text-purple-700",
     },
   ],
 };
-
-const SPARKLES = [
-  { top: 15, left: 20, duration: 2 },
-  { top: 40, left: 75, duration: 2.5 },
-  { top: 70, left: 30, duration: 3 },
-  { top: 25, left: 60, duration: 2.2 },
-  { top: 80, left: 45, duration: 2.8 },
-  { top: 55, left: 15, duration: 3.2 },
-];
 
 export function StoreCategoriesSection({ subdomain }: StoreCategoriesProps) {
   const [totalProducts, setTotalProducts] = useState(0);
@@ -299,73 +290,46 @@ export function StoreCategoriesSection({ subdomain }: StoreCategoriesProps) {
         isBoutique
           ? "bg-background border-border text-foreground"
           : isSports
-          ? "bg-[#020d09] border-emerald-950/60 text-emerald-50"
+          ? "bg-[#f4fbf7] border-emerald-200/80 text-slate-900"
           : isClothing
-          ? "bg-[#0b0314] border-purple-950/60 text-purple-50"
-          : "bg-slate-950 border-slate-900 text-slate-100"
+          ? "bg-[#faf7fc] border-purple-200/80 text-slate-900"
+          : "bg-[#f8fafc] border-slate-200 text-slate-900"
       }`}
     >
-      {/* Background Ambient Glows for dark themes */}
-      {!isBoutique && (
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className={`absolute top-0 left-10 w-96 h-96 rounded-full blur-3xl ${
-              isSports ? "bg-emerald-500/10" : isClothing ? "bg-purple-500/10" : "bg-cyan-500/10"
-            }`}
-          />
-          <div
-            className={`absolute bottom-0 right-10 w-96 h-96 rounded-full blur-3xl ${
-              isSports ? "bg-teal-500/10" : isClothing ? "bg-pink-500/10" : "bg-blue-500/10"
-            }`}
-          />
-        </div>
-      )}
-
-      {/* Subtle Dot Pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(circle, ${isBoutique ? "#000000" : "#ffffff"} 1px, transparent 1px)`,
-          backgroundSize: "28px 28px",
-        }}
-      />
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-10">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-14 md:mb-16">
           <div
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 ${
+            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-wider mb-4 shadow-xs ${
               isBoutique
-                ? "border-border bg-card text-foreground shadow-xs"
+                ? "border-border bg-card text-foreground"
                 : isSports
-                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
+                ? "border-emerald-200 bg-emerald-50 text-emerald-800"
                 : isClothing
-                ? "border-purple-500/30 bg-purple-500/10 text-purple-300"
-                : "border-cyan-500/30 bg-cyan-500/10 text-cyan-300"
+                ? "border-purple-200 bg-purple-50 text-purple-800"
+                : "border-sky-200 bg-sky-50 text-sky-800"
             }`}
           >
             <LayoutGrid size={14} />
             Categories & Edits
           </div>
-          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-white"}`}>
+          <h2 className={`text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isBoutique ? "text-foreground" : "text-slate-950"}`}>
             Browse by{" "}
             <span
               className={
                 isBoutique
                   ? "text-foreground/90 underline decoration-border underline-offset-8"
-                  : `bg-gradient-to-r ${
-                      isSports
-                        ? "from-emerald-400 via-teal-400 to-green-300"
-                        : isClothing
-                        ? "from-purple-400 via-fuchsia-400 to-pink-300"
-                        : "from-cyan-400 via-blue-400 to-indigo-300"
-                    } bg-clip-text text-transparent`
+                  : isSports
+                  ? "text-emerald-700 underline decoration-emerald-300 underline-offset-8"
+                  : isClothing
+                  ? "text-purple-700 underline decoration-purple-300 underline-offset-8"
+                  : "text-sky-700 underline decoration-sky-300 underline-offset-8"
               }
             >
               Category
             </span>
           </h2>
-          <p className={`mt-3.5 text-sm sm:text-base leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+          <p className={`mt-3.5 text-sm sm:text-base leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
             {isBoutique
               ? "Discover artisanal hand-embellished couture, festive edits, and everyday pret crafted to perfection."
               : "Browse through curated collections tailored to your lifestyle, performance, and everyday needs."}
@@ -384,20 +348,20 @@ export function StoreCategoriesSection({ subdomain }: StoreCategoriesProps) {
             >
               <Link
                 href={`/store/${subdomain}/products?category=${encodeURIComponent(cat.id)}`}
-                className={`group relative flex flex-col justify-between h-full rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1.5 ${
+                className={`group relative flex flex-col justify-between h-full rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-1.5 shadow-xs ${
                   isBoutique
-                    ? "border-border bg-card shadow-xs hover:border-foreground/20 hover:shadow-md"
+                    ? "border-border bg-card hover:border-foreground/20 hover:shadow-md"
                     : isSports
-                    ? "border-emerald-900/30 bg-slate-900/60 hover:border-emerald-500/40 hover:bg-slate-900/90 shadow-lg"
+                    ? "border-emerald-200/80 bg-white hover:border-emerald-300 hover:shadow-lg hover:shadow-emerald-500/5"
                     : isClothing
-                    ? "border-purple-900/30 bg-slate-900/60 hover:border-purple-500/40 hover:bg-slate-900/90 shadow-lg"
-                    : "border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 hover:bg-slate-900/90 shadow-lg"
+                    ? "border-purple-200/80 bg-white hover:border-purple-300 hover:shadow-lg hover:shadow-purple-500/5"
+                    : "border-slate-200/80 bg-white hover:border-sky-300 hover:shadow-lg hover:shadow-sky-500/5"
                 }`}
               >
                 <div>
                   {/* Category Icon Badge */}
                   <div
-                    className={`inline-flex items-center justify-center w-14 h-14 rounded-xl border ${cat.bgColor} text-2xl mb-5 group-hover:scale-110 transition-transform duration-300`}
+                    className={`inline-flex items-center justify-center w-14 h-14 rounded-xl border ${cat.bgColor} text-2xl mb-5 group-hover:scale-110 transition-transform duration-300 shadow-xs`}
                   >
                     {cat.icon}
                   </div>
@@ -407,15 +371,15 @@ export function StoreCategoriesSection({ subdomain }: StoreCategoriesProps) {
                       isBoutique
                         ? "text-foreground group-hover:text-foreground/80"
                         : isSports
-                        ? "text-white group-hover:text-emerald-400"
+                        ? "text-slate-900 group-hover:text-emerald-700"
                         : isClothing
-                        ? "text-white group-hover:text-purple-300"
-                        : "text-white group-hover:text-cyan-300"
+                        ? "text-slate-900 group-hover:text-purple-700"
+                        : "text-slate-900 group-hover:text-sky-700"
                     }`}
                   >
                     {cat.name}
                   </h3>
-                  <p className={`mt-1.5 text-xs leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+                  <p className={`mt-1.5 text-xs leading-relaxed ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
                     {cat.description}
                   </p>
                 </div>
@@ -424,14 +388,10 @@ export function StoreCategoriesSection({ subdomain }: StoreCategoriesProps) {
                   className={`mt-6 flex items-center justify-between pt-4 border-t ${
                     isBoutique
                       ? "border-border"
-                      : isSports
-                      ? "border-emerald-950/80"
-                      : isClothing
-                      ? "border-purple-950/80"
-                      : "border-slate-800/60"
+                      : "border-slate-100"
                   }`}
                 >
-                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isBoutique ? "text-muted-foreground" : "text-slate-500"}`}>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wider ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
                     Available
                   </span>
                   <div
@@ -439,10 +399,10 @@ export function StoreCategoriesSection({ subdomain }: StoreCategoriesProps) {
                       isBoutique
                         ? "bg-accent border border-border text-foreground group-hover:bg-primary group-hover:text-primary-foreground"
                         : isSports
-                        ? "bg-slate-800 text-slate-400 group-hover:bg-emerald-500 group-hover:text-slate-950"
+                        ? "bg-emerald-50 text-emerald-700 group-hover:bg-emerald-600 group-hover:text-white"
                         : isClothing
-                        ? "bg-slate-800 text-slate-400 group-hover:bg-purple-600 group-hover:text-white"
-                        : "bg-slate-800 text-slate-400 group-hover:bg-cyan-500 group-hover:text-slate-950"
+                        ? "bg-purple-50 text-purple-700 group-hover:bg-purple-600 group-hover:text-white"
+                        : "bg-sky-50 text-sky-700 group-hover:bg-sky-600 group-hover:text-white"
                     }`}
                   >
                     <ArrowUpRight size={16} />
@@ -464,42 +424,13 @@ export function StoreCategoriesSection({ subdomain }: StoreCategoriesProps) {
               className={`group relative flex flex-col justify-between h-full overflow-hidden rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-1.5 transition-all duration-300 ${
                 isBoutique
                   ? "bg-primary text-primary-foreground"
-                  : "text-white"
+                  : isSports
+                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                  : isClothing
+                  ? "bg-purple-600 text-white hover:bg-purple-700"
+                  : "bg-sky-600 text-white hover:bg-sky-700"
               }`}
-              style={
-                isBoutique
-                  ? {}
-                  : {
-                      background: isSports
-                        ? "linear-gradient(135deg, #059669 0%, #10B981 50%, #14B8A6 100%)"
-                        : isClothing
-                        ? "linear-gradient(135deg, #7C3AED 0%, #A855F7 50%, #EC4899 100%)"
-                        : "linear-gradient(135deg, #0284C7 0%, #06B6D4 50%, #3B82F6 100%)",
-                    }
-              }
             >
-              {/* Animated Sparkles for dark mode */}
-              {!isBoutique && (
-                <div className="absolute inset-0 opacity-20 pointer-events-none">
-                  {SPARKLES.map((sparkle, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute w-2 h-2 bg-white rounded-full"
-                      style={{ top: `${sparkle.top}%`, left: `${sparkle.left}%` }}
-                      animate={{
-                        opacity: [0.3, 1, 0.3],
-                        scale: [1, 1.4, 1],
-                      }}
-                      transition={{
-                        duration: sparkle.duration,
-                        repeat: Infinity,
-                        delay: i * 0.3,
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-
               <div className="relative">
                 <div
                   className={`inline-flex items-center justify-center w-14 h-14 rounded-xl mb-5 group-hover:scale-110 transition-transform duration-300 ${
@@ -522,7 +453,7 @@ export function StoreCategoriesSection({ subdomain }: StoreCategoriesProps) {
                 </span>
                 <div
                   className={`w-9 h-9 rounded-full flex items-center justify-center group-hover:translate-x-1 transition-transform ${
-                    isBoutique ? "bg-primary-foreground text-primary" : "bg-white text-slate-950"
+                    isBoutique ? "bg-primary-foreground text-primary" : "bg-white text-slate-900"
                   }`}
                 >
                   <ArrowRight size={16} />
@@ -534,19 +465,19 @@ export function StoreCategoriesSection({ subdomain }: StoreCategoriesProps) {
 
         {/* Bottom Request / Custom Inquiry Strip */}
         <div className="mt-14 text-center">
-          <p className={`text-sm mb-3 ${isBoutique ? "text-muted-foreground" : "text-slate-400"}`}>
+          <p className={`text-sm mb-3 ${isBoutique ? "text-muted-foreground" : "text-slate-600"}`}>
             {isBoutique ? "Need assistance with custom measurements or bridal appointments?" : "Looking for a specific model or bulk order?"}
           </p>
           <Link
             href={`/store/${subdomain}#contact`}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-bold transition-all ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-bold transition-all shadow-xs ${
               isBoutique
-                ? "border-border bg-card text-foreground hover:bg-accent shadow-xs"
+                ? "border-border bg-card text-foreground hover:bg-accent"
                 : isSports
-                ? "border-emerald-900/50 bg-slate-900/80 text-emerald-300 hover:bg-emerald-950/60"
+                ? "border-emerald-200 bg-white text-emerald-800 hover:border-emerald-400 hover:text-emerald-900"
                 : isClothing
-                ? "border-purple-900/50 bg-slate-900/80 text-purple-300 hover:bg-purple-950/60"
-                : "border-slate-800 bg-slate-900/80 text-cyan-300 hover:bg-slate-800"
+                ? "border-purple-200 bg-white text-purple-800 hover:border-purple-400 hover:text-purple-900"
+                : "border-slate-200 bg-white text-slate-800 hover:border-sky-400 hover:text-sky-900"
             }`}
           >
             <span>{isBoutique ? "Book Consultation" : "Contact Store Team"}</span>

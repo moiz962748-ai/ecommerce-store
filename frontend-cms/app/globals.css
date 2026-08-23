@@ -108,575 +108,55 @@
     scroll-behavior: smooth;
   }
 }
-/* Storefront per-store themes. Default falls back to the same warm
-   paper look as the admin; Electronics overrides it with a dark/tech
-   palette. Sports and Clothing can get their own blocks the same way. */
-[data-store-theme="default"] {
-  --store-background: var(--background);
-  --store-foreground: var(--foreground);
-  --store-card: var(--card);
-  --store-border: var(--border);
-  --store-accent: var(--sidebar-accent);
-  --store-muted: var(--muted-foreground);
-  --store-heading-font: var(--font-display);
-}
 
+/* ==========================================================
+   Storefront Themes (Default Light Theme Palettes)
+   ========================================================== */
+[data-store-theme="default"],
 [data-store-theme="default"][data-store-mode="light"] {
-  --store-background: oklch(0.985 0.008 220);
-  --store-foreground: oklch(0.19 0.02 220);
-  --store-card: oklch(0.995 0.006 220);
-  --store-border: oklch(0.88 0.012 220);
-  --store-accent: oklch(0.62 0.17 245);
-  --store-muted: oklch(0.47 0.015 220);
-}
-
-[data-store-theme="default"][data-store-mode="dark"] {
-  --store-background: var(--background);
-  --store-foreground: var(--foreground);
-  --store-card: var(--card);
-  --store-border: var(--border);
-  --store-accent: var(--sidebar-accent);
-  --store-muted: var(--muted-foreground);
-}
-
-[data-store-theme="sports"] {
-  --store-background: oklch(0.18 0.018 150);
-  --store-foreground: oklch(0.95 0.012 150);
-  --store-card: oklch(0.24 0.02 150);
-  --store-border: oklch(0.32 0.04 150);
-  --store-accent: oklch(0.68 0.17 145);
-  --store-muted: oklch(0.72 0.018 150);
+  --store-background: #ffffff;
+  --store-foreground: #0f172a;
+  --store-card: #ffffff;
+  --store-border: #e2e8f0;
+  --store-accent: #0284c7;
+  --store-muted: #64748b;
   --store-heading-font: var(--font-display);
 }
 
+[data-store-theme="sports"],
 [data-store-theme="sports"][data-store-mode="light"] {
-  --store-background: oklch(0.985 0.008 150);
-  --store-foreground: oklch(0.18 0.02 150);
-  --store-card: oklch(0.995 0.006 150);
-  --store-border: oklch(0.82 0.03 150);
-  --store-accent: oklch(0.52 0.14 150);
-  --store-muted: oklch(0.46 0.015 150);
-}
-
-[data-store-theme="clothing"] {
-  --store-background: oklch(0.20 0.02 30);
-  --store-foreground: oklch(0.96 0.012 30);
-  --store-card: oklch(0.26 0.022 30);
-  --store-border: oklch(0.35 0.03 30);
-  --store-accent: oklch(0.62 0.16 20);
-  --store-muted: oklch(0.76 0.02 30);
+  --store-background: #ffffff;
+  --store-foreground: #0f172a;
+  --store-card: #ffffff;
+  --store-border: #d1fae5;
+  --store-accent: #059669;
+  --store-muted: #64748b;
   --store-heading-font: var(--font-display);
 }
 
+[data-store-theme="clothing"],
 [data-store-theme="clothing"][data-store-mode="light"] {
-  --store-background: oklch(0.985 0.008 30);
-  --store-foreground: oklch(0.18 0.02 30);
-  --store-card: oklch(0.996 0.004 30);
-  --store-border: oklch(0.84 0.02 30);
-  --store-accent: oklch(0.48 0.12 25);
-  --store-muted: oklch(0.46 0.014 30);
-}
-
-[data-store-theme="electronics"] {
-  --store-background: oklch(0.16 0.02 250);
-  --store-foreground: oklch(0.94 0.01 250);
-  --store-card: oklch(0.21 0.025 250);
-  --store-border: oklch(0.32 0.03 250);
-  --store-accent: oklch(0.75 0.15 220);
-  --store-muted: oklch(0.65 0.02 250);
-  --store-heading-font: var(--font-tech-display);
-}
-
-[data-store-theme="electronics"][data-store-mode="light"] {
-  --store-background: oklch(0.97 0.012 230);
-  --store-foreground: oklch(0.19 0.025 230);
-  --store-card: oklch(1 0.008 230);
-  --store-border: oklch(0.86 0.018 230);
-  --store-accent: oklch(0.58 0.19 230);
-  --store-muted: oklch(0.48 0.016 230);
-}
-
-[data-store-root="true"][data-store-mode="light"][data-store-theme="sports"] .store-hero-panel {
-  background:
-    radial-gradient(circle at top, rgba(34, 197, 94, 0.18), transparent 48%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(236, 253, 245, 0.8));
-  box-shadow: 0 20px 45px rgba(20, 83, 45, 0.08);
-}
-
-[data-store-root="true"][data-store-mode="light"][data-store-theme="sports"] .store-product-thumb {
-  background: linear-gradient(135deg, rgba(34, 197, 94, 0.14), rgba(255, 255, 255, 0.96));
-}
-
-[data-store-root="true"][data-store-mode="light"][data-store-theme="sports"] .store-hero-badge {
-  color: oklch(0.38 0.12 145);
-}
-
-[data-store-root="true"][data-store-mode="light"][data-store-theme="clothing"] .store-hero-panel {
-  background:
-    radial-gradient(circle at top, rgba(168, 85, 247, 0.14), transparent 48%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(250, 245, 247, 0.82));
-  box-shadow: 0 20px 45px rgba(120, 53, 15, 0.08);
-}
-
-[data-store-root="true"][data-store-mode="light"][data-store-theme="clothing"] .store-product-thumb {
-  background: linear-gradient(135deg, rgba(244, 114, 182, 0.12), rgba(255, 255, 255, 0.96));
-}
-
-[data-store-root="true"][data-store-mode="light"][data-store-theme="clothing"] .store-hero-badge {
-  color: oklch(0.44 0.12 30);
-}
-
-[data-store-root="true"] {
-  transition: background-color 0.25s ease, color 0.25s ease;
-}
-
-[data-store-root="true"] .store-theme-toggle {
-  background: color-mix(in srgb, var(--store-card) 88%, transparent);
-  border-color: var(--store-border);
-  color: var(--store-foreground);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-}
-
-[data-store-root="true"][data-store-mode="light"] .store-theme-toggle {
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.08);
-}
-
-[data-store-root="true"][data-store-mode="dark"] .store-theme-toggle {
-  background: rgba(15, 23, 42, 0.36);
-}
-
-[data-store-root="true"][data-store-mode="light"] .store-hero-panel {
-  background:
-    radial-gradient(circle at top, rgba(96, 165, 250, 0.18), transparent 48%),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(239, 246, 255, 0.8));
-  box-shadow: 0 20px 45px rgba(59, 130, 246, 0.08);
-}
-
-[data-store-root="true"][data-store-mode="light"] .store-product-thumb {
-  background: linear-gradient(135deg, rgba(96, 165, 250, 0.12), rgba(255, 255, 255, 0.96));
-}
-
-[data-store-root="true"][data-store-mode="light"] .store-muted-card {
-  background: rgba(148, 163, 184, 0.04);
-}
-
-[data-store-root="true"][data-store-mode="light"] .store-hero-badge {
-  color: oklch(0.49 0.12 245);
-}
-
-.store-heading {
-  font-family: var(--store-heading-font);
-}
-
-/* ==========================================================================
-   TARGETED STORE LIGHT MODE
-   - Hero Section & Footer remain in Dark Theme (Untouched)
-   - Navbar & Main Body Content switch to High-Contrast Pure White
-   ========================================================================== */
-
-/* 1. Navbar in Light Mode (Pure White with Dark Links & Icons) */
-[data-store-mode="light"] header {
-  background-color: rgba(255, 255, 255, 0.98) !important;
-  border-bottom: 1px solid #e2e8f0 !important;
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.05) !important;
-}
-
-[data-store-mode="light"] header a,
-[data-store-mode="light"] header a span,
-[data-store-mode="light"] header nav a,
-[data-store-mode="light"] header button {
-  color: #0f172a !important;
-}
-
-[data-store-mode="light"] header nav a:hover {
-  color: #0284c7 !important;
-}
-
-[data-store-mode="light"] header button {
-  background-color: #f1f5f9 !important;
-  border: 1px solid #cbd5e1 !important;
-}
-
-[data-store-mode="light"] header svg {
-  stroke: #0f172a !important;
-}
-
-/* 2. Main Page Background (Excluding Hero & Footer) */
-[data-store-mode="light"] main {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-}
-
-/* 3. Hero Section Locked in Dark Theme */
-[data-store-mode="light"] main > section:first-of-type,
-[data-store-mode="light"] section[class*="hero"],
-[data-store-mode="light"] [data-hero-section="true"] {
-  background-color: #020617 !important;
-  color: #f8fafc !important;
-}
-
-[data-store-mode="light"][data-store-theme="sports"] main > section:first-of-type {
-  background-color: #020d09 !important;
-}
-
-[data-store-mode="light"][data-store-theme="clothing"] main > section:first-of-type {
-  background-color: #0b0314 !important;
-}
-
-/* Hero Section Typography Preserved */
-[data-store-mode="light"] main > section:first-of-type h1,
-[data-store-mode="light"] main > section:first-of-type h2,
-[data-store-mode="light"] main > section:first-of-type h3 {
-  color: #ffffff !important;
-}
-
-[data-store-mode="light"] main > section:first-of-type p,
-[data-store-mode="light"] main > section:first-of-type span:not([class*="bg-"]) {
-  color: #94a3b8 !important;
-}
-
-[data-store-mode="light"] main > section:first-of-type input {
-  background-color: #0f172a !important;
-  border-color: #1e293b !important;
-  color: #ffffff !important;
-}
-
-/* 4. Body Content Sections (Stats, Categories, Products, Reviews, Contact, About) */
-[data-store-mode="light"] main > section:not(:first-of-type) {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-}
-
-/* Headings in Light Sections */
-[data-store-mode="light"] main > section:not(:first-of-type) h1,
-[data-store-mode="light"] main > section:not(:first-of-type) h2,
-[data-store-mode="light"] main > section:not(:first-of-type) h3,
-[data-store-mode="light"] main > section:not(:first-of-type) h4 {
-  color: #090d16 !important;
-}
-
-[data-store-mode="light"] main > section:not(:first-of-type) p,
-[data-store-mode="light"] main > section:not(:first-of-type) label,
-[data-store-mode="light"] main > section:not(:first-of-type) li {
-  color: #334155 !important;
-}
-
-/* 5. Force Cards in Content to Pure White with High-Contrast Dark Text */
-[data-store-mode="light"] main > section:not(:first-of-type) .rounded-2xl,
-[data-store-mode="light"] main > section:not(:first-of-type) .rounded-3xl,
-[data-store-mode="light"] main > section:not(:first-of-type) [class*="bg-slate-900"],
-[data-store-mode="light"] main > section:not(:first-of-type) [class*="bg-slate-950"],
-[data-store-mode="light"] main > section:not(:first-of-type) [class*="bg-[#020d09]"],
-[data-store-mode="light"] main > section:not(:first-of-type) [class*="bg-[#0b0314]"] {
-  background-color: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03) !important;
-}
-
-/* Overriding faded/white text inside content cards */
-[data-store-mode="light"] main > section:not(:first-of-type) .text-white,
-[data-store-mode="light"] main > section:not(:first-of-type) .text-slate-100,
-[data-store-mode="light"] main > section:not(:first-of-type) .text-slate-200,
-[data-store-mode="light"] main > section:not(:first-of-type) .text-slate-300,
-[data-store-mode="light"] main > section:not(:first-of-type) .text-slate-400,
-[data-store-mode="light"] main > section:not(:first-of-type) .text-slate-500 {
-  color: #1e293b !important;
-}
-
-/* Icon Colors inside Cards */
-[data-store-mode="light"] main > section:not(:first-of-type) .rounded-2xl svg,
-[data-store-mode="light"] main > section:not(:first-of-type) .rounded-3xl svg {
-  stroke: #0284c7 !important;
-}
-
-[data-store-mode="light"][data-store-theme="sports"] main > section:not(:first-of-type) svg {
-  stroke: #059669 !important;
-}
-
-[data-store-mode="light"][data-store-theme="clothing"] main > section:not(:first-of-type) svg {
-  stroke: #7c3aed !important;
-}
-
-/* 6. Form Inputs & Pills in Content Sections */
-[data-store-mode="light"] main > section:not(:first-of-type) input,
-[data-store-mode="light"] main > section:not(:first-of-type) textarea,
-[data-store-mode="light"] main > section:not(:first-of-type) select {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border: 1px solid #cbd5e1 !important;
-}
-
-[data-store-mode="light"] main > section:not(:first-of-type) .rounded-full.border {
-  background-color: #f1f5f9 !important;
-  border-color: #cbd5e1 !important;
-}
-
-/* 7. Footer Locked in Dark Theme (Completely untouched) */
-[data-store-mode="light"] footer {
-  background-color: #020617 !important;
-  border-top: 1px solid #0f172a !important;
-  color: #f8fafc !important;
-}
-
-[data-store-mode="light"][data-store-theme="sports"] footer {
-  background-color: #020d09 !important;
-  border-color: #064e3b !important;
-}
-
-[data-store-mode="light"][data-store-theme="clothing"] footer {
-  background-color: #0b0314 !important;
-  border-color: #3b0764 !important;
-}
-
-[data-store-mode="light"] footer * {
-  color: inherit;
-}
-
-/* ==========================================================================
-   CART & WISHLIST PAGES - LIGHT MODE REFINEMENTS
-   ========================================================================== */
-
-/* 1. Cart & Wishlist Page Containers */
-[data-store-mode="light"] main:has([class*="cart"]),
-[data-store-mode="light"] main:has([class*="wishlist"]),
-[data-store-mode="light"] .cart-container,
-[data-store-mode="light"] .wishlist-container {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-}
-
-/* 2. Order Summary, Item Cards & Tables */
-[data-store-mode="light"] .cart-item,
-[data-store-mode="light"] .wishlist-card,
-[data-store-mode="light"] table tbody tr,
-[data-store-mode="light"] div[class*="summary"],
-[data-store-mode="light"] div[class*="checkout"] {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-  color: #0f172a !important;
-}
-
-/* 3. Product Names & Pricing inside Cart/Wishlist */
-[data-store-mode="light"] .cart-item h3,
-[data-store-mode="light"] .cart-item h4,
-[data-store-mode="light"] .wishlist-card h3,
-[data-store-mode="light"] .wishlist-card h4,
-[data-store-mode="light"] td {
-  color: #090d16 !important;
-}
-
-[data-store-mode="light"] .cart-item p,
-[data-store-mode="light"] .wishlist-card p,
-[data-store-mode="light"] .text-slate-400 {
-  color: #64748b !important;
-}
-
-/* 4. Quantity Increment/Decrement Buttons & Trash Icon */
-[data-store-mode="light"] .quantity-btn,
-[data-store-mode="light"] button[aria-label*="quantity"],
-[data-store-mode="light"] button[class*="remove"],
-[data-store-mode="light"] button:has(svg.lucide-trash),
-[data-store-mode="light"] button:has(svg.lucide-trash-2) {
-  background-color: #f1f5f9 !important;
-  border-color: #cbd5e1 !important;
-  color: #0f172a !important;
-}
-
-[data-store-mode="light"] button:has(svg.lucide-trash):hover,
-[data-store-mode="light"] button:has(svg.lucide-trash-2):hover {
-  background-color: #fee2e2 !important;
-  border-color: #fca5a5 !important;
-  color: #dc2626 !important;
-}
-
-[data-store-mode="light"] svg.lucide-trash,
-[data-store-mode="light"] svg.lucide-trash-2 {
-  stroke: #dc2626 !important;
-}
-
-/* 5. Subtotal, Discount & Total Rows in Summary Box */
-[data-store-mode="light"] .summary-row,
-[data-store-mode="light"] .border-t.border-slate-800 {
-  border-color: #e2e8f0 !important;
-}
-
-[data-store-mode="light"] .summary-row span:first-child {
-  color: #475569 !important;
-}
-
-[data-store-mode="light"] .summary-row span:last-child {
-  color: #090d16 !important;
-}
-
-/* 6. Empty Cart / Empty Wishlist States */
-[data-store-mode="light"] div[class*="empty"] svg {
-  stroke: #94a3b8 !important;
-}
-
-[data-store-mode="light"] div[class*="empty"] h2,
-[data-store-mode="light"] div[class*="empty"] h3 {
-  color: #0f172a !important;
-}
-
-[data-store-mode="light"] div[class*="empty"] p {
-  color: #64748b !important;
-}
-
-/* ==========================================================================
-   CART & WISHLIST PAGES - PURE WHITE LIGHT MODE OVERRIDES
-   ========================================================================== */
-
-/* 1. Header Banners (Your Tech Cart / My Wishlist) */
-[data-store-mode="light"] main div[class*="rounded-3xl"]:first-of-type,
-[data-store-mode="light"] main div[class*="bg-gradient"]:first-of-type {
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05) !important;
-}
-
-[data-store-mode="light"] main div[class*="rounded-3xl"]:first-of-type h1,
-[data-store-mode="light"] main div[class*="rounded-3xl"]:first-of-type h2 {
-  color: #090d16 !important;
-}
-
-[data-store-mode="light"] main div[class*="rounded-3xl"]:first-of-type p {
-  color: #64748b !important;
-}
-
-/* 2. Cart Items, Wishlist Cards & Order Summary Box */
-[data-store-mode="light"] main .rounded-3xl,
-[data-store-mode="light"] main .rounded-2xl,
-[data-store-mode="light"] main [class*="bg-slate-900"],
-[data-store-mode="light"] main [class*="bg-slate-800"],
-[data-store-mode="light"] main [class*="bg-slate-950"],
-[data-store-mode="light"] main div[class*="border-slate-800"],
-[data-store-mode="light"] main div[class*="border-slate-900"] {
-  background-color: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.04), 0 2px 4px -2px rgba(0, 0, 0, 0.02) !important;
-}
-
-/* 3. Product Titles, Headings & Order Summary Header */
-[data-store-mode="light"] main h2,
-[data-store-mode="light"] main h3,
-[data-store-mode="light"] main h4,
-[data-store-mode="light"] main .font-black,
-[data-store-mode="light"] main .font-extrabold,
-[data-store-mode="light"] main .font-bold {
-  color: #090d16 !important;
-}
-
-/* 4. Subtotal, Shipping, Tax, & Helper Text */
-[data-store-mode="light"] main p,
-[data-store-mode="light"] main span:not([class*="bg-"]):not([class*="text-cyan"]):not([class*="text-emerald"]):not([class*="text-purple"]) {
-  color: #334155 !important;
-}
-
-[data-store-mode="light"] main .text-slate-400,
-[data-store-mode="light"] main .text-slate-500,
-[data-store-mode="light"] main .text-slate-300 {
-  color: #64748b !important;
-}
-
-/* 5. Quantity Badge, Dividers & Remove Link */
-[data-store-mode="light"] main .bg-slate-950,
-[data-store-mode="light"] main [class*="bg-slate-950/"],
-[data-store-mode="light"] main [class*="bg-black/"] {
-  background-color: #f1f5f9 !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #0f172a !important;
-}
-
-[data-store-mode="light"] main hr,
-[data-store-mode="light"] main .border-t,
-[data-store-mode="light"] main .border-b {
-  border-color: #e2e8f0 !important;
-}
-
-[data-store-mode="light"] main button:has(svg.lucide-trash),
-[data-store-mode="light"] main button:has(svg.lucide-trash-2),
-[data-store-mode="light"] main [class*="text-rose"],
-[data-store-mode="light"] main [class*="text-red"] {
-  color: #e11d48 !important;
-}
-
-/* 6. Empty Wishlist State */
-[data-store-mode="light"] main div:has(svg.lucide-heart) [class*="bg-slate"] {
-  background-color: #ffffff !important;
-  border-color: #e2e8f0 !important;
-}
-
-[data-store-mode="light"] main div[class*="rounded-2xl"]:has(svg.lucide-heart) {
-  background-color: #f1f5f9 !important;
-  border: 1px solid #e2e8f0 !important;
-}
-
-/* Ensure Outer Canvas is White in Light Mode on Products/About/Contact */
-[data-store-mode="light"] main,
-[data-store-mode="light"] div[data-store-root="true"] {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-}
-
-[data-store-mode="light"] main .rounded-3xl.border,
-[data-store-mode="light"] main .rounded-2xl.border {
-  background-color: #f8fafc !important;
-  border-color: #e2e8f0 !important;
-  color: #0f172a !important;
-}
-
-/* ==========================================================
-   Cyber & Frosted Glass Utilities (Electronics Theme)
-   ========================================================== */
-
-/* Dark Mode Frosted Glass Card */
-.cyber-glass-dark {
-  background: rgba(10, 20, 42, 0.55);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(6, 182, 212, 0.18);
-  box-shadow: 0 8px 32px 0 rgba(0, 217, 255, 0.06);
-}
-
-/* Hover Glowing Cyber Card */
-.cyber-glass-card {
-  background: rgba(11, 22, 44, 0.6);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(56, 189, 248, 0.15);
-  box-shadow: 0 10px 30px -10px rgba(2, 132, 199, 0.12);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.cyber-glass-card:hover {
-  border-color: rgba(6, 182, 212, 0.55);
-  box-shadow: 0 0 25px rgba(6, 182, 212, 0.2), 0 12px 35px -5px rgba(2, 132, 199, 0.3);
-  transform: translateY(-3px);
-}
-
-/* Light Mode Soft Frosted Card */
-.cyber-glass-light {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-}
-
-/* ==========================================================
-   Boutique Theme - Admin Portal Aesthetic (Warm Paper & Pure White)
-   ========================================================== */
-[data-store-theme="boutique"] {
-  --store-background: var(--background);
-  --store-foreground: var(--foreground);
-  --store-card: var(--card);
-  --store-border: var(--border);
-  --store-accent: var(--primary);
-  --store-muted: var(--muted-foreground);
+  --store-background: #ffffff;
+  --store-foreground: #0f172a;
+  --store-card: #ffffff;
+  --store-border: #f3e8ff;
+  --store-accent: #7c3aed;
+  --store-muted: #64748b;
   --store-heading-font: var(--font-display);
 }
 
+[data-store-theme="electronics"],
+[data-store-theme="electronics"][data-store-mode="light"] {
+  --store-background: #ffffff;
+  --store-foreground: #0f172a;
+  --store-card: #ffffff;
+  --store-border: #e2e8f0;
+  --store-accent: #0284c7;
+  --store-muted: #64748b;
+  --store-heading-font: var(--font-display);
+}
+
+[data-store-theme="boutique"],
 [data-store-theme="boutique"][data-store-mode="light"],
 [data-store-theme="boutique"][data-store-mode="dark"] {
   --store-background: var(--background);
@@ -685,10 +165,113 @@
   --store-border: var(--border);
   --store-accent: var(--primary);
   --store-muted: var(--muted-foreground);
+  --store-heading-font: var(--font-display);
 }
 
-/* Light mode specific styling for Boutique sections */
-[data-store-theme="boutique"] main {
-  background-color: var(--background);
-  color: var(--foreground);
+/* ==========================================================
+   Universal Crisp Light Mode (All 4 Stores)
+   ========================================================== */
+
+/* 1. Header / Navbar */
+header {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+header a,
+header a span,
+header nav a {
+  color: #0f172a !important;
+}
+
+header svg {
+  stroke: #0f172a !important;
+}
+
+/* 2. Main Canvas & Sections */
+main,
+[data-store-root="true"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+main > section {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* 3. Hero Section (Crisp White with Dark Headings) */
+main > section:first-of-type,
+section[class*="hero"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+main > section:first-of-type h1,
+main > section:first-of-type h2,
+main > section:first-of-type h3 {
+  color: #020617 !important;
+}
+
+main > section:first-of-type p {
+  color: #475569 !important;
+}
+
+/* 4. Cards in Content */
+main .rounded-2xl,
+main .rounded-3xl {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.04) !important;
+}
+
+main h1,
+main h2,
+main h3,
+main h4 {
+  color: #020617 !important;
+}
+
+/* 5. Inputs & Buttons */
+main input,
+main textarea,
+main select {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+/* 6. Footer (Clean Light Footer) */
+footer {
+  background-color: #f8fafc !important;
+  border-top: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+footer h1,
+footer h2,
+footer h3,
+footer h4 {
+  color: #0f172a !important;
+}
+
+footer p,
+footer span,
+footer a {
+  color: #64748b !important;
+}
+
+footer a:hover {
+  color: #0f172a !important;
+}
+
+/* Boutique Store Clean Neutral Styling */
+[data-store-theme="boutique"] header,
+[data-store-theme="boutique"] main,
+[data-store-theme="boutique"] main > section,
+[data-store-theme="boutique"] footer {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
 }
