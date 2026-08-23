@@ -46,7 +46,7 @@ export default function HomePage() {
       {/* Top Header Link */}
       <div className="flex justify-end">
         <Link
-          href="/admin/login"
+          href="/login"
           className="text-xs font-semibold text-slate-600 hover:text-slate-950 underline underline-offset-4 transition-colors"
         >
           Admin / Partner Login
