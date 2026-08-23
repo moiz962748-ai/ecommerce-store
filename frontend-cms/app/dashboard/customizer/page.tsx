@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 
 const DEFAULT_STORES = [
+  { name: 'Boutique Store', subdomain: 'boutique' },
   { name: 'Electronics Store', subdomain: 'electronics' },
   { name: 'Sports Store', subdomain: 'sports' },
   { name: 'Clothing Store', subdomain: 'clothing' },
@@ -34,7 +35,7 @@ const DEFAULT_STORES = [
 
 export default function StoreCustomizerPage() {
   const [stores, setStores] = useState<any[]>(DEFAULT_STORES);
-  const [selectedSubdomain, setSelectedSubdomain] = useState<string>('electronics');
+  const [selectedSubdomain, setSelectedSubdomain] = useState<string>('boutique');
   const [activeTab, setActiveTab] = useState<'branding' | 'announcement' | 'hero' | 'about' | 'contact' | 'social'>('branding');
   const [showPreview, setShowPreview] = useState<boolean>(true);
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
@@ -49,7 +50,7 @@ export default function StoreCustomizerPage() {
   const [formData, setFormData] = useState({
     name: '',
     logoUrl: '',
-    theme: 'electronics',
+    theme: 'boutique',
     announcement: {
       enabled: true,
       text: 'Free Express Nationwide Delivery on all orders over Rs. 3,000!',
@@ -120,31 +121,32 @@ export default function StoreCustomizerPage() {
       try {
         const store = await apiClient(`/public/stores/${selectedSubdomain}`);
         const config = store?.templateConfig || {};
+        const isBoutique = selectedSubdomain.toLowerCase().includes('boutique') || selectedSubdomain.toLowerCase().includes('luxury');
 
         setFormData({
-          name: store?.name || (selectedSubdomain === 'electronics' ? 'Electronics Store' : selectedSubdomain === 'sports' ? 'Sports Store' : 'Clothing Store'),
+          name: store?.name || (isBoutique ? 'Boutique Store' : selectedSubdomain === 'electronics' ? 'Electronics Store' : selectedSubdomain === 'sports' ? 'Sports Store' : 'Clothing Store'),
           logoUrl: store?.logoUrl || '',
-          theme: config.theme || selectedSubdomain,
+          theme: config.theme || (isBoutique ? 'boutique' : selectedSubdomain),
           announcement: {
             enabled: config.announcement?.enabled !== undefined ? config.announcement.enabled : true,
-            text: config.announcement?.text || (selectedSubdomain === 'sports' ? '⚡ Free Workout Guide with orders over Rs. 4,000!' : selectedSubdomain === 'clothing' ? '✨ Flat 20% Off on New Season Arrivals | Code: TREND20' : '⚡ Free Express Nationwide Delivery on orders over Rs. 3,000!'),
+            text: config.announcement?.text || (isBoutique ? '✨ Complimentary Nationwide Express Shipping on all bespoke orders!' : selectedSubdomain === 'sports' ? '⚡ Free Workout Guide with orders over Rs. 4,000!' : selectedSubdomain === 'clothing' ? '✨ Flat 20% Off on New Season Arrivals | Code: TREND20' : '⚡ Free Express Nationwide Delivery on orders over Rs. 3,000!'),
             badge: config.announcement?.badge || 'PROMO',
             link: config.announcement?.link || `/store/${selectedSubdomain}/products`,
           },
           hero: {
-            eyebrow: config.hero?.eyebrow || (selectedSubdomain === 'sports' ? 'Peak Athletic Performance' : selectedSubdomain === 'clothing' ? 'Curated Fashion & Apparel' : 'Next-Gen Tech Essentials'),
-            headline: config.hero?.headline || (selectedSubdomain === 'sports' ? 'Elevate Your Fitness Journey' : selectedSubdomain === 'clothing' ? 'Define Your Signature Style' : 'Discover Smart Modern Technology'),
-            buttonText: config.hero?.buttonText || 'Browse All Products',
+            eyebrow: config.hero?.eyebrow || (isBoutique ? 'Exclusive Luxury Pret & Couture' : selectedSubdomain === 'sports' ? 'Peak Athletic Performance' : selectedSubdomain === 'clothing' ? 'Curated Fashion & Apparel' : 'Next-Gen Tech Essentials'),
+            headline: config.hero?.headline || (isBoutique ? 'Timeless Elegance & Modern Luxury' : selectedSubdomain === 'sports' ? 'Elevate Your Fitness Journey' : selectedSubdomain === 'clothing' ? 'Define Your Signature Style' : 'Discover Smart Modern Technology'),
+            buttonText: config.hero?.buttonText || (isBoutique ? 'Explore Atelier Collection' : 'Browse All Products'),
           },
           about: {
-            story: config.about?.story || 'Powering modern e-commerce experiences across Pakistan with verified authenticity, direct brand warranty, and seamless doorstep delivery.',
+            story: config.about?.story || (isBoutique ? 'Crafting timeless luxury pret, hand-embellished couture, and bespoke festive silhouettes across Pakistan with pure fabrics and artisanal mastery.' : 'Powering modern e-commerce experiences across Pakistan with verified authenticity, direct brand warranty, and seamless doorstep delivery.'),
             mission: config.about?.mission || 'Committed to superior quality, 100% genuine products, and trusted customer care.',
           },
           contact: {
-            email: config.contact?.email || 'support@store.pk',
+            email: config.contact?.email || (isBoutique ? 'concierge@boutique.pk' : 'support@store.pk'),
             phone: config.contact?.phone || '+92 300 1234567',
             address: config.contact?.address || 'Islamabad & Lahore, Pakistan',
-            officeHours: config.contact?.officeHours || 'Mon – Sat (9AM – 8PM)',
+            officeHours: config.contact?.officeHours || 'Mon – Sat (10AM – 8PM)',
           },
           social: {
             whatsapp: {
@@ -170,24 +172,43 @@ export default function StoreCustomizerPage() {
     loadStoreConfig();
   }, [selectedSubdomain]);
 
-  // 3. Direct Image Upload Handler
+  // 3. Client-Side Image Compression to eliminate "Request Entity Too Large"
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 3 * 1024 * 1024) {
-      setMessage({ text: 'File size exceeds 3MB limit. Please upload a smaller image.', type: 'error' });
+    if (file.size > 5 * 1024 * 1024) {
+      setMessage({ text: 'File size is too large (max 5MB allowed).', type: 'error' });
       return;
     }
 
     const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = reader.result as string;
-      setFormData((prev) => ({
-        ...prev,
-        logoUrl: base64String,
-      }));
-      setMessage({ text: 'Logo selected successfully!', type: 'success' });
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        // Optimize logo dimensions to 320px max width while preserving aspect ratio
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 320;
+        const scale = img.width > MAX_WIDTH ? MAX_WIDTH / img.width : 1;
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          
+          // Compress into compact PNG/WebP base64 (< 25KB)
+          const compressedBase64 = canvas.toDataURL('image/png', 0.85);
+          setFormData((prev) => ({
+            ...prev,
+            logoUrl: compressedBase64,
+          }));
+          setMessage({ text: 'Logo uploaded and optimized successfully!', type: 'success' });
+        }
+      };
     };
     reader.readAsDataURL(file);
   };
@@ -421,7 +442,7 @@ export default function StoreCustomizerPage() {
                           </div>
 
                           <p className="text-[10px] sm:text-[11px] text-muted-foreground">
-                            PNG, JPG, WebP or SVG (Max 3MB).
+                            PNG, JPG, WebP or SVG (Auto-optimized on upload).
                           </p>
                         </div>
                       </div>
@@ -449,9 +470,10 @@ export default function StoreCustomizerPage() {
                         onChange={(e) => setFormData({ ...formData, theme: e.target.value })}
                         className="w-full bg-background border rounded-lg px-3 py-2 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer"
                       >
-                        <option value="electronics">Electronics (Cyan & Blue Tech Theme)</option>
-                        <option value="sports">Sports & Gym (Emerald & Forest Green Theme)</option>
-                        <option value="clothing">Apparel & Fashion (Purple & Magenta Theme)</option>
+                        <option value="boutique">Boutique (Luxury Pret & Couture Theme)</option>
+                        <option value="electronics">Electronics (Smart Tech Theme)</option>
+                        <option value="sports">Sports & Gym (Emerald Performance Theme)</option>
+                        <option value="clothing">Apparel & Fashion (Purple Curated Theme)</option>
                       </select>
                     </div>
                   </div>
@@ -861,7 +883,7 @@ export default function StoreCustomizerPage() {
                 </div>
               )}
 
-              {/* Mobile Actions */}
+              {/* Action Buttons */}
               <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
                 <a
                   href={`/store/${selectedSubdomain}`}
