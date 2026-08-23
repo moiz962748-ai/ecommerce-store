@@ -35,8 +35,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const [user, setUser] = useState<StoredUser | null>(null);
   const [checked, setChecked] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false); // Mobile drawer state
-  const [isCollapsed, setIsCollapsed] = useState(false); // Desktop collapse state
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     const token = getStoredToken();
@@ -51,7 +51,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setChecked(true);
   }, [router]);
 
-  // Route change hone par mobile sidebar auto close ho jaye
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
@@ -71,12 +70,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background">
-      {/* 1. Mobile Top Header */}
-      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-sidebar text-sidebar-foreground border-b border-sidebar-border sticky top-0 z-30">
+      {/* 1. Mobile Top Header (Clean Light Bar with High-Contrast Typography) */}
+      <header className="md:hidden flex items-center justify-between px-4 py-3 bg-card border-b border-border shadow-xs sticky top-0 z-30">
         <div>
-          <h2 className="font-heading text-lg font-semibold">CMS Admin</h2>
+          <h2 className="font-heading text-lg font-bold text-foreground">CMS Admin</h2>
           {user && (
-            <p className="text-[10px] text-sidebar-foreground/60 uppercase tracking-wide">
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">
               {user.role} · {user.fullName}
             </p>
           )}
@@ -84,9 +83,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           aria-label="Toggle menu"
-          className="p-2 rounded-md hover:bg-sidebar-accent text-sidebar-foreground focus:outline-none"
+          className="p-2 rounded-xl bg-accent text-foreground hover:bg-accent/80 focus:outline-none transition-colors"
         >
-          {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </header>
 
@@ -94,23 +93,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden transition-opacity"
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 md:hidden transition-opacity"
         />
       )}
 
-      {/* 3. Sidebar */}
+      {/* 3. Sidebar (Original Admin Portal Palette & Warm Charcoal/Dark Styling) */}
       <aside
         className={`fixed inset-y-0 left-0 z-50 bg-sidebar text-sidebar-foreground flex flex-col transition-all duration-300 ease-in-out md:static md:translate-x-0 border-r border-sidebar-border shadow-2xl md:shadow-none ${
           sidebarOpen ? 'translate-x-0 w-72 sm:w-80' : '-translate-x-full'
         } ${isCollapsed ? 'md:w-[72px]' : 'md:w-64'}`}
       >
-        {/* Desktop Header with Toggle Button */}
-        <div className="hidden md:flex items-center justify-between px-4 py-5 border-b border-sidebar-border min-h-[73px]">
+        {/* Desktop Header */}
+        <div className="hidden md:flex items-center justify-between px-5 py-5 border-b border-sidebar-border min-h-[73px]">
           {!isCollapsed && (
             <div className="overflow-hidden whitespace-nowrap">
-              <h2 className="font-heading text-lg font-semibold tracking-tight">CMS Admin</h2>
+              <h2 className="font-heading text-lg font-bold tracking-tight">CMS Admin</h2>
               {user && (
-                <p className="text-[11px] text-sidebar-foreground/60 truncate uppercase tracking-wide">
+                <p className="text-[10px] font-medium text-sidebar-foreground/60 truncate uppercase tracking-wider">
                   {user.role} · {user.fullName}
                 </p>
               )}
@@ -130,26 +129,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </button>
         </div>
 
-        {/* Mobile Header with Close Button */}
-        <div className="md:hidden flex items-center justify-between p-4 border-b border-sidebar-border">
+        {/* Mobile Header */}
+        <div className="md:hidden flex items-center justify-between p-5 border-b border-sidebar-border">
           <div>
-            <h3 className="font-heading font-bold text-base text-sidebar-foreground">CMS Navigation</h3>
+            <h3 className="font-heading font-bold text-base text-sidebar-foreground tracking-tight">CMS Navigation</h3>
             {user && (
-              <p className="text-[10px] text-sidebar-foreground/60 uppercase">
+              <p className="text-[10px] font-medium text-sidebar-foreground/60 uppercase tracking-wider mt-0.5">
                 {user.role} · {user.fullName}
               </p>
             )}
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="p-2 rounded-lg hover:bg-sidebar-accent text-sidebar-foreground/80 hover:text-sidebar-foreground"
+            aria-label="Close drawer"
+            className="p-1.5 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="flex-1 px-3 py-5 space-y-1.5 overflow-y-auto">
+        {/* Navigation Items (Original Theme Native Sidebar Styling) */}
+        <nav className="flex-1 px-3.5 py-6 space-y-1.5 overflow-y-auto">
           {navItems.map((item) => {
             const active = pathname === item.href;
             const Icon = item.icon;
@@ -160,13 +160,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 href={item.href}
                 aria-current={active ? 'page' : undefined}
                 title={item.label}
-                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary ${
+                className={`flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   active
-                    ? 'bg-sidebar-accent text-sidebar-accent-foreground font-semibold shadow-sm'
+                    ? 'bg-sidebar-accent text-sidebar-accent-foreground font-semibold shadow-xs'
                     : 'text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground'
                 } ${isCollapsed ? 'md:justify-center md:px-2' : ''}`}
               >
-                <Icon className={`w-5 h-5 shrink-0 ${active ? 'text-primary' : ''}`} />
+                <Icon className={`w-5 h-5 shrink-0 ${active ? 'text-sidebar-primary' : ''}`} />
                 <span className={`truncate ${isCollapsed ? 'md:hidden' : 'inline'}`}>
                   {item.label}
                 </span>
@@ -177,7 +177,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Logout Section */}
         <div className="p-4 border-t border-sidebar-border">
-          {/* Full Logout Button (Always on Mobile, and Desktop when Expanded) */}
           <div className={isCollapsed ? 'md:hidden' : 'block'}>
             <Button
               variant="outline"
@@ -189,13 +188,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Button>
           </div>
 
-          {/* Icon-Only Logout Button (Desktop when Collapsed only) */}
           {isCollapsed && (
             <button
               type="button"
               onClick={handleLogout}
               title="Logout"
-              className="hidden md:flex w-full justify-center p-2.5 rounded-lg text-sidebar-foreground/70 hover:text-destructive hover:bg-destructive/10 transition-colors"
+              className="hidden md:flex w-full justify-center p-2.5 rounded-xl text-sidebar-foreground/70 hover:text-destructive hover:bg-destructive/10 transition-colors"
             >
               <LogOut className="w-5 h-5" />
             </button>
