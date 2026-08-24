@@ -14,9 +14,8 @@ export class StoresService {
 
   // 1. Create a new store
   async createStore(body: any) {
-    const { name, subDomain, theme, mode } = body;
+    const { name, subDomain, theme } = body;
 
-    // Default template fetch karein taake template_id null na ho
     let templateId = body.templateId;
     if (!templateId) {
       const defaultTemplate = await this.db.query.templates?.findFirst();
@@ -31,7 +30,6 @@ export class StoresService {
         templateId,
         templateConfig: {
           theme: theme || 'boutique',
-          mode: mode || 'light',
         },
       })
       .returning();
@@ -158,14 +156,13 @@ export class StoresService {
     if (body.name !== undefined) updatePayload.name = body.name;
     if (body.isActive !== undefined) updatePayload.isActive = body.isActive;
 
-    if (body.theme || body.mode) {
+    if (body.theme) {
       const existing = await this.getStoreById(id);
       const existingConfig = (existing.templateConfig as Record<string, any>) || {};
 
       updatePayload.templateConfig = {
         ...existingConfig,
-        ...(body.theme ? { theme: body.theme } : {}),
-        ...(body.mode ? { mode: body.mode } : {}),
+        theme: body.theme,
       };
     }
 
