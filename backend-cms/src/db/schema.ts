@@ -196,7 +196,9 @@ export const productVariant = pgTable(
     productId: uuid('product_id')
       .references(() => products.id, { onDelete: 'cascade' })
       .notNull(),
-    name: varchar('name').notNull(),
+    name: varchar('name').notNull(), // e.g. "Crimson Red / Large"
+    description: text('description'), // Variant-specific description
+    imageUrl: varchar('image_url'),   // Variant-specific photo
     price: integer('price').notNull(),
     sku: varchar('sku').notNull().unique(),
     stock: integer('stock').default(0).notNull(),
@@ -278,7 +280,7 @@ export const orderItem = pgTable(
   {
     id: uuid('id').defaultRandom().primaryKey(),
     orderId: uuid('order_id')
-      .references(() => stores.id, { onDelete: 'cascade' })
+      .references(() => orders.id, { onDelete: 'cascade' })
       .notNull(),
     productVariantId: uuid('product_variant_id')
       .references(() => productVariant.id, { onDelete: 'cascade' })

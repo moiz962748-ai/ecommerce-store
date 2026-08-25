@@ -1,4 +1,43 @@
-import { IsString, IsNotEmpty, IsOptional, IsUUID, IsNumber, Min } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsUUID,
+  IsNumber,
+  Min,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class CreateVariantDto {
+  @IsString()
+  @IsNotEmpty({ message: 'Variant name is required' })
+  name!: string; // e.g. "Crimson Red / Large" ya "Midnight Black 256GB"
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
+
+  @IsNumber({}, { message: 'Variant price must be a number' })
+  @Min(0, { message: 'Variant price cannot be negative' })
+  @Type(() => Number)
+  price!: number;
+
+  @IsOptional()
+  @IsString()
+  sku?: string;
+
+  @IsOptional()
+  @IsNumber({}, { message: 'Variant stock must be a number' })
+  @Min(0, { message: 'Variant stock cannot be negative' })
+  @Type(() => Number)
+  stock?: number;
+}
 
 export class CreateProductDto {
   @IsString()
@@ -15,6 +54,7 @@ export class CreateProductDto {
 
   @IsNumber({}, { message: 'basePrice must be a number' })
   @Min(0, { message: 'basePrice cannot be negative' })
+  @Type(() => Number)
   basePrice!: number;
 
   @IsUUID('4', { message: 'storeId must be a valid UUID' })
@@ -22,6 +62,12 @@ export class CreateProductDto {
 
   @IsUUID('4', { message: 'categoryId must be a valid UUID' })
   categoryId!: string;
+
+  @IsOptional()
+  @IsArray({ message: 'variants must be an array' })
+  @ValidateNested({ each: true })
+  @Type(() => CreateVariantDto)
+  variants?: CreateVariantDto[];
 }
 
 export class UpdateProductDto {
@@ -41,6 +87,7 @@ export class UpdateProductDto {
   @IsOptional()
   @IsNumber({}, { message: 'basePrice must be a number' })
   @Min(0, { message: 'basePrice cannot be negative' })
+  @Type(() => Number)
   basePrice?: number;
 
   @IsOptional()
@@ -50,4 +97,10 @@ export class UpdateProductDto {
   @IsOptional()
   @IsUUID('4', { message: 'categoryId must be a valid UUID' })
   categoryId?: string;
+
+  @IsOptional()
+  @IsArray({ message: 'variants must be an array' })
+  @ValidateNested({ each: true })
+  @Type(() => CreateVariantDto)
+  variants?: CreateVariantDto[];
 }
