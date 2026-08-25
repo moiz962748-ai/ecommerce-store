@@ -19,10 +19,12 @@ export function StoreHeader({
   storeName,
   subdomain,
   logoUrl,
+  theme,
 }: {
   storeName: string;
   subdomain: string;
   logoUrl?: string | null;
+  theme?: string;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -43,9 +45,70 @@ export function StoreHeader({
   } | null>(null);
 
   const lowerSub = (subdomain || '').toLowerCase();
-  const isBoutique = lowerSub.includes('boutique') || lowerSub.includes('luxury');
-  const isSports = lowerSub.includes('sport') || lowerSub.includes('fitness');
-  const isClothing = lowerSub.includes('cloth') || lowerSub.includes('fashion') || lowerSub.includes('apparel');
+  const isClothing =
+    theme === 'clothing' ||
+    lowerSub.includes('cloth') ||
+    lowerSub.includes('fashion') ||
+    lowerSub.includes('apparel');
+
+  const isSports =
+    !isClothing &&
+    (theme === 'sports' ||
+      lowerSub.includes('sport') ||
+      lowerSub.includes('fitness'));
+
+  const isBoutique =
+    !isClothing &&
+    !isSports &&
+    (theme === 'boutique' ||
+      lowerSub.includes('boutique') ||
+      lowerSub.includes('luxury'));
+
+  // Dynamic Theme Colors Map
+  const themeStyles = isClothing
+    ? {
+        activeText: 'text-purple-600',
+        activeBar: 'border-purple-600',
+        hoverText: 'hover:text-purple-600',
+        cartBadge: 'bg-purple-600 text-white',
+        wishlistBadge: 'bg-purple-600 text-white',
+        mobileActive: 'bg-purple-100 text-purple-800',
+        searchBtn: 'border-purple-200 hover:border-purple-400 hover:text-purple-700',
+        loginBtn: 'bg-purple-600 text-white hover:bg-purple-700',
+      }
+    : isSports
+    ? {
+        activeText: 'text-emerald-600',
+        activeBar: 'border-emerald-600',
+        hoverText: 'hover:text-emerald-600',
+        cartBadge: 'bg-emerald-600 text-white',
+        wishlistBadge: 'bg-emerald-600 text-white',
+        mobileActive: 'bg-emerald-100 text-emerald-800',
+        searchBtn: 'border-emerald-200 hover:border-emerald-400 hover:text-emerald-700',
+        loginBtn: 'bg-emerald-600 text-white hover:bg-emerald-700',
+      }
+    : isBoutique
+    ? {
+        activeText: 'text-amber-500',
+        activeBar: 'border-amber-500',
+        hoverText: 'hover:text-amber-500',
+        cartBadge: 'bg-amber-500 text-slate-950 font-black',
+        wishlistBadge: 'bg-amber-500 text-slate-950 font-black',
+        mobileActive: 'bg-accent text-foreground',
+        searchBtn: 'border-border bg-card text-foreground hover:bg-accent',
+        loginBtn: 'bg-amber-500 text-slate-950 font-bold hover:opacity-90',
+      }
+    : {
+        // Electronics / Default
+        activeText: 'text-sky-600',
+        activeBar: 'border-sky-600',
+        hoverText: 'hover:text-sky-600',
+        cartBadge: 'bg-sky-600 text-white',
+        wishlistBadge: 'bg-sky-600 text-white',
+        mobileActive: 'bg-sky-100 text-sky-800',
+        searchBtn: 'border-slate-200 hover:border-sky-400 hover:text-sky-700',
+        loginBtn: 'bg-sky-600 text-white hover:bg-sky-700',
+      };
 
   // Fetch Announcement Config
   useEffect(() => {
@@ -162,7 +225,7 @@ export function StoreHeader({
             <span
               className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
                 isBoutique
-                  ? 'bg-primary text-primary-foreground'
+                  ? 'bg-amber-500 text-slate-950'
                   : isSports
                   ? 'bg-emerald-600 text-white'
                   : isClothing
@@ -223,7 +286,7 @@ export function StoreHeader({
               <span
                 className={`font-bold text-lg tracking-tight transition-colors ${
                   isBoutique
-                    ? 'text-foreground group-hover:opacity-80'
+                    ? 'text-foreground group-hover:text-amber-500'
                     : isSports
                     ? 'text-slate-900 group-hover:text-emerald-600'
                     : isClothing
@@ -233,7 +296,7 @@ export function StoreHeader({
               >
                 {storeName}
               </span>
-              <span className={`text-[10px] tracking-widest font-semibold uppercase ${isBoutique ? 'text-muted-foreground' : isSports ? 'text-emerald-700/80' : isClothing ? 'text-purple-700/80' : 'text-slate-500'}`}>
+              <span className={`text-[10px] tracking-widest font-semibold uppercase ${isBoutique ? 'text-amber-500/90' : isSports ? 'text-emerald-700/80' : isClothing ? 'text-purple-700/80' : 'text-slate-500'}`}>
                 {isBoutique ? 'ATELIER PAKISTAN' : isSports ? 'PERFORMANCE HUB' : isClothing ? 'CURATED APPAREL' : 'PRECISION TECH'}
               </span>
             </div>
@@ -249,35 +312,17 @@ export function StoreHeader({
                   href={link.href}
                   className={`relative py-1 transition-colors flex items-center gap-1.5 ${
                     isActive
-                      ? isBoutique
-                        ? 'text-foreground font-bold border-b-2 border-foreground'
-                        : isSports
-                        ? 'text-emerald-700 font-bold border-b-2 border-emerald-600'
-                        : isClothing
-                        ? 'text-purple-700 font-bold border-b-2 border-purple-600'
-                        : 'text-sky-700 font-bold border-b-2 border-sky-600'
-                      : isBoutique
-                      ? 'text-muted-foreground hover:text-foreground'
-                      : isSports
-                      ? 'text-slate-600 hover:text-emerald-700'
-                      : isClothing
-                      ? 'text-slate-600 hover:text-purple-700'
-                      : 'text-slate-600 hover:text-sky-700'
+                      ? `${themeStyles.activeText} font-bold border-b-2 ${themeStyles.activeBar}`
+                      : `text-slate-600 ${themeStyles.hoverText}`
                   }`}
                 >
                   <span>{link.name}</span>
                   {typeof link.count === 'number' && link.count > 0 && (
                     <span
-                      className={`inline-flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 text-[10px] font-bold shadow-xs ${
+                      className={`inline-flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 text-[10px] font-bold shadow-xs transition-colors ${
                         link.name === 'Wishlist'
-                          ? 'bg-rose-500 text-white'
-                          : isBoutique
-                          ? 'bg-primary text-primary-foreground'
-                          : isSports
-                          ? 'bg-emerald-600 text-white'
-                          : isClothing
-                          ? 'bg-purple-600 text-white'
-                          : 'bg-sky-600 text-white'
+                          ? themeStyles.wishlistBadge
+                          : themeStyles.cartBadge
                       }`}
                     >
                       {link.count}
@@ -303,7 +348,7 @@ export function StoreHeader({
                     placeholder="Search collections..."
                     className={`h-9 w-44 rounded-lg border px-3 text-xs focus:outline-none transition-all ${
                       isBoutique
-                        ? 'bg-card text-foreground border-input placeholder:text-muted-foreground focus:ring-1 focus:ring-ring'
+                        ? 'bg-card text-foreground border-input placeholder:text-muted-foreground focus:ring-1 focus:ring-amber-500'
                         : isSports
                         ? 'bg-white text-slate-900 border-emerald-200 placeholder:text-slate-400 focus:border-emerald-500'
                         : isClothing
@@ -324,15 +369,7 @@ export function StoreHeader({
                   type="button"
                   onClick={() => setSearchOpen(true)}
                   aria-label="Search"
-                  className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-all ${
-                    isBoutique
-                      ? 'border-border bg-card text-foreground hover:bg-accent shadow-xs'
-                      : isSports
-                      ? 'border-emerald-200 bg-white text-slate-700 hover:border-emerald-400 hover:text-emerald-700 shadow-xs'
-                      : isClothing
-                      ? 'border-purple-200 bg-white text-slate-700 hover:border-purple-400 hover:text-purple-700 shadow-xs'
-                      : 'border-slate-200 bg-white text-slate-700 hover:border-sky-400 hover:text-sky-700 shadow-xs'
-                  }`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-all ${themeStyles.searchBtn}`}
                 >
                   <Search size={16} />
                 </button>
@@ -359,15 +396,7 @@ export function StoreHeader({
               <Link
                 href={`/login?redirect=${encodeURIComponent(currentReturnUrl)}`}
                 onClick={() => sessionStorage.setItem('redirect_after_login', currentReturnUrl)}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-xs ${
-                  isBoutique
-                    ? 'bg-primary text-primary-foreground hover:opacity-90'
-                    : isSports
-                    ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                    : isClothing
-                    ? 'bg-purple-600 text-white hover:bg-purple-700'
-                    : 'bg-sky-600 text-white hover:bg-sky-700'
-                }`}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-xs ${themeStyles.loginBtn}`}
               >
                 <LogIn size={15} />
                 <span>Sign In</span>
@@ -383,15 +412,7 @@ export function StoreHeader({
               type="button"
               onClick={() => router.push(`/store/${subdomain}/products`)}
               aria-label="Search"
-              className={`flex h-9 w-9 items-center justify-center rounded-lg border ${
-                isBoutique
-                  ? 'border-border bg-card text-foreground shadow-xs'
-                  : isSports
-                  ? 'border-emerald-200 bg-white text-slate-700'
-                  : isClothing
-                  ? 'border-purple-200 bg-white text-slate-700'
-                  : 'border-slate-200 bg-white text-slate-700'
-              }`}
+              className={`flex h-9 w-9 items-center justify-center rounded-lg border ${themeStyles.searchBtn}`}
             >
               <Search size={16} />
             </button>
@@ -438,13 +459,7 @@ export function StoreHeader({
                     onClick={() => setMenuOpen(false)}
                     className={`flex items-center justify-between py-2 px-3 rounded-lg transition-colors ${
                       isActive
-                        ? isBoutique
-                          ? 'bg-accent text-foreground font-bold'
-                          : isSports
-                          ? 'bg-emerald-100 text-emerald-800 font-bold'
-                          : isClothing
-                          ? 'bg-purple-100 text-purple-800 font-bold'
-                          : 'bg-sky-100 text-sky-800 font-bold'
+                        ? `${themeStyles.mobileActive} font-bold`
                         : isBoutique
                         ? 'text-foreground/80 hover:bg-accent'
                         : isSports
@@ -459,14 +474,8 @@ export function StoreHeader({
                       <span
                         className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
                           link.name === 'Wishlist'
-                            ? 'bg-rose-500 text-white'
-                            : isBoutique
-                            ? 'bg-primary text-primary-foreground'
-                            : isSports
-                            ? 'bg-emerald-600 text-white'
-                            : isClothing
-                            ? 'bg-purple-600 text-white'
-                            : 'bg-sky-600 text-white'
+                            ? themeStyles.wishlistBadge
+                            : themeStyles.cartBadge
                         }`}
                       >
                         {link.count}
@@ -495,15 +504,7 @@ export function StoreHeader({
                       setMenuOpen(false);
                       sessionStorage.setItem('redirect_after_login', currentReturnUrl);
                     }}
-                    className={`block text-center w-full py-2.5 rounded-lg font-bold text-xs shadow-xs ${
-                      isBoutique
-                        ? 'bg-primary text-primary-foreground'
-                        : isSports
-                        ? 'bg-emerald-600 text-white'
-                        : isClothing
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-sky-600 text-white'
-                    }`}
+                    className={`block text-center w-full py-2.5 rounded-lg font-bold text-xs shadow-xs ${themeStyles.loginBtn}`}
                   >
                     Sign In
                   </Link>

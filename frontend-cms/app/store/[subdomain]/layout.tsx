@@ -20,7 +20,7 @@ export default async function StoreLayout({
   const lowerSub = (subdomain || '').toLowerCase();
   const isBoutique = lowerSub.includes('boutique') || lowerSub.includes('luxury');
 
-  // Boutique ke ilawa baqi 3 stores default pure light mode par rahenge
+  // Boutique ke ilawa baqi stores default light mode par rahenge
   let storeMode = isBoutique ? 'dark' : 'light';
 
   try {
@@ -36,7 +36,10 @@ export default async function StoreLayout({
       logoUrl = store.logoUrl;
     }
 
-    if (configuredTheme && ['default', 'ES', 'sports', 'clothing', 'electronics'].includes(configuredTheme)) {
+    if (
+      configuredTheme &&
+      ['default', 'ES', 'sports', 'clothing', 'electronics', 'boutique'].includes(configuredTheme)
+    ) {
       storeTheme = configuredTheme;
     }
 
@@ -62,6 +65,7 @@ export default async function StoreLayout({
         storeName={storeName} 
         subdomain={subdomain} 
         logoUrl={logoUrl} 
+        theme={storeTheme} 
       />
       <main className="flex-1">{children}</main>
       <StoreFooter 
